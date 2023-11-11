@@ -1,10 +1,13 @@
 import React from "react";
 
+import { MantineProvider } from "@mantine/core";
+import '@mantine/core/styles.css';
+
 import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
+    createBrowserRouter,
+    createRoutesFromElements,
+    Route,
+    RouterProvider,
 } from "react-router-dom";
 import { AuthProvider } from "./AuthContext";
 // Routes
@@ -16,21 +19,31 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 
 const router = createBrowserRouter(
-  createRoutesFromElements(
-    <>
-      <Route path="/" element={<PrivateRoute element={<Home />} />} />
-      <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-    </>,
-  ),
+    createRoutesFromElements(
+        <>
+            <Route path="/" element={<PrivateRoute element={<Home />} />} />
+            <Route
+                path="/profile"
+                element={<PrivateRoute element={<Profile />} />}
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+        </>
+    )
 );
 
+import OrderForm from "./pages/OrderForm";
+
 const App: React.FC = () => (
-  <AuthProvider>
-    <RouterProvider router={router} />
-  </AuthProvider>
+    <>
+        <MantineProvider>
+            <OrderForm></OrderForm>
+            <AuthProvider>
+                <RouterProvider router={router} />
+            </AuthProvider>
+        </MantineProvider>
+    </>
 );
 
 export default App;
