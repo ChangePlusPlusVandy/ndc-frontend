@@ -1,103 +1,146 @@
 import React, { useState, useEffect } from "react";
 import {
-    Group,
-    CloseButton,
+    Flex,
     Title,
     Text,
     Container,
-    Slider,
     Button,
-    Input,
-    NumberInput,
+    Modal,
+    TextInput,
+    Textarea,
+    ScrollArea,
 } from "@mantine/core";
+import { DateInput } from "@mantine/dates";
+import { useDisclosure } from "@mantine/hooks";
+import OrderFormDiaperSize from "./OrderFormDiaperSize";
 
 const OrderForm: React.FC = () => {
+    const [date, setDate] = useState<Date | null>(null);
+    const [opened, { open, close }] = useDisclosure(false);
+    const [newbornSizeAmount, setNewbornSizeAmount] = useState<string | number>(
+        1
+    );
+    const [sizeOneAmount, setSizeOneAmount] = useState<string | number>(1);
+    const [sizeTwoAmount, setSizeTwoAmount] = useState<string | number>(1);
+    const [sizeThreeAmount, setSizeThreeAmount] = useState<string | number>(1);
+    const [sizeFourAmount, setSizeFourAmount] = useState<string | number>(1);
+    const [sizeFiveAmount, setSizeFiveAmount] = useState<string | number>(1);
+    const [sizeSixAmount, setSizeSixAmount] = useState<string | number>(1);
     return (
         <>
             {/*form part 1*/}
-            <Container bg="white">
-                <CloseButton />
-                <Title ta="center" m="lg">Request Diapers</Title>
-                <Container m="lg" p="lg" bg="var(--mantine-color-blue-light)">
-                    <Group m="lg">
-                        <Text size="lg">Newborn Diapers</Text>
-                        <NumberInput placeholder="1-100" min={1} max={100} />
-                    </Group>
-
-                    <Slider
-                        color="blue"
-                        showLabelOnHover={false}
-                        marks={[
-                            { value: 1, label: "1" },
-                            { value: 100, label: "100" },
-                        ]}
-                        min={1}
-                        max={100}
-                        m="lg"
+            <Modal
+                size="xl"
+                opened={opened}
+                onClose={close}
+                overlayProps={{
+                    backgroundOpacity: 0.55,
+                    blur: 3,
+                }}
+                withCloseButton={false}
+                centered
+                scrollAreaComponent={ScrollArea.Autosize}
+            >
+                <Container bg="white">
+                    <Title ta="center" m="lg">
+                        Request Diapers
+                    </Title>
+                    <OrderFormDiaperSize
+                        amount={newbornSizeAmount}
+                        setAmount={setNewbornSizeAmount}
+                        typeName="Newborn Diapers"
                     />
-                </Container>
-                <Container m="lg" p="lg" bg="var(--mantine-color-blue-light)">
-                    <Group m="lg">
-                        <Text size="lg">Diaper 2</Text>
-                        <NumberInput placeholder="1-100" min={1} max={100} />
-                    </Group>
-
-                    <Slider
-                        color="blue"
-                        showLabelOnHover={false}
-                        marks={[
-                            { value: 1, label: "1" },
-                            { value: 100, label: "100" },
-                        ]}
-                        min={1}
-                        max={100}
-                        m="lg"
+                    <OrderFormDiaperSize
+                        amount={sizeOneAmount}
+                        setAmount={setSizeOneAmount}
+                        typeName="Size 1"
                     />
-                </Container>
-                <Container m="lg" p="lg" bg="var(--mantine-color-blue-light)">
-                    <Group m="lg">
-                        <Text size="lg">Idk</Text>
-                        <NumberInput placeholder="1-100" min={1} max={100} />
-                    </Group>
-
-                    <Slider
-                        color="blue"
-                        showLabelOnHover={false}
-                        marks={[
-                            { value: 1, label: "1" },
-                            { value: 100, label: "100" },
-                        ]}
-                        min={1}
-                        max={100}
-                        m="lg"
+                    <OrderFormDiaperSize
+                        amount={sizeTwoAmount}
+                        setAmount={setSizeTwoAmount}
+                        typeName="Size 2"
                     />
-                </Container>
+                    <OrderFormDiaperSize
+                        amount={sizeThreeAmount}
+                        setAmount={setSizeThreeAmount}
+                        typeName="Size 3"
+                    />
+                    <OrderFormDiaperSize
+                        amount={sizeFourAmount}
+                        setAmount={setSizeFourAmount}
+                        typeName="Size 4"
+                    />
+                    <OrderFormDiaperSize
+                        amount={sizeFiveAmount}
+                        setAmount={setSizeFiveAmount}
+                        typeName="Size 5"
+                    />
+                    <OrderFormDiaperSize
+                        amount={sizeSixAmount}
+                        setAmount={setSizeSixAmount}
+                        typeName="Size 6"
+                    />
 
-                <Button justify="right" variant="filled" color="gray" m="lg">
-                    Enter Delivery Info.
-                </Button>
-            </Container>
+                    <Flex
+                        gap="md"
+                        justify="flex-end"
+                        direction="row"
+                        wrap="wrap"
+                    >
+                        <Button
+                            justify="flex-end"
+                            variant="filled"
+                            color="gray"
+                            m="lg"
+                        >
+                            Enter Delivery Info
+                        </Button>
+                    </Flex>
+                </Container>
+            </Modal>
+
+            <Button onClick={open}>Open Form</Button>
 
             {/*form part 2*/}
-            <div>
-                <button>x</button>
-                <h1>Delivery Instructions</h1>
+            <Container bg="white">
+                <Title ta="center" m="lg">
+                    Delivery Instructions
+                </Title>
+                <Container m="lg">
+                    <Text size="sm">Distribution Place</Text>
+                    <TextInput
+                        placeholder="Name of Distribution Place"
+                        size="sm"
+                    />
+                </Container>
+                <Container m="lg">
+                    <Text size="sm">Date</Text>
+                    {/*TODO: switch to using date input from @mantine/dates*/}
+                    <DateInput
+                        popoverProps={{ withinPortal: true }}
+                        placeholder="Date input"
+                        size="sm"
+                    />
+                </Container>
+                <Container m="lg">
+                    <Text size="sm">Additional Instructions</Text>
+                    <Textarea
+                        autosize
+                        minRows={4}
+                        placeholder="Placeholder"
+                        size="sm"
+                    />
+                </Container>
 
-                <label>
-                    <h3>Distribution Place</h3>
-                    <input type="text" />
-                </label>
-                <label>
-                    <h3>Date</h3>
-                    <input type="date" />
-                </label>
-                <label>
-                    <h3>Additional Instructions</h3>
-                    <input type="text" />
-                </label>
-                <button>Edit quantities</button>
-                <button>Submit</button>
-            </div>
+                <Flex gap="md" justify="flex-end" direction="row" wrap="wrap">
+                    <Button variant="filled" color="gray" m="lg">
+                        Edit quantities
+                    </Button>
+                    <Button variant="filled" color="dark" m="lg">
+                        Submit
+                    </Button>
+                </Flex>
+            </Container>
         </>
     );
 };
