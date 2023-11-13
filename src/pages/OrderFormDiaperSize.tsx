@@ -15,6 +15,7 @@ const OrderFormDiaperSize: React.FC<SizeProps> = ({ typeName, amount, setAmount 
                 <Group m="">
                     <Text size="md">{typeName}</Text>
                     <NumberInput
+                    
                         value={amount}
                         onChange={setAmount}
                         size="sm"
@@ -27,6 +28,7 @@ const OrderFormDiaperSize: React.FC<SizeProps> = ({ typeName, amount, setAmount 
                 </Group>
 
                 <Slider
+                
                     value={Number(amount)}
                     onChange={setAmount}
                     color="blue"
