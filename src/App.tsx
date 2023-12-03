@@ -2,7 +2,6 @@ import React from "react";
 
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { ModalsProvider } from "@mantine/modals";
 
 import {
     createBrowserRouter,
@@ -39,9 +38,7 @@ import OrderForm from "./pages/OrderForm";
 const App: React.FC = () => (
     <>
         <MantineProvider>
-            <ModalsProvider>
-                <OrderForm></OrderForm>
-            </ModalsProvider>
+            <OrderForm></OrderForm>
             <AuthProvider>
                 <RouterProvider router={router} />
             </AuthProvider>
