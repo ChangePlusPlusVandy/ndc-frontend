@@ -1,23 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
-    Group,
-    Flex,
     Title,
     Text,
     Container,
-    Button,
-    Modal,
     TextInput,
     Textarea,
-    ScrollArea,
-    NumberInput,
-    CloseButton,
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import { useDisclosure } from "@mantine/hooks";
-import OrderFormDiaperSize from "./OrderFormDiaperSize";
-import { openConfirmModal, closeAllModals } from "@mantine/modals";
-import OrderFormRequest from "./OrderFormRequest";
 
 const OrderFormDeliveryInfo: React.FC = () => {
     return (

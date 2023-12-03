@@ -1,25 +1,17 @@
 import React, { useState, useEffect } from "react";
 import {
     Tabs,
-    Group,
     Flex,
-    Title,
-    Text,
     Container,
     Button,
     Modal,
-    TextInput,
-    Textarea,
     ScrollArea,
-    NumberInput,
     CloseButton,
 } from "@mantine/core";
-import { DateInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
-import OrderFormDiaperSize from "./OrderFormDiaperSize";
-import { openConfirmModal, closeAllModals } from "@mantine/modals";
 import OrderFormRequest from "./OrderFormRequest";
 import OrderFormDeliveryInfo from "./OrderFormDeliveryInfo";
+import OrderFormConfirmation from "./OrderFormConfirmation";
 
 const OrderForm: React.FC = () => {
     const [date, setDate] = useState<Date | null>(null);
@@ -50,6 +42,9 @@ const OrderForm: React.FC = () => {
                             <Tabs.Tab value="delivery-info">
                                 Delivery Information
                             </Tabs.Tab>
+                            <Tabs.Tab value="confirmation">
+                                Confirmation
+                            </Tabs.Tab>
                         </Tabs.List>
                     </Container>
                     <Tabs.Panel value="request-diapers">
@@ -68,6 +63,10 @@ const OrderForm: React.FC = () => {
                                 Submit
                             </Button>
                         </Flex>
+                    </Tabs.Panel>
+
+                    <Tabs.Panel value="confirmation">
+                        <OrderFormConfirmation />
                     </Tabs.Panel>
                 </Tabs>
 
