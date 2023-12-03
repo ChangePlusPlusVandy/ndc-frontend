@@ -14,6 +14,7 @@ import PrivateRoute from "./pages/Auth/PrivateRoute";
 import Register from "./pages/Auth/Register";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import StaffDashboard from "./pages/StaffDashboard/StaffDashboard";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +24,8 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/staff-dashboard" element={<StaffDashboard />} />
+
     </>,
   ),
 );

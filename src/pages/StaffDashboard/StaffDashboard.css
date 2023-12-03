@@ -1,0 +1,15 @@
+.flex{
+    display: flex;
+}
+
+.flex-col{
+    flex-direction: column;
+}
+
+.flex-row{
+    flex-direction: row;
+}
+
+.m{
+    margin-right: 2rem;
+}
