@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react'; 
+import React, {useEffect, useState} from 'react';
+import "./OrderPartner.css";  
 
 interface TableProps {
     orderType: string,
@@ -32,7 +33,7 @@ const OrderTable: React.FC<TableProps> = (props: TableProps) => {
                 .then ((data) => {
                     let temp: Order[] = []; 
                     data.forEach((elem: any) => {
-                        temp.push(new Order(elem.datePlaced, elem.status, elem.numDiapers)); 
+                        temp.push(new Order(elem.datePlaced, elem.numDiapers)); 
                     }) 
 
                     setOrders(temp); 
@@ -51,12 +52,19 @@ const OrderTable: React.FC<TableProps> = (props: TableProps) => {
                 </tr>
                 {orders?.map((val: Order, index: number) => {
                     return (
-                        <tr key={index}>
+                        <tr key={index} className="backWhite">
+                            <td>Order</td>
                             <td>{val.datePlaced.toDateString()}</td>
                             <td>{val.numDiapers}</td>
+                            <td>...</td>
                         </tr>
                     )
                 })}
+                <tr>
+                    <td>temp</td>
+                    <td>temp</td>
+                    <td>temp</td>
+                </tr>
         </table>
     )
 }
