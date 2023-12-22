@@ -1,5 +1,5 @@
 import { Group, Tabs, Button, Image } from '@mantine/core';
-import OrderTable from './OrderTable';  
+import OrderTable from './OrderTable'; 
 import "./OrderPartner.css"; 
 
 const OrderPartner: React.FC = () => {
@@ -18,11 +18,11 @@ const OrderPartner: React.FC = () => {
                 
             </header>
             
-            <Tabs variant='pills' color='black' defaultValue={"open"}  className="width-90">
-                <Tabs.List grow>
-                    <Tabs.Tab className="tableHeader" value="open">Open</Tabs.Tab>
-                    <Tabs.Tab className="tableHeader" value="review">Under Review</Tabs.Tab>
-                    <Tabs.Tab className="tableHeader" value="approved">Approved</Tabs.Tab>
+            <Tabs variant='unstyled' defaultValue={"open"} className="width-90">
+                <Tabs.List grow className=''>
+                    <Tabs.Tab className="tableHeader tab" value="open">Open</Tabs.Tab>
+                    <Tabs.Tab className="tableHeader tab" value="review">Under Review</Tabs.Tab>
+                    <Tabs.Tab className="tableHeader tab" value="approved">Approved</Tabs.Tab>
                 </Tabs.List>
                 
                 <Tabs.Panel value="open">

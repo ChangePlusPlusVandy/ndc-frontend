@@ -45,26 +45,31 @@ const OrderTable: React.FC<TableProps> = (props: TableProps) => {
 
     return (
         <table>
-                <tr>
-                    <th>Order</th>
-                    <th>Date Placed</th>
-                    <th>Number of Diapers</th>
-                </tr>
-                {orders?.map((val: Order, index: number) => {
-                    return (
-                        <tr key={index} className="backWhite">
-                            <td>Order</td>
-                            <td>{val.datePlaced.toDateString()}</td>
-                            <td>{val.numDiapers}</td>
-                            <td>...</td>
-                        </tr>
-                    )
-                })}
-                <tr>
-                    <td>temp</td>
-                    <td>temp</td>
-                    <td>temp</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Date Placed</th>
+                        <th>Number of Diapers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {orders?.map((val: Order, index: number) => {
+                        return (
+                            <tr key={index} className="backWhite">
+                                <td>Order</td>
+                                <td>{val.datePlaced.toDateString()}</td>
+                                <td>{val.numDiapers}</td>
+                                <td>...</td>
+                            </tr>
+                        )
+                    })}
+                    <tr>
+                        <td>temp</td>
+                        <td>temp</td>
+                        <td>temp</td>
+                    </tr>
+                </tbody>
+                
         </table>
     )
 }
