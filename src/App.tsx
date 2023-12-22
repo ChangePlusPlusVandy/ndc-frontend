@@ -7,6 +7,9 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { AuthProvider } from "./AuthContext";
+import {MantineProvider } from "@mantine/core"; 
+import "@mantine/core/styles.css";
+
 // Routes
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Login from "./pages/Auth/Login";
@@ -14,6 +17,7 @@ import PrivateRoute from "./pages/Auth/PrivateRoute";
 import Register from "./pages/Auth/Register";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import OrderPartner from "./pages/Order/OrderPartner";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,14 +27,18 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/order" element={<OrderPartner />} />
     </>,
   ),
 );
 
 const App: React.FC = () => (
-  <AuthProvider>
-    <RouterProvider router={router} />
-  </AuthProvider>
+  <MantineProvider>
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  </MantineProvider>
+  
 );
 
 export default App;
