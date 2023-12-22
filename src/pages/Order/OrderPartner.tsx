@@ -1,13 +1,14 @@
-import { Group, Tabs, Button, Image } from '@mantine/core';
+import { Group, Tabs, Button, Image, rem } from '@mantine/core';
 import OrderTable from './OrderTable'; 
 import "./OrderPartner.css"; 
+import ndcLogo from '../../assets/ndc-logo.png'; 
 
 const OrderPartner: React.FC = () => {
     return (
         <main>
             <header>
                 <Group justify="space-between" className="width-90">
-                    <Button leftSection={<Image src="../../assets/ndc-logo.png" />} variant='white' color='black'>
+                    <Button leftSection={<Image w={rem(64)} src={ndcLogo} />} variant='white' color='black'>
                         Nashville D.C.
                     </Button>
                     <div className='orderTitle'>Orders</div>
