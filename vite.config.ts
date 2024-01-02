@@ -9,7 +9,7 @@ export default defineConfig({
     proxy: {
       // Proxy /api requests to our express server
       "/api": {
-        target: "http://localhost:3001",
+        target: "https://ndc-backend-410021.uc.r.appspot.com/",
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ""),
