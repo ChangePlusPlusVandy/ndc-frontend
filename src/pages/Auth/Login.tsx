@@ -4,7 +4,9 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useAuth } from "../../AuthContext";
+import { Title, Text, TextInput, Button, Container, Divider, PasswordInput, Checkbox } from '@mantine/core';
 import FormError from "./FormError";
+import '../../styles/login.css'
 
 interface FormValues {
   email: string;
@@ -45,41 +47,51 @@ const Login: React.FC = () => {
       console.log(alal);
       navigate("/"); // Redirect to home page
     } catch (err: any) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
+
       setError(err.message);
     }
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" {...register("email")} />
-          {errors.email != null && (
-            <FormError>{errors.email.message}</FormError>
-          )}
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" {...register("password")} />
-          {errors.password != null && (
-            <FormError>{errors.password.message}</FormError>
-          )}
-          {errors && <FormError>{error}</FormError>}
-        </div>
-        <button disabled={isSubmitting} type="submit">
-          {isSubmitting ? "Submitting" : "Login"}
-        </button>
-      </form>
-      <p>
-        Don&apos;t have an account? <Link to="/register">Register</Link>
-      </p>
-      <p>
-        Forgot your password? <Link to="/forgot-password">Reset</Link>
-      </p>
-    </div>
+    <div className="login-container">
+      <Container visibleFrom="sm" className="left-panel" />
+      <div className="right-panel">
+        <Title order={1}>Log in</Title>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="login-form">
+          <TextInput
+            label="Email Address"
+            className="email-input"
+            {...register("email")}
+            error={(errors.email != null) && errors.email.message}
+          />
+          <PasswordInput
+            className="password-input"
+            label="Password"
+            {...register("password")}
+            error={errors.password != null ? errors.password.message : (errors && error)}
+          />
+          <div className="login-auth-options">
+            <Checkbox
+              label="Remember Me"
+            />
+            <Text size="sm">
+              Forgot your password? <Link to="/forgot-password">Reset</Link>
+            </Text>
+          </div>
+
+          <Button fullWidth disabled={isSubmitting} type="submit">
+            {isSubmitting ? "Submitting" : "Login"}
+          </Button>
+        </form>
+        <Divider size="xs" className="divider" />
+        <Text size="sm">
+          No account yet? <Link to="/register">Sign Up</Link>
+        </Text>
+
+      </div>
+
+    </div >
   );
 };
 

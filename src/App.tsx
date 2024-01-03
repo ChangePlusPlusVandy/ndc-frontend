@@ -1,4 +1,6 @@
 import React from "react";
+import "@mantine/core/styles.css";
+
 
 import {
   createBrowserRouter,
@@ -7,6 +9,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { AuthProvider } from "./AuthContext";
+import "./App.css"
 // Routes
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Login from "./pages/Auth/Login";
@@ -14,6 +17,7 @@ import PrivateRoute from "./pages/Auth/PrivateRoute";
 import Register from "./pages/Auth/Register";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import { PasswordInput } from "@mantine/core";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

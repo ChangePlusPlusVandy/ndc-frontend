@@ -73,6 +73,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return unsubscribe;
   }, []);
 
+
   const value = {
     currentUser,
     login,
