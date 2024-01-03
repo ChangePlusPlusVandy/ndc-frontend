@@ -36,6 +36,7 @@ const Home: React.FC = () => {
     <div>
       This is a React Firebase Auth template. Below is a fact from a protected
       route on the server.
+
       <p>{fact}</p>
       <br />
       <Link to="/profile">Profile</Link>
