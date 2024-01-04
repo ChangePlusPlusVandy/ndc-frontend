@@ -42,11 +42,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return await signInWithEmailAndPassword(auth, email, password).then(
       async (userCredential) => {
         try {
+          const token = await currentUser?.getIdToken();
           const requestOptions = {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
+              Authorization: `Bearer ${token}`,
             }
           }
           let checkPartner = await fetch(`/api/login/partner?firebaseUid=${userCredential.user.uid}`, requestOptions);
