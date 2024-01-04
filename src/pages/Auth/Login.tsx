@@ -44,10 +44,12 @@ const Login: React.FC = () => {
     try {
       setError("");
       const alal = await login(values.email, values.password);
+
+
+
       console.log(alal);
       navigate("/"); // Redirect to home page
     } catch (err: any) {
-
       setError(err.message);
     }
   };

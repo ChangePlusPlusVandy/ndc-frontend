@@ -46,10 +46,12 @@ const Register: React.FC = () => {
 
   const [error, setError] = useState<string>("");
 
+
   const onSubmit = async (values: FormValues) => {
     try {
       setError("");
-      await registerUser(values.name, values.email, values.password);
+      await registerUser(values.name, values.email, values.password, false);
+
       navigate("/"); // Redirect to home page
     } catch (err: any) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument

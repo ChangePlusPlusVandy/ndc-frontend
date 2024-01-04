@@ -13,14 +13,16 @@ import type { UserCredential, User } from "firebase/auth";
 
 interface AuthContextData {
   currentUser: User | null;
-  login: (email: string, password: string) => Promise<UserCredential>;
+  login: (email: string, password: string) => Promise<void>;
   registerUser: (
     name: string,
     email: string,
     password: string,
+    isStaff: boolean,
   ) => Promise<void>;
   logout: () => Promise<void>;
   getUser: () => User | null;
+  isStaff: boolean | null;
   forgotPassword: (email: string) => Promise<void>;
   confirmReset: (code: string, password: string) => Promise<void>;
 }
@@ -34,23 +36,118 @@ export function useAuth(): AuthContextData {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isStaff, setIsStaff] = useState<boolean | null>(null);
 
   async function login(email: string, password: string) {
-    return await signInWithEmailAndPassword(auth, email, password);
-  }
+    return await signInWithEmailAndPassword(auth, email, password).then(
+      async (userCredential) => {
+        try {
+          const requestOptions = {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
+            }
+          }
+          let checkPartner = await fetch(`/api/login/partner?firebaseUid=${userCredential.user.uid}`, requestOptions);
+          let data = await checkPartner.json();
+          if (data.error) {
+            let checkStaff = await fetch(`/api/login/staff?firebaseUid=${userCredential.user.uid}`, requestOptions);
+            let data = await checkStaff.json();
+            if (data.firebaseUid) {
+              setIsStaff(true);
+            } else
+              setIsStaff(false)
+          } else {
+            setIsStaff(false)
+          }
 
-  async function registerUser(name: string, email: string, password: string) {
-    return await createUserWithEmailAndPassword(auth, email, password).then(
-      (userCredential) => {
-        void updateProfile(userCredential.user, {
-          displayName: name,
-        });
-      },
+        } catch (err) {
+          console.error(err)
+        }
+
+      }
     );
   }
 
+  async function registerUser(name: string, email: string, password: string, isStaff: boolean) {
+    return createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Update the user profile
+        return updateProfile(userCredential.user, {
+          displayName: name,
+        }).then(() => userCredential); // Return userCredential for the next then
+      })
+      .then((userCredential) => {
+        // Now userCredential is accessible here
+        if (isStaff) {
+          return createMongoStaff(name, email, userCredential.user.uid);
+        } else {
+          return createMongoPartner(name, email, userCredential.user.uid);
+        }
+      });
+  }
+
+  const createMongoStaff = async (name: string, email: string, uid: string) => {
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
+        },
+        body: JSON.stringify({
+          firstName: name,
+          lastName: name,
+          email: email,
+          phoneNumber: "123",
+          firebaseUID: uid,
+        })
+      }
+      const res = await fetch("/api/staff/", requestOptions);
+      const staffUser = await res.json()
+      setIsStaff(true);
+
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  const createMongoPartner = async (name: string, email: string, uid: string) => {
+    try {
+
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
+        },
+        body: JSON.stringify({
+          firstName: name,
+          lastName: name,
+          email: email,
+          phoneNumber: "123",
+          location: "ld",
+          address: "slkdjf",
+          numOrdersTotal: 1,
+          numOrdersYTD: 1,
+          numOrdersMonth: 1,
+          type: "DFD",
+          firebaseUID: uid
+        })
+      }
+      const res = await fetch("/api/partner/", requestOptions);
+      const partnerUser = await res.json()
+      setIsStaff(false);
+
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   async function logout(): Promise<void> {
+    setIsStaff(null)
     return await signOut(auth);
+
   }
 
   function getUser(): User | null {
@@ -73,6 +170,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return unsubscribe;
   }, []);
 
+  const setToken = async () => {
+    const userToken = await currentUser?.getIdToken();
+    if (userToken) {
+      window.localStorage.setItem("auth", userToken);
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser) {
+      setToken()
+    } else {
+      window.localStorage.removeItem("auth");
+    }
+  }, [currentUser])
+
 
   const value = {
     currentUser,
@@ -80,6 +192,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     registerUser,
     logout,
     getUser,
+    isStaff,
     forgotPassword,
     confirmReset,
   };
