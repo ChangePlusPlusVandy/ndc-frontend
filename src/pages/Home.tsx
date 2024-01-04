@@ -43,12 +43,12 @@ const Home: React.FC = () => {
         const data = await res.json() as InventoryApiResponse;
         setInventory(data);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
-    console.log("user", currentUser)
-    void fetchFact();
-    console.log("inventory", inventory)
+    if (currentUser) {
+      void fetchFact();
+    }
   }, [currentUser]);
 
 
@@ -78,6 +78,7 @@ const Home: React.FC = () => {
       <br />
       <Link to="/profile">Profile</Link>
     </div>
+
   );
 };
 

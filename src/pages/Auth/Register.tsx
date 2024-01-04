@@ -50,7 +50,7 @@ const Register: React.FC = () => {
   const onSubmit = async (values: FormValues) => {
     try {
       setError("");
-      await registerUser(values.name, values.email, values.password, true);
+      await registerUser(values.name, values.email, values.password, false);
 
       navigate("/"); // Redirect to home page
     } catch (err: any) {
