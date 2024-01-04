@@ -44,10 +44,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
           const token = await currentUser?.getIdToken();
           const requestOptions = {
-            method: "GET",
+            // method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              // Authorization: `Bearer ${token}`,
             }
           }
           let checkPartner = await fetch(`/api/partner?firebaseUid=${userCredential.user.uid}`, requestOptions);
@@ -171,20 +171,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return unsubscribe;
   }, []);
 
-  const setToken = async () => {
-    const userToken = await currentUser?.getIdToken();
-    if (userToken) {
-      window.localStorage.setItem("auth", userToken);
-    }
-  };
+  // const setToken = async () => {
+  //   const userToken = await currentUser?.getIdToken();
+  //   if (userToken) {
+  //     window.localStorage.setItem("auth", userToken);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (currentUser) {
-      setToken()
-    } else {
-      window.localStorage.removeItem("auth");
-    }
-  }, [currentUser])
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     setToken()
+  //   } else {
+  //     window.localStorage.removeItem("auth");
+  //   }
+  // }, [currentUser])
 
 
   const value = {
