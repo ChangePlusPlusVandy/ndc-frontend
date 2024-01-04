@@ -50,10 +50,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               Authorization: `Bearer ${token}`,
             }
           }
-          let checkPartner = await fetch(`/api/login/partner?firebaseUid=${userCredential.user.uid}`, requestOptions);
+          let checkPartner = await fetch(`/api/partner?firebaseUid=${userCredential.user.uid}`, requestOptions);
           let data = await checkPartner.json();
           if (data.error) {
-            let checkStaff = await fetch(`/api/login/staff?firebaseUid=${userCredential.user.uid}`, requestOptions);
+            let checkStaff = await fetch(`/api/staff?firebaseUid=${userCredential.user.uid}`, requestOptions);
             let data = await checkStaff.json();
             if (data.firebaseUid) {
               setIsStaff(true);
