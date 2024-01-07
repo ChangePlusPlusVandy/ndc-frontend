@@ -13,3 +13,81 @@
 .m{
     margin-right: 2rem;
 }
+
+.header{
+    font-size: 1.25rem;
+    margin: 1rem;
+}
+
+.body-m{
+    font-size: 1rem;
+    padding: 2rem;
+}
+
+.gray-1{
+    background-color: #DDE1E6;
+}
+.pure-white{
+    background-color: white;
+}
+.white{
+    background-color: white;
+    width: 20vw;
+    text-align: center;
+    margin-bottom: 5vh;
+}
+
+.pic-size{
+    padding: 2rem 2rem 0 2rem;
+}
+
+.grey-text{
+    color: #606164;
+}
+
+.grey-background{
+    background-color: #DDE1E6;
+}
+
+.margin-pad{
+    margin: 1rem;
+    padding: 0 2rem 2rem 2rem;
+}
+
+.margin-order{
+    margin-left: 2rem;
+}
+
+.order-bo{
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+}
+
+.order-b{
+    margin-bottom: 1rem;
+    padding: 0.5rem 2rem 0.5rem 2rem;
+}
+.order-width{
+    width: 10vw;
+    text-align: center;
+}
+
+.m-r{
+    margin-right: 2rem;
+    margin-top: 2rem;
+}
+
+.wr-width{
+    width: 20vw;
+}
+
+.wr-width-2{
+    width: 40vw;
+}
+.center-t{
+    text-align: center;
+}
+
+.bt{
+    justify-content: space-between;
+}
