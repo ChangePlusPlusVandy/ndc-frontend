@@ -4,7 +4,7 @@ import { Group, Text, Container, Slider, NumberInput } from "@mantine/core";
 type SizeProps = {
     typeName: string,
     amount: string | number,
-    setAmount: React.Dispatch<React.SetStateAction<string | number>>
+    setAmount: any
 };
 
 const OrderFormDiaperSize: React.FC<SizeProps> = ({ typeName, amount, setAmount }: SizeProps) => {
