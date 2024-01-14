@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               "Content-Type": "application/json",
             }
           }
-          let checkPartner = await fetch(`/api/login?firebaseUid=${userCredential.user.uid}`, requestOptions);
+          let checkPartner = await fetch(`https://ndc-backend-410021.uc.r.appspot.com/login?firebaseUid=zteQVO7RH0gVBx53Ax3iTbJmpg73`, requestOptions);
           let data = await checkPartner.json();
           console.log("login ", data);
           // if (!data.error)
