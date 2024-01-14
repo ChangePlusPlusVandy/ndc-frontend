@@ -50,11 +50,11 @@ const Register: React.FC = () => {
   const onSubmit = async (values: FormValues) => {
     try {
       setError("");
+      //TODO HANDLE CREATING STAFF VS USER HERE
       await registerUser(values.name, values.email, values.password, false);
 
       navigate("/"); // Redirect to home page
     } catch (err: any) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
       setError(err.message);
     }
   };

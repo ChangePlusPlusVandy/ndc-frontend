@@ -44,34 +44,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
           const token = await currentUser?.getIdToken();
           const requestOptions = {
-            // method: "GET",
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
-              // Authorization: `Bearer ${token}`,
             }
           }
-          let checkPartner = await fetch(`/api/partner?firebaseUid=${userCredential.user.uid}`, requestOptions);
+          let checkPartner = await fetch(`/api/login?firebaseUid=${userCredential.user.uid}`, requestOptions);
           let data = await checkPartner.json();
-          if (data.error) {
-            let checkStaff = await fetch(`/api/staff?firebaseUid=${userCredential.user.uid}`, requestOptions);
-            let data = await checkStaff.json();
-            if (data.firebaseUid) {
-              setIsStaff(true);
-            } else
-              setIsStaff(false)
-          } else {
-            setIsStaff(false)
-          }
-
+          if (!data.error)
+            setIsStaff(data.isStaff);
         } catch (err) {
           console.error(err)
         }
-
       }
     );
   }
 
-  async function registerUser(name: string, email: string, password: string, isStaff: boolean) {
+  async function registerUser(name: string, email: string, password: string, isStaff: boolean = false) {
     return createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Update the user profile
@@ -95,32 +84,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
+          Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
         },
         body: JSON.stringify({
           firstName: name,
           lastName: name,
           email: email,
           phoneNumber: "123",
-          firebaseUID: uid,
+          firebaseUid: uid,
         })
       }
       const res = await fetch("/api/staff/", requestOptions);
-      const staffUser = await res.json()
+      const staffUser = await res.json();
       setIsStaff(true);
-
     } catch (err) {
       console.error(err);
     }
   }
   const createMongoPartner = async (name: string, email: string, uid: string) => {
     try {
-
       const requestOptions = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
+          Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
         },
         body: JSON.stringify({
           firstName: name,
@@ -133,12 +120,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           numOrdersYTD: 1,
           numOrdersMonth: 1,
           type: "DFD",
-          firebaseUID: uid
+          firebaseUid: uid
         })
       }
       const res = await fetch("/api/partner/", requestOptions);
       const partnerUser = await res.json()
       setIsStaff(false);
+      console.log(partnerUser);
 
     } catch (err) {
       console.error(err);
@@ -171,20 +159,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return unsubscribe;
   }, []);
 
-  // const setToken = async () => {
-  //   const userToken = await currentUser?.getIdToken();
-  //   if (userToken) {
-  //     window.localStorage.setItem("auth", userToken);
-  //   }
-  // };
+  const setToken = async () => {
+    const userToken = await currentUser?.getIdToken();
+    if (userToken) {
+      window.localStorage.setItem("auth", userToken);
+    }
+  };
 
-  // useEffect(() => {
-  //   if (currentUser) {
-  //     setToken()
-  //   } else {
-  //     window.localStorage.removeItem("auth");
-  //   }
-  // }, [currentUser])
+  useEffect(() => {
+    if (currentUser) {
+      setToken()
+    } else {
+      window.localStorage.removeItem("auth");
+    }
+  }, [currentUser])
 
 
   const value = {

@@ -45,8 +45,6 @@ const Login: React.FC = () => {
       setError("");
       const alal = await login(values.email, values.password);
 
-
-
       console.log(alal);
       navigate("/"); // Redirect to home page
     } catch (err: any) {
