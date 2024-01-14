@@ -51,6 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
           let checkPartner = await fetch(`/api/login?firebaseUid=${userCredential.user.uid}`, requestOptions);
           let data = await checkPartner.json();
+          console.log("login ", data)
           if (!data.error)
             setIsStaff(data.isStaff);
         } catch (err) {

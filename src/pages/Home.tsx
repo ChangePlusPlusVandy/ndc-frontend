@@ -40,8 +40,9 @@ const Home: React.FC = () => {
         // so, if the server is defined as "localhost:3001" in that file,
         // the fetch url will be "localhost:3001/example"
         const res = await fetch("/api/inventory/", payloadHeader);
-        const data = await res.json() as InventoryApiResponse;
-        setInventory(data);
+        const data = await res.json();
+        console.log("inventory ", data)
+        // setInventory(data);
       } catch (err) {
         console.error(err);
       }
