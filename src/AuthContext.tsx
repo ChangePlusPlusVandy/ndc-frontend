@@ -52,7 +52,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.log("cred ,", userCredential);
           console.log("user ,", userCredential.user);
           console.log("uid ,", userCredential.user.uid);
-          let checkPartner = await fetch(`/api/login?firebaseUid=${userCredential.user.uid}`, requestOptions);
+          const fetchUrl = import.meta.env.MODE === 'development'
+            ? `/api` // URL for development
+            : `${import.meta.env.VITE_BACKEND_URL}`; // URL for production
+
+          let checkPartner = await fetch(`${fetchUrl}/login?firebaseUid=${userCredential.user.uid}`, requestOptions);
           let data = await checkPartner.json();
           console.log("login ", data);
           // if (!data.error)
