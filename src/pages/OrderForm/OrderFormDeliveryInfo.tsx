@@ -8,7 +8,12 @@ import {
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 
-const OrderFormDeliveryInfo: React.FC = () => {
+type DeliveryProps = {
+    date: Date | null,
+    setDate: React.Dispatch<React.SetStateAction<Date | null>>
+};
+
+const OrderFormDeliveryInfo:React.FC<DeliveryProps> = ({ date, setDate }: DeliveryProps) => {
     return (
         <>
             <Container bg="white">
@@ -25,9 +30,9 @@ const OrderFormDeliveryInfo: React.FC = () => {
                 <Container m="lg">
                     <Text size="sm">Date</Text>
                     <DateInput
-                        popoverProps={{ withinPortal: true }}
+                        value={date}
+                        onChange={setDate}
                         placeholder="Date input"
-                        size="sm"
                     />
                 </Container>
                 <Container m="lg">

@@ -4,17 +4,20 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useAuth } from "../../AuthContext";
+import { Title, Flex, Text, TextInput, Button, Container, Divider, PasswordInput, Checkbox, Group } from '@mantine/core';
 import FormError from "./FormError";
 
 interface FormValues {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   confirmPassword: string;
 }
 
 const schema = Yup.object().shape({
-  name: Yup.string().required("Name is required"),
+  firstName: Yup.string().required("First name is required"),
+  lastName: Yup.string().required("Last name is required"),
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required"),
@@ -46,61 +49,70 @@ const Register: React.FC = () => {
 
   const [error, setError] = useState<string>("");
 
+
   const onSubmit = async (values: FormValues) => {
     try {
       setError("");
-      await registerUser(values.name, values.email, values.password);
+      //TODO HANDLE CREATING STAFF VS USER HERE
+      await registerUser(values.firstName, values.lastName, values.email, values.password, false);
+
       navigate("/"); // Redirect to home page
     } catch (err: any) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
       setError(err.message);
     }
   };
 
   return (
-    <div>
-      <h1>Welcome to the React Firebase Auth template project</h1>
-      <h1>Register</h1>
+    <>
+      <Title order={1}>Register</Title>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor="name">Name</label>
-          <input type="text" id="name" {...register("name")} />
-          {errors.name != null && <FormError>{errors.name.message}</FormError>}
-        </div>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" {...register("email")} />
-          {errors.email != null && (
-            <FormError>{errors.email.message}</FormError>
-          )}
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" {...register("password")} />
-          {errors.password != null && (
-            <FormError>{errors.password.message}</FormError>
-          )}
-        </div>
-        <div>
-          <label htmlFor="confirmPassword">Confirm Password</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            {...register("confirmPassword")}
+        <Group grow justify="space-between">
+          <TextInput
+            label="First Name"
+            className="auth-input"
+            {...register("firstName")}
+            error={(errors.firstName != null) && errors.firstName.message}
           />
-          {errors.confirmPassword != null && (
-            <FormError>{errors.confirmPassword.message}</FormError>
-          )}
-        </div>
+          <TextInput
+            label="Last Name"
+            className="auth-input"
+            {...register("lastName")}
+            error={(errors.lastName != null) && errors.lastName.message}
+          />
+        </Group>
+
+        <TextInput
+          label="Email Address"
+          className="auth-input"
+          {...register("email")}
+          error={(errors.email != null) && errors.email.message}
+        />
+
+        <Group grow justify="space-between">
+          <PasswordInput
+            className="auth-input"
+            label="Password"
+            {...register("password")}
+            error={errors.password != null && errors.password.message}
+          />
+          <PasswordInput
+            className="auth-input"
+            label="Confirm Password"
+            {...register("confirmPassword")}
+            error={errors.confirmPassword != null && errors.confirmPassword.message}
+          />
+        </Group>
+
         {error && <FormError>{error}</FormError>}
-        <button disabled={isSubmitting} type="submit">
+        <Button fullWidth disabled={isSubmitting} type="submit">
           {isSubmitting ? "Submitting" : "Register"}
-        </button>
+        </Button>
       </form>
-      <p>
+      <Divider size="xs" className="divider" />
+      <Text size="sm">
         Already have an account? <Link to="/login">Login</Link>
-      </p>
-    </div>
+      </Text>
+    </>
   );
 };
 

@@ -31,7 +31,10 @@ const OrderForm: React.FC = () => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
+                partner: null, // TODO
+                id: null, // TODO
                 datePlaced: date,
+                dateCompleted: null,
                 status: "PLACED",
                 numDiapers:
                     Number(newborn) +
@@ -113,7 +116,7 @@ const OrderForm: React.FC = () => {
                     </Tabs.Panel>
 
                     <Tabs.Panel value="delivery-info">
-                        <OrderFormDeliveryInfo />
+                        <OrderFormDeliveryInfo date={date} setDate={setDate} />
                         <Flex
                             gap="md"
                             justify="flex-end"
