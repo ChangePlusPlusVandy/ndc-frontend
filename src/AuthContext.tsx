@@ -101,6 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error(err);
     }
   }
+
   const createMongoPartner = async (name: string, email: string, uid: string) => {
     try {
       const requestOptions = {
@@ -136,7 +137,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function logout(): Promise<void> {
     setIsStaff(null)
     return await signOut(auth);
-
   }
 
   function getUser(): User | null {
