@@ -8,7 +8,7 @@ type User = {
 };
 
 const Profile: React.FC = () => {
-  const { logout, getUser } = useAuth();
+  const { logout, getUser, isStaff } = useAuth();
   const navigate = useNavigate();
 
   const [user, setUser] = useState<User | null>(null);
@@ -39,6 +39,9 @@ const Profile: React.FC = () => {
           </p>
           <p>
             <strong>Email:</strong> {user?.email}
+          </p>
+          <p>
+            <strong>Is a Staff Member:</strong> {isStaff ? "yes" : "no"}
           </p>
           <button onClick={handleLogout}>Logout</button>
         </div>
