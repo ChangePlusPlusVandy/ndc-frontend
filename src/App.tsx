@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useContext, ReactNode } from "react";
 import "@mantine/core/styles.css";
 
 
 import {
-  createBrowserRouter,
-  createRoutesFromElements,
   Route,
-  RouterProvider,
+  Routes,
+  BrowserRouter as RouterProvider,
 } from "react-router-dom";
 import { AuthProvider } from "./AuthContext";
 import "./App.css"
@@ -19,25 +18,24 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import AuthWrapper from "./pages/Auth/AuthWrapper";
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <>
-      <Route path="/" element={<PrivateRoute element={<Home />} />} />
-      <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
+const App: React.FC = () => {
+  return (
+    <AuthProvider>
+      <RouterProvider>
+        <Routes>
+          <Route path="/" element={<PrivateRoute element={<Home />} />} />
+          <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
+
+          <Route index path="/login" element={AuthWrapper(<Login />)} />
+          <Route path="/register" element={AuthWrapper(<Register />)} />
+          <Route path="/forgot-password" element={AuthWrapper(<ForgotPassword />)} />
+        </Routes>
+      </RouterProvider>
+    </AuthProvider>
+  );
+}
 
 
-      <Route index path="/login" element={AuthWrapper(<Login />)} />
-      <Route path="/register" element={AuthWrapper(<Register />)} />
-      <Route path="/forgot-password" element={AuthWrapper(<ForgotPassword />)} />
 
-    </>,
-  ),
-);
-
-const App: React.FC = () => (
-  <AuthProvider>
-    <RouterProvider router={router} />
-  </AuthProvider>
-);
 
 export default App;
