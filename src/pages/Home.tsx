@@ -79,7 +79,6 @@ const Home: React.FC = () => {
       <br />
       <Link to="/profile">Profile</Link>
     </div>
-
   );
 };
 

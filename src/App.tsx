@@ -17,16 +17,19 @@ import PrivateRoute from "./pages/Auth/PrivateRoute";
 import Register from "./pages/Auth/Register";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
-import { PasswordInput } from "@mantine/core";
+import AuthWrapper from "./pages/Auth/AuthWrapper";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<PrivateRoute element={<Home />} />} />
       <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
+
+
+      <Route index path="/login" element={AuthWrapper(<Login />)} />
+      <Route path="/register" element={AuthWrapper(<Register />)} />
+      <Route path="/forgot-password" element={AuthWrapper(<ForgotPassword />)} />
+
     </>,
   ),
 );

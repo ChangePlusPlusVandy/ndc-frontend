@@ -15,7 +15,8 @@ interface AuthContextData {
   currentUser: User | null;
   login: (email: string, password: string) => Promise<void>;
   registerUser: (
-    name: string,
+    firstName: string,
+    lastName: string,
     email: string,
     password: string,
     isStaff: boolean,
@@ -60,25 +61,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
   }
 
-  async function registerUser(name: string, email: string, password: string, isStaff: boolean = false) {
+  async function registerUser(firstName: string, lastName: string, email: string, password: string, isStaff: boolean = false) {
     return createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Update the user profile
         return updateProfile(userCredential.user, {
-          displayName: name,
-        }).then(() => userCredential); // Return userCredential for the next then
+          displayName: firstName + lastName,
+        }).then(() => userCredential);
       })
       .then((userCredential) => {
         // Now userCredential is accessible here
         if (isStaff) {
-          return createMongoStaff(name, email, userCredential.user.uid);
+          return createMongoStaff(firstName, lastName, email, userCredential.user.uid);
         } else {
-          return createMongoPartner(name, email, userCredential.user.uid);
+          return createMongoPartner(firstName, lastName, email, userCredential.user.uid);
         }
       });
   }
 
-  const createMongoStaff = async (name: string, email: string, uid: string) => {
+  const createMongoStaff = async (firstName: string, lastName: string, email: string, uid: string) => {
     try {
       const requestOptions = {
         method: "POST",
@@ -87,8 +88,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
         },
         body: JSON.stringify({
-          firstName: name,
-          lastName: name,
+          firstName: firstName,
+          lastName: lastName,
           email: email,
           phoneNumber: "123",
           firebaseUid: uid,
@@ -102,7 +103,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const createMongoPartner = async (name: string, email: string, uid: string) => {
+  const createMongoPartner = async (firstName: string, lastName: string, email: string, uid: string) => {
     try {
       const requestOptions = {
         method: "POST",
@@ -111,8 +112,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
         },
         body: JSON.stringify({
-          firstName: name,
-          lastName: name,
+          firstName: firstName,
+          lastName: lastName,
           email: email,
           phoneNumber: "123",
           location: "ld",
@@ -127,8 +128,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch("/api/partner/", requestOptions);
       const partnerUser = await res.json()
       setIsStaff(false);
-      console.log(partnerUser);
-
     } catch (err) {
       console.error(err);
     }

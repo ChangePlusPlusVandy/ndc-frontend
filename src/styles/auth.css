@@ -49,9 +49,10 @@
     margin-bottom: 1em;
 }
 
-.email-input {
+.auth-input {
     margin-bottom: 1em;
 }
+
 
 .login-auth-options {
     display: flex;
