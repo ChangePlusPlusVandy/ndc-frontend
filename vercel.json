@@ -1,8 +1,0 @@
-{
-    "rewrites": [
-        {
-            "source": "/api/(.*)",
-            "destination": "https://ndc-backend-410021.uc.r.appspot.com/"
-        }
-    ]
-}
