@@ -35,7 +35,6 @@ const Home: React.FC = () => {
             Authorization: `Bearer ${token}`,
           },
         };
-        console.log(token)
 
         // below, the /api is replaced with the server url defined in vite.config.ts
         // so, if the server is defined as "localhost:3001" in that file,
