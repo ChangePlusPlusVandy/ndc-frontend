@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               "Content-Type": "application/json",
             }
           }
-          let checkPartner = await fetch(`/api/login?firebaseUid=${userCredential.user.uid}`, requestOptions);
+          let checkPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login?firebaseUid=${userCredential.user.uid}`, requestOptions);
           let data = await checkPartner.json();
           if (!data.error)
             setIsStaff(data.isStaff);

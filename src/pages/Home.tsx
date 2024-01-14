@@ -40,7 +40,7 @@ const Home: React.FC = () => {
         // below, the /api is replaced with the server url defined in vite.config.ts
         // so, if the server is defined as "localhost:3001" in that file,
         // the fetch url will be "localhost:3001/example"
-        const res = await fetch("/api/inventory/", payloadHeader);
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/inventory/`, payloadHeader);
         const data = await res.json() as InventoryApiResponse;
         setInventory(data);
       } catch (err) {
