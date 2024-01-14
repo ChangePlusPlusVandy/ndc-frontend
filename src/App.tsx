@@ -1,16 +1,14 @@
-import React from "react";
+import React, { useContext, ReactNode } from "react";
+import "@mantine/core/styles.css";
 
-// Changed, Mantine
-import '@mantine/core/styles.css';
-import { MantineProvider } from "@mantine/core";
 
 import {
-  createBrowserRouter,
-  createRoutesFromElements,
   Route,
-  RouterProvider,
+  Routes,
+  BrowserRouter as RouterProvider,
 } from "react-router-dom";
 import { AuthProvider } from "./AuthContext";
+import "./App.css"
 // Routes
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Login from "./pages/Auth/Login";
@@ -18,32 +16,26 @@ import PrivateRoute from "./pages/Auth/PrivateRoute";
 import Register from "./pages/Auth/Register";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import AuthWrapper from "./pages/Auth/AuthWrapper";
 
-// Changed, Michelle (Dashboard)
-import Dashboard from "./pages/dashboard/Dashboard";
+const App: React.FC = () => {
+  return (
+    <AuthProvider>
+      <RouterProvider>
+        <Routes>
+          <Route path="/" element={<PrivateRoute element={<Home />} />} />
+          <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <>
-      <Route path="/" element={<PrivateRoute element={<Home />} />} />
-      <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-    </>,
-  ),
-);
+          <Route index path="/login" element={AuthWrapper(<Login />)} />
+          <Route path="/register" element={AuthWrapper(<Register />)} />
+          <Route path="/forgot-password" element={AuthWrapper(<ForgotPassword />)} />
+        </Routes>
+      </RouterProvider>
+    </AuthProvider>
+  );
+}
 
-const App: React.FC = () => (
-  <>
-    <MantineProvider>
-      <Dashboard></Dashboard>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
-    </MantineProvider>
-  </>
 
-);
+
 
 export default App;
