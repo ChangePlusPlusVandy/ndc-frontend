@@ -49,19 +49,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               "Content-Type": "application/json",
             }
           }
-          console.log("cred ,", userCredential);
-          console.log("user ,", userCredential.user);
-          console.log("uid ,", userCredential.user.uid);
-          const fetchUrl = import.meta.env.MODE === 'development'
-            ? `/api` // URL for development
-            : `${import.meta.env.VITE_BACKEND_URL}`; // URL for production
-
-          let checkPartner = await fetch(`${fetchUrl}/login?firebaseUid=${userCredential.user.uid}`, requestOptions);
+          let checkPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login?firebaseUid=${userCredential.user.uid}`, requestOptions);
           let data = await checkPartner.json();
-          console.log("login ", data);
-          // if (!data.error)
-          //   setIsStaff(data.isStaff);
-
+          if (!data.error)
+            setIsStaff(data.isStaff);
         } catch (err) {
           console.error(err)
         }
