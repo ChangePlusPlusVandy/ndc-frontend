@@ -8,15 +8,21 @@ import MyAccountBtn from "./MyAccountBtn";
 import ViewOrderBtn from "./ViewOrderBtn";
 import logo from './Images/logo.png';
 import placeholder from './Images/placeholder.png';
+import {useNavigate} from "react-router-dom";
+
 
 function Dashboard() {
+    const navigate = useNavigate();
+    const handleProfile = () =>{
+        navigate('./profile');
+    }
     return (
         <>
             <Flex direction = "row">
 
                 {/* image section */}
                 <Flex w = {150} mt = {30} direction = "column">
-                    <Image style={{ alignSelf: 'flex-start' }} fit= "contain" radius = "md" h = {60} src = {logo} alt = "Logo"/>
+                    <Image onClick={handleProfile}  style={{ alignSelf: 'flex-start' }} fit= "contain" radius = "md" h = {60} src = {logo} alt = "Logo"/>
                 </Flex>
 
                 {/* main section */}

@@ -11,6 +11,7 @@ import { AuthProvider } from "./AuthContext";
 import "./App.css"
 // Routes
 import ForgotPassword from "./pages/Auth/ForgotPassword";
+import Dashboard from "./pages/dashboard/Dashboard";
 import Login from "./pages/Auth/Login";
 import PrivateRoute from "./pages/Auth/PrivateRoute";
 import Register from "./pages/Auth/Register";
@@ -23,7 +24,7 @@ const App: React.FC = () => {
     <AuthProvider>
       <RouterProvider>
         <Routes>
-          <Route path="/" element={<PrivateRoute element={<Home />} />} />
+          <Route path="/" element={<PrivateRoute element={<Dashboard />} />} />
           <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
 
           <Route index path="/login" element={AuthWrapper(<Login />)} />
