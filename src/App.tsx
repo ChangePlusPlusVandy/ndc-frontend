@@ -1,5 +1,9 @@
 import React from "react";
 
+// Changed, Mantine
+import '@mantine/core/styles.css';
+import { MantineProvider } from "@mantine/core";
+
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -15,6 +19,9 @@ import Register from "./pages/Auth/Register";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 
+// Changed, Michelle (Dashboard)
+import Dashboard from "./pages/dashboard/Dashboard";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -28,9 +35,15 @@ const router = createBrowserRouter(
 );
 
 const App: React.FC = () => (
-  <AuthProvider>
-    <RouterProvider router={router} />
-  </AuthProvider>
+  <>
+    <MantineProvider>
+      <Dashboard></Dashboard>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </MantineProvider>
+  </>
+
 );
 
 export default App;
