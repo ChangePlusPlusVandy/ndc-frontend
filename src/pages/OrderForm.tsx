@@ -33,6 +33,11 @@ const OrderForm: React.FC = () => {
         setSizes({ ...initialSizes });
     };
 
+    const handleClose = () => {
+        close();
+        clearSizes();
+    }
+
     const handleSubmit = async () => {
         close();
         clearSizes(); //TODO: add this after everything else
@@ -84,7 +89,7 @@ const OrderForm: React.FC = () => {
             <Modal
                 size="xl"
                 opened={opened}
-                onClose={close}
+                onClose={handleClose}
                 overlayProps={{
                     backgroundOpacity: 0.55,
                     blur: 3,
@@ -92,7 +97,7 @@ const OrderForm: React.FC = () => {
                 withCloseButton={false}
                 scrollAreaComponent={ScrollArea.Autosize}
             >
-                <CloseButton onClick={close} />
+                <CloseButton onClick={handleClose} />
 
                 <Tabs defaultValue="request-diapers">
                     <Container m="md">
