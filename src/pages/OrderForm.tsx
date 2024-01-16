@@ -12,19 +12,38 @@ import { useDisclosure } from "@mantine/hooks";
 import OrderFormRequest from "./OrderForm/OrderFormRequest";
 import OrderFormDeliveryInfo from "./OrderForm/OrderFormDeliveryInfo";
 import OrderFormConfirmation from "./OrderForm/OrderFormConfirmation";
+import { set } from "react-hook-form";
+
+const initialSizes = {
+    newborn: 1,
+    size1: 1,
+    size2: 1,
+    size3: 1,
+    size4: 1,
+    size5: 1,
+    size6: 1,
+};
 
 const OrderForm: React.FC = () => {
     const [opened, { open, close }] = useDisclosure(false);
     const [date, setDate] = useState<Date | null>(null);
-    const [newborn, setNewborn] = useState<string | number>(1);
-    const [size1, setSize1] = useState<string | number>(1);
-    const [size2, setSize2] = useState<string | number>(1);
-    const [size3, setSize3] = useState<string | number>(1);
-    const [size4, setSize4] = useState<string | number>(1);
-    const [size5, setSize5] = useState<string | number>(1);
-    const [size6, setSize6] = useState<string | number>(1);
+    const [sizes, setSizes] = useState(initialSizes);
+
+    const clearSizes = () => {
+        setSizes({ ...initialSizes });
+    };
 
     const handleSubmit = async () => {
+        close();
+        clearSizes(); //TODO: add this after everything else
+        const numDiapers =
+            Number(sizes.newborn) +
+            Number(sizes.size1) +
+            Number(sizes.size2) +
+            Number(sizes.size3) +
+            Number(sizes.size4) +
+            Number(sizes.size5) +
+            Number(sizes.size6);
         const response = await fetch("http://localhost:3000/order", {
             method: "POST",
             headers: {
@@ -36,21 +55,14 @@ const OrderForm: React.FC = () => {
                 datePlaced: date,
                 dateCompleted: null,
                 status: "PLACED",
-                numDiapers:
-                    Number(newborn) +
-                    Number(size1) +
-                    Number(size2) +
-                    Number(size3) +
-                    Number(size4) +
-                    Number(size5) +
-                    Number(size6),
-                newborn: newborn,
-                size1: size1,
-                size2: size2,
-                size3: size3,
-                size4: size4,
-                size5: size5,
-                size6: size6,
+                numDiapers: numDiapers,
+                newborn: sizes.newborn,
+                size1: sizes.size1,
+                size2: sizes.size2,
+                size3: sizes.size3,
+                size4: sizes.size4,
+                size5: sizes.size5,
+                size6: sizes.size6,
             }),
         });
     };
@@ -91,27 +103,12 @@ const OrderForm: React.FC = () => {
                             <Tabs.Tab value="delivery-info">
                                 Delivery Information
                             </Tabs.Tab>
-                            <Tabs.Tab value="confirmation">
-                                Confirmation
-                            </Tabs.Tab>
                         </Tabs.List>
                     </Container>
                     <Tabs.Panel value="request-diapers">
                         <OrderFormRequest
-                            newborn={newborn}
-                            setNewborn={setNewborn}
-                            size1={size1}
-                            setSize1={setSize1}
-                            size2={size2}
-                            setSize2={setSize2}
-                            size3={size3}
-                            setSize3={setSize3}
-                            size4={size4}
-                            setSize4={setSize4}
-                            size5={size5}
-                            setSize5={setSize5}
-                            size6={size6}
-                            setSize6={setSize6}
+                            sizes={sizes}
+                            setSizes={setSizes}
                         />
                     </Tabs.Panel>
 
@@ -123,14 +120,15 @@ const OrderForm: React.FC = () => {
                             direction="row"
                             wrap="wrap"
                         >
-                            <Button variant="filled" color="dark" m="lg">
+                            <Button
+                                onClick={handleSubmit}
+                                variant="filled"
+                                color="dark"
+                                m="lg"
+                            >
                                 Submit
                             </Button>
                         </Flex>
-                    </Tabs.Panel>
-
-                    <Tabs.Panel value="confirmation">
-                        <OrderFormConfirmation />
                     </Tabs.Panel>
                 </Tabs>
 

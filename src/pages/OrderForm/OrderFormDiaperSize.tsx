@@ -3,11 +3,18 @@ import { Group, Text, Container, Slider, NumberInput } from "@mantine/core";
 
 type SizeProps = {
     typeName: string,
-    amount: string | number,
-    setAmount: any
+    keyName: string,
+    updateSize: any,
+    initialSize: string | number
 };
 
-const OrderFormDiaperSize: React.FC<SizeProps> = ({ typeName, amount, setAmount }: SizeProps) => {
+const OrderFormDiaperSize: React.FC<SizeProps> = ({ typeName,  keyName, updateSize, initialSize }: SizeProps) => {
+    const [value, setValue] = useState<string | number>(initialSize);
+
+    const handleChange = (e: string | number) => {
+        setValue(e);
+        updateSize(keyName, e);
+    };
 
     return (
         <>
@@ -15,9 +22,8 @@ const OrderFormDiaperSize: React.FC<SizeProps> = ({ typeName, amount, setAmount 
                 <Group m="">
                     <Text size="md">{typeName}</Text>
                     <NumberInput
-                    
-                        value={amount}
-                        onChange={setAmount}
+                        value={value}
+                        onChange={handleChange}
                         size="sm"
                         placeholder="1 - 1000"
                         clampBehavior="strict"
@@ -29,8 +35,8 @@ const OrderFormDiaperSize: React.FC<SizeProps> = ({ typeName, amount, setAmount 
 
                 <Slider
                 
-                    value={Number(amount)}
-                    onChange={setAmount}
+                    value={Number(value)}
+                    onChange={handleChange}
                     color="blue"
                     showLabelOnHover={false}
                     marks={[

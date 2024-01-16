@@ -10,7 +10,7 @@ import { DateInput } from "@mantine/dates";
 
 type DeliveryProps = {
     date: Date | null,
-    setDate: React.Dispatch<React.SetStateAction<Date | null>>
+    setDate: any
 };
 
 const OrderFormDeliveryInfo:React.FC<DeliveryProps> = ({ date, setDate }: DeliveryProps) => {
