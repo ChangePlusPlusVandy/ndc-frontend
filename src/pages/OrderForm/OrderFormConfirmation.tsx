@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-    Title,
-    Text,
-    Container,
-} from "@mantine/core";
+import { Title, Text, Container } from "@mantine/core";
 
 const OrderFormConfirmation: React.FC = () => {
     return (
@@ -12,7 +8,9 @@ const OrderFormConfirmation: React.FC = () => {
                 <Title ta="center" m="lg">
                     Order Received!
                 </Title>
-                <Text ta="center">We will be processing your order shortly!</Text>
+                <Text ta="center">
+                    We will be processing your order shortly!
+                </Text>
                 <Container m="lg" p="sm" bg="var(--mantine-color-blue-light)">
                     <Title size="md">Order Date</Title>
                     <Text>10:00pm 10/10/2023</Text>
@@ -29,7 +27,6 @@ const OrderFormConfirmation: React.FC = () => {
                     <Title size="md">Order Quantity</Title>
                     <Text>1000</Text>
                 </Container>
-                
             </Container>
         </>
     );

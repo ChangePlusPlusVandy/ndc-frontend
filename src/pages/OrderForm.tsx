@@ -28,19 +28,25 @@ const OrderForm: React.FC = () => {
     const [opened, { open, close }] = useDisclosure(false);
     const [date, setDate] = useState<Date | null>(null);
     const [sizes, setSizes] = useState(initialSizes);
+    const [submit, setSubmit] = useState(false);
 
     const clearSizes = () => {
         setSizes({ ...initialSizes });
     };
 
+    const delay = (ms: any) => new Promise(
+        resolve => setTimeout(resolve, ms)
+      );
+
     const handleClose = () => {
         close();
         clearSizes();
-    }
+        setSubmit(false);
+    };
 
     const handleSubmit = async () => {
-        close();
-        clearSizes(); //TODO: add this after everything else
+        setSubmit(true);
+        //handleClose(); //TODO: add this after everything else
         const numDiapers =
             Number(sizes.newborn) +
             Number(sizes.size1) +
@@ -49,40 +55,31 @@ const OrderForm: React.FC = () => {
             Number(sizes.size4) +
             Number(sizes.size5) +
             Number(sizes.size6);
-        const response = await fetch("http://localhost:3000/order", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                partner: null, // TODO
-                id: null, // TODO
-                datePlaced: date,
-                dateCompleted: null,
-                status: "PLACED",
-                numDiapers: numDiapers,
-                newborn: sizes.newborn,
-                size1: sizes.size1,
-                size2: sizes.size2,
-                size3: sizes.size3,
-                size4: sizes.size4,
-                size5: sizes.size5,
-                size6: sizes.size6,
-            }),
-        });
+        const response = await fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/orders`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    partner: null, // TODO
+                    id: null, // TODO
+                    datePlaced: date,
+                    dateCompleted: null,
+                    status: "PLACED",
+                    numDiapers: numDiapers,
+                    newborn: sizes.newborn,
+                    size1: sizes.size1,
+                    size2: sizes.size2,
+                    size3: sizes.size3,
+                    size4: sizes.size4,
+                    size5: sizes.size5,
+                    size6: sizes.size6,
+                }),
+            }
+        );
     };
-
-    useEffect(() => {
-        fetch("http://localhost:3000/order", {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-            });
-    });
 
     return (
         <>
@@ -99,45 +96,50 @@ const OrderForm: React.FC = () => {
             >
                 <CloseButton onClick={handleClose} />
 
-                <Tabs defaultValue="request-diapers">
-                    <Container m="md">
-                        <Tabs.List grow justify="center">
-                            <Tabs.Tab value="request-diapers">
-                                Request Diapers
-                            </Tabs.Tab>
-                            <Tabs.Tab value="delivery-info">
-                                Delivery Information
-                            </Tabs.Tab>
-                        </Tabs.List>
-                    </Container>
-                    <Tabs.Panel value="request-diapers">
-                        <OrderFormRequest
-                            sizes={sizes}
-                            setSizes={setSizes}
-                        />
-                    </Tabs.Panel>
+                {!submit ? (
+                    <>
+                        <Tabs defaultValue="request-diapers">
+                            <Container m="md">
+                                <Tabs.List grow justify="center">
+                                    <Tabs.Tab value="request-diapers">
+                                        Request Diapers
+                                    </Tabs.Tab>
+                                    <Tabs.Tab value="delivery-info">
+                                        Delivery Information
+                                    </Tabs.Tab>
+                                </Tabs.List>
+                            </Container>
+                            <Tabs.Panel value="request-diapers">
+                                <OrderFormRequest
+                                    sizes={sizes}
+                                    setSizes={setSizes}
+                                />
+                            </Tabs.Panel>
 
-                    <Tabs.Panel value="delivery-info">
-                        <OrderFormDeliveryInfo date={date} setDate={setDate} />
-                        <Flex
-                            gap="md"
-                            justify="flex-end"
-                            direction="row"
-                            wrap="wrap"
-                        >
-                            <Button
-                                onClick={handleSubmit}
-                                variant="filled"
-                                color="dark"
-                                m="lg"
-                            >
-                                Submit
-                            </Button>
-                        </Flex>
-                    </Tabs.Panel>
-                </Tabs>
+                            <Tabs.Panel value="delivery-info">
+                                <OrderFormDeliveryInfo
+                                    date={date}
+                                    setDate={setDate}
+                                />
+                                <Flex
+                                    gap="md"
+                                    justify="flex-end"
+                                    direction="row"
+                                    wrap="wrap"
+                                >
+                                    <Button
+                                        onClick={handleSubmit}
+                                        variant="filled"
+                                        color="dark"
+                                        m="lg"
+                                    >
+                                        Submit
+                                    </Button>
+                                </Flex>
+                            </Tabs.Panel>
+                        </Tabs>
 
-                {/*<Flex gap="md" justify="flex-end" direction="row" wrap="wrap">
+                        {/*<Flex gap="md" justify="flex-end" direction="row" wrap="wrap">
                     <Button
                         justify="flex-end"
                         variant="filled"
@@ -156,8 +158,11 @@ const OrderForm: React.FC = () => {
                         Submit
                     </Button>
             </Flex>*/}
+                    </>
+                ) : (
+                    <OrderFormConfirmation />
+                )}
             </Modal>
-
             <Button onClick={open}>Open Form</Button>
         </>
     );
