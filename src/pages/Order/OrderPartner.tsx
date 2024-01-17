@@ -1,5 +1,7 @@
 import { Group, Tabs, Button, Image, rem } from '@mantine/core';
-import OrderTable from './OrderTable'; 
+import OrderTable from './OrderTable';
+import Filter from './Filters'; 
+import Sorter from './Sorters';  
 import "./OrderPartner.css"; 
 import ndcLogo from '../../assets/ndc-logo.png'; 
 
@@ -18,6 +20,11 @@ const OrderPartner: React.FC = () => {
                 </Group>
                 
             </header>
+
+            <Group justify='space-between' className='width-90'>
+                <Filter></Filter>
+                <Sorter></Sorter>
+            </Group>
             
             <Tabs variant='unstyled' defaultValue={"open"} className="width-90">
                 <Tabs.List grow className=''>
