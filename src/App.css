@@ -1,3 +1,15 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #474646;
+  --secondary-color: #626161;
+  --accent-color: #d4d4d4;
+  --background-color: #ffffff;
+  --button-color: #8a9ddc;
+}
+
 .app {
   display: flex;
   flex-direction: column;
@@ -35,9 +47,20 @@
   padding: 1.5em;
   will-change: filter;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #d46b46aa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
+
+/*.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-content: flex-end;
+  gap: 20px;
+
+}*/

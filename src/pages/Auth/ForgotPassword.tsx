@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useAuth } from "../../AuthContext";
 import FormError from "./FormError";
+import { Button, TextInput, Title, Text, Divider } from "@mantine/core";
 
 interface FormValues {
   email: string;
@@ -43,32 +44,31 @@ const ForgotPassword: React.FC = () => {
       await forgotPassword(values.email);
       setMessage("Check your email for further instructions");
     } catch (err: any) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument
       setError(err.message);
     }
   };
 
   return (
-    <div>
-      <h1>Forgot Password</h1>
+    <>
+      <Title order={1}>Forgot Password</Title>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" {...register("email")} />
-          {errors.email != null && (
-            <FormError>{errors.email.message}</FormError>
-          )}
-        </div>
+        <TextInput
+          label="Email Address"
+          className="auth-input"
+          {...register("email")}
+          error={(errors.email != null) && errors.email.message}
+        />
         {error && <FormError>{error}</FormError>}
-        <button disabled={isSubmitting} type="submit">
-          {isSubmitting ? "Submitting" : "Login"}
-        </button>
-        {message && <p>{message}</p>}
+        <Button fullWidth disabled={isSubmitting} type="submit">
+          {isSubmitting ? "Submitting" : "Send Email"}
+        </Button>
+        <Text size="sm">{message && <p>{message}</p>}</Text>
       </form>
-      <p>
+      <Divider size="xs" className="divider" />
+      <Text size="sm">
         <Link to="/login">Back to login</Link>
-      </p>
-    </div>
+      </Text>
+    </>
   );
 };
 
