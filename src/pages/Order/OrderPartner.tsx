@@ -21,7 +21,7 @@ const OrderPartner: React.FC = () => {
                 
             </header>
 
-            <Group justify='space-between' className='width-90'>
+            <Group justify='space-between' className='width-90 modButtons'>
                 <Filter></Filter>
                 <Sorter></Sorter>
             </Group>

@@ -12,6 +12,15 @@ header {
     margin-bottom: 2.5%;
 }
 
+.modButtons {
+    margin-bottom: 2.5%; 
+}
+
+.whiteButton {
+    background-color: white; 
+    color: black; 
+}
+
 .tab {
     position: relative;
     border-bottom: 0.1rem solid var(--mantine-color-gray-4);

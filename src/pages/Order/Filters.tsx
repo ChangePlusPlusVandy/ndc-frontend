@@ -1,11 +1,11 @@
 import {Menu, Button, Image, rem} from '@mantine/core';
-import downArrow from '../../assets/downArrow.png'; 
+import downArrow from '../../assets/downArrow.jpg'; 
 
 const Filter: React.FC = () => {
     return (
-        <Menu>
+        <Menu offset={0}>
             <Menu.Target>
-                <Button rightSection={<Image w={rem(64)} src={downArrow}/>}>Filters</Button>
+                <Button className='whiteButton' rightSection={<Image w={rem(20)} src={downArrow}/>}>Filters</Button>
             </Menu.Target>
 
             <Menu.Dropdown>
