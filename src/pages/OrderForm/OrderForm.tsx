@@ -9,9 +9,9 @@ import {
     CloseButton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import OrderFormRequest from "./OrderForm/OrderFormRequest";
-import OrderFormDeliveryInfo from "./OrderForm/OrderFormDeliveryInfo";
-import OrderFormConfirmation from "./OrderForm/OrderFormConfirmation";
+import OrderFormRequest from "./OrderFormRequest";
+import OrderFormDeliveryInfo from "./OrderFormDeliveryInfo";
+import OrderFormConfirmation from "./OrderFormConfirmation";
 import { set } from "react-hook-form";
 
 const initialSizes = {

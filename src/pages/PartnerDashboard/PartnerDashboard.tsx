@@ -10,7 +10,7 @@ import logo from './Images/logo.png';
 import placeholder from './Images/placeholder.png';
 import {useNavigate} from "react-router-dom";
 
-import OrderForm from '../OrderForm';
+import OrderForm from '../OrderForm/OrderForm';
 
 
 function Dashboard() {

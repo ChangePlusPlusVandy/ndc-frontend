@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 
-import OrderForm from "./OrderForm";
+import OrderForm from "./OrderForm/OrderForm";
 
 interface DiaperSizes {
     newborn: number;
