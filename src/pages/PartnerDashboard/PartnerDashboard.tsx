@@ -10,6 +10,8 @@ import logo from './Images/logo.png';
 import placeholder from './Images/placeholder.png';
 import {useNavigate} from "react-router-dom";
 
+import OrderForm from '../OrderForm/OrderForm';
+
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -34,7 +36,7 @@ function Dashboard() {
                         <Flex pb = {20} direction = "row" gap = {40} justify = "center">
                             <MyAccountBtn></MyAccountBtn>
                             <ViewOrderBtn></ViewOrderBtn>
-                            <MakeOrderBtn></MakeOrderBtn>
+                            <OrderForm />
                         </Flex>
                     </Container>
 
