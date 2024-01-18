@@ -7,24 +7,29 @@ import {
   Routes,
   BrowserRouter as RouterProvider,
 } from "react-router-dom";
-import { AuthProvider } from "./AuthContext";
+import { AuthProvider, useAuth } from "./AuthContext";
 import "./App.css"
 // Routes
 import ForgotPassword from "./pages/Auth/ForgotPassword";
-import Dashboard from "./pages/dashboard/Dashboard";
+import PartnerDashboard from "./pages/PartnerDashboard/PartnerDashboard";
+import StaffDashboard from "./pages/StaffDashboard/StaffDashboard";
 import Login from "./pages/Auth/Login";
 import PrivateRoute from "./pages/Auth/PrivateRoute";
 import Register from "./pages/Auth/Register";
-import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import AuthWrapper from "./pages/Auth/AuthWrapper";
+
+const DashboardAccessControl: React.FC = () => {
+  const { isStaff } = useAuth();
+  return isStaff ? <StaffDashboard /> : <PartnerDashboard />;
+}
 
 const App: React.FC = () => {
   return (
     <AuthProvider>
       <RouterProvider>
         <Routes>
-          <Route path="/" element={<PrivateRoute element={<Dashboard />} />} />
+          <Route path="/" element={<PrivateRoute element={<DashboardAccessControl />} />} />
           <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
 
           <Route index path="/login" element={AuthWrapper(<Login />)} />
