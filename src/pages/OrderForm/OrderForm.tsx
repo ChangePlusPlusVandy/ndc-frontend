@@ -33,7 +33,7 @@ const initialDeliveryInfo = {
 const OrderForm: React.FC = () => {
     const [opened, { open, close }] = useDisclosure(false);
     const [sizes, setSizes] = useState(initialSizes);
-    const [submit, setSubmit] = useState(false);
+    const [activePage, setActivePage] = useState<string | null>("request-diapers");
     const [deliveryInfo, setDeliveryInfo] = useState(initialDeliveryInfo);
 
     //TODO: 
@@ -48,7 +48,7 @@ const OrderForm: React.FC = () => {
     const handleOpen = () => {
         clearForm();
         open();
-        setSubmit(false);
+        setActivePage("request-diapers");
     };
 
     const handleClose = () => {
@@ -64,7 +64,7 @@ const OrderForm: React.FC = () => {
     };
 
     const handleSubmit = async () => {
-        setSubmit(true);
+        setActivePage("confirmation");
         const response = await fetch(
             `${import.meta.env.VITE_BACKEND_URL}/orders`,
             {
@@ -106,9 +106,9 @@ const OrderForm: React.FC = () => {
                 scrollAreaComponent={ScrollArea.Autosize}
             >
                 <CloseButton onClick={handleClose} />
-                {!submit ? (
+                {!(activePage == "confirmation") ? (
                     <>
-                        <Tabs defaultValue="request-diapers">
+                        <Tabs value={activePage} onChange={setActivePage}>
                             <Container m="md">
                                 <Tabs.List grow justify="center">
                                     <Tabs.Tab value="request-diapers">
@@ -124,6 +124,21 @@ const OrderForm: React.FC = () => {
                                     sizes={sizes}
                                     setSizes={setSizes}
                                 />
+                                <Flex
+                                    gap="md"
+                                    justify="flex-end"
+                                    direction="row"
+                                    wrap="wrap"
+                                >
+                                    <Button
+                                        onClick={() => setActivePage("delivery-info")}
+                                        variant="filled"
+                                        color="blue"
+                                        m="lg"
+                                    >
+                                        Next
+                                    </Button>
+                                </Flex>
                             </Tabs.Panel>
                             <Tabs.Panel value="delivery-info">
                                 <OrderFormDeliveryInfo
@@ -138,9 +153,17 @@ const OrderForm: React.FC = () => {
                                     wrap="wrap"
                                 >
                                     <Button
+                                        onClick={() => setActivePage("request-diapers")}
+                                        variant="outline"
+                                        color="grey"
+                                        m="lg"
+                                    >
+                                        Back
+                                    </Button>
+                                    <Button
                                         onClick={handleSubmit}
                                         variant="filled"
-                                        color="dark"
+                                        color="blue"
                                         m="lg"
                                     >
                                         Submit
