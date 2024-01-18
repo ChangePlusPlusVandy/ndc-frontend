@@ -24,24 +24,29 @@ const initialSizes = {
     size6: 0,
 };
 
+const initialDeliveryInfo = {
+    distributionPlace: "",
+    date: null,
+    additionalInstructions: "",
+};
+
 const OrderForm: React.FC = () => {
     const [opened, { open, close }] = useDisclosure(false);
-    const [date, setDate] = useState<Date | null>(null);
     const [sizes, setSizes] = useState(initialSizes);
     const [submit, setSubmit] = useState(false);
+    const [deliveryInfo, setDeliveryInfo] = useState(initialDeliveryInfo);
 
-    //TODO: add delivery place and additional instructions, likely combine with dates
+    //TODO: 
     //set a requirement that at least 1 diaper must be ordered
     // set up validation for the delivery info dates - force user to write something for the required parts
 
-
-    const clearSizes = () => {
+    const clearForm = () => {
         setSizes({ ...initialSizes });
-        setDate(null);
+        setDeliveryInfo({ ...initialDeliveryInfo });
     };
 
     const handleOpen = () => {
-        clearSizes();
+        clearForm();
         open();
         setSubmit(false);
     };
@@ -51,9 +56,11 @@ const OrderForm: React.FC = () => {
     };
 
     const numDiapers = () => {
-        return Number(Object.values(sizes).reduce((accumulator: any, value: any) => {
-            return accumulator + value;
-          }, 0));
+        return Number(
+            Object.values(sizes).reduce((accumulator: any, value: any) => {
+                return accumulator + value;
+            }, 0)
+        );
     };
 
     const handleSubmit = async () => {
@@ -68,7 +75,7 @@ const OrderForm: React.FC = () => {
                 body: JSON.stringify({
                     partner: null, // TODO
                     id: null, // TODO
-                    datePlaced: date,
+                    datePlaced: deliveryInfo.date,
                     dateCompleted: null,
                     status: "PLACED",
                     numDiapers: numDiapers(),
@@ -99,7 +106,6 @@ const OrderForm: React.FC = () => {
                 scrollAreaComponent={ScrollArea.Autosize}
             >
                 <CloseButton onClick={handleClose} />
-
                 {!submit ? (
                     <>
                         <Tabs defaultValue="request-diapers">
@@ -121,8 +127,9 @@ const OrderForm: React.FC = () => {
                             </Tabs.Panel>
                             <Tabs.Panel value="delivery-info">
                                 <OrderFormDeliveryInfo
-                                    date={date}
-                                    setDate={setDate}
+                                    deliveryInfo={deliveryInfo}
+                                    setDeliveryInfo={setDeliveryInfo}
+                                    initialDeliveryInfo={initialDeliveryInfo}
                                 />
                                 <Flex
                                     gap="md"
@@ -143,7 +150,12 @@ const OrderForm: React.FC = () => {
                         </Tabs>
                     </>
                 ) : (
-                    <OrderFormConfirmation date={date?.toDateString()} numDiapers={numDiapers()} />
+                    
+                    <OrderFormConfirmation
+                        date={deliveryInfo.date}
+                        distributionPlace={deliveryInfo.distributionPlace}
+                        numDiapers={numDiapers()}
+                    />
                 )}
             </Modal>
             <Button onClick={handleOpen}>Open Form</Button>
