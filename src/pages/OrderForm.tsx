@@ -15,13 +15,13 @@ import OrderFormConfirmation from "./OrderForm/OrderFormConfirmation";
 import { set } from "react-hook-form";
 
 const initialSizes = {
-    newborn: 1,
-    size1: 1,
-    size2: 1,
-    size3: 1,
-    size4: 1,
-    size5: 1,
-    size6: 1,
+    newborn: 0,
+    size1: 0,
+    size2: 0,
+    size3: 0,
+    size4: 0,
+    size5: 0,
+    size6: 0,
 };
 
 const OrderForm: React.FC = () => {
@@ -30,31 +30,34 @@ const OrderForm: React.FC = () => {
     const [sizes, setSizes] = useState(initialSizes);
     const [submit, setSubmit] = useState(false);
 
+    //TODO: add delivery place and additional instructions, likely combine with dates
+    //set a requirement that at least 1 diaper must be ordered
+    // set up validation for the delivery info dates - force user to write something for the required parts
+
+
     const clearSizes = () => {
         setSizes({ ...initialSizes });
+        setDate(null);
     };
 
-    const delay = (ms: any) => new Promise(
-        resolve => setTimeout(resolve, ms)
-      );
+    const handleOpen = () => {
+        clearSizes();
+        open();
+        setSubmit(false);
+    };
 
     const handleClose = () => {
         close();
-        clearSizes();
-        setSubmit(false);
+    };
+
+    const numDiapers = () => {
+        return Number(Object.values(sizes).reduce((accumulator: any, value: any) => {
+            return accumulator + value;
+          }, 0));
     };
 
     const handleSubmit = async () => {
         setSubmit(true);
-        //handleClose(); //TODO: add this after everything else
-        const numDiapers =
-            Number(sizes.newborn) +
-            Number(sizes.size1) +
-            Number(sizes.size2) +
-            Number(sizes.size3) +
-            Number(sizes.size4) +
-            Number(sizes.size5) +
-            Number(sizes.size6);
         const response = await fetch(
             `${import.meta.env.VITE_BACKEND_URL}/orders`,
             {
@@ -68,7 +71,7 @@ const OrderForm: React.FC = () => {
                     datePlaced: date,
                     dateCompleted: null,
                     status: "PLACED",
-                    numDiapers: numDiapers,
+                    numDiapers: numDiapers(),
                     newborn: sizes.newborn,
                     size1: sizes.size1,
                     size2: sizes.size2,
@@ -92,6 +95,7 @@ const OrderForm: React.FC = () => {
                     blur: 3,
                 }}
                 withCloseButton={false}
+                centered
                 scrollAreaComponent={ScrollArea.Autosize}
             >
                 <CloseButton onClick={handleClose} />
@@ -115,7 +119,6 @@ const OrderForm: React.FC = () => {
                                     setSizes={setSizes}
                                 />
                             </Tabs.Panel>
-
                             <Tabs.Panel value="delivery-info">
                                 <OrderFormDeliveryInfo
                                     date={date}
@@ -138,32 +141,12 @@ const OrderForm: React.FC = () => {
                                 </Flex>
                             </Tabs.Panel>
                         </Tabs>
-
-                        {/*<Flex gap="md" justify="flex-end" direction="row" wrap="wrap">
-                    <Button
-                        justify="flex-end"
-                        variant="filled"
-                        color="gray"
-                        m="lg"
-                    >
-                        Enter Delivery Info
-                    </Button>
-                </Flex>
-
-                <Flex gap="md" justify="flex-end" direction="row" wrap="wrap">
-                    <Button variant="filled" color="gray" m="lg">
-                        Edit quantities
-                    </Button>
-                    <Button variant="filled" color="dark" m="lg">
-                        Submit
-                    </Button>
-            </Flex>*/}
                     </>
                 ) : (
-                    <OrderFormConfirmation />
+                    <OrderFormConfirmation date={date?.toDateString()} numDiapers={numDiapers()} />
                 )}
             </Modal>
-            <Button onClick={open}>Open Form</Button>
+            <Button onClick={handleOpen}>Open Form</Button>
         </>
     );
 };

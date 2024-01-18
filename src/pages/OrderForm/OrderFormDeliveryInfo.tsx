@@ -20,15 +20,17 @@ const OrderFormDeliveryInfo:React.FC<DeliveryProps> = ({ date, setDate }: Delive
                 <Title ta="center" m="lg">
                     Delivery Instructions
                 </Title>
+                
                 <Container m="lg">
-                    <Text size="sm">Distribution Place</Text>
+                    <Text size="sm">Distribution Place<Text component="span" c="red"> *</Text></Text>
+                    
                     <TextInput
                         placeholder="Name of Distribution Place"
                         size="sm"
                     />
                 </Container>
                 <Container m="lg">
-                    <Text size="sm">Date</Text>
+                    <Text size="sm">Date<Text component="span" c="red"> *</Text></Text>
                     <DateInput
                         value={date}
                         onChange={setDate}

@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Title, Text, Container } from "@mantine/core";
 
-const OrderFormConfirmation: React.FC = () => {
+type ConfirmationProps = {
+    date: any,
+    numDiapers: any
+};
+
+const OrderFormConfirmation: React.FC<ConfirmationProps> = ({date, numDiapers}: ConfirmationProps) => {
+
     return (
         <>
             <Container bg="white">
@@ -13,7 +19,7 @@ const OrderFormConfirmation: React.FC = () => {
                 </Text>
                 <Container m="lg" p="sm" bg="var(--mantine-color-blue-light)">
                     <Title size="md">Order Date</Title>
-                    <Text>10:00pm 10/10/2023</Text>
+                    <Text>{date}</Text>
                 </Container>
                 <Container m="lg" p="sm" bg="var(--mantine-color-blue-light)">
                     <Title size="md">Order Status</Title>
@@ -25,7 +31,7 @@ const OrderFormConfirmation: React.FC = () => {
                 </Container>
                 <Container m="lg" p="sm" bg="var(--mantine-color-blue-light)">
                     <Title size="md">Order Quantity</Title>
-                    <Text>1000</Text>
+                    <Text>{numDiapers}</Text>
                 </Container>
             </Container>
         </>
