@@ -13,6 +13,7 @@ import OrderFormRequest from "./OrderFormRequest";
 import OrderFormDeliveryInfo from "./OrderFormDeliveryInfo";
 import OrderFormConfirmation from "./OrderFormConfirmation";
 import { set } from "react-hook-form";
+import MakeOrderBtn from "../PartnerDashboard/MakeOrderBtn";
 
 const initialSizes = {
     newborn: 0,
@@ -181,7 +182,7 @@ const OrderForm: React.FC = () => {
                     />
                 )}
             </Modal>
-            <Button onClick={handleOpen}>Open Form</Button>
+            <MakeOrderBtn handleOnClick={handleOpen} />
         </>
     );
 };

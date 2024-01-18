@@ -20,7 +20,6 @@ function Dashboard() {
     }
     return (
         <>
-            <OrderForm />
             <Flex direction = "row">
 
                 {/* image section */}
@@ -37,7 +36,7 @@ function Dashboard() {
                         <Flex pb = {20} direction = "row" gap = {40} justify = "center">
                             <MyAccountBtn></MyAccountBtn>
                             <ViewOrderBtn></ViewOrderBtn>
-                            <MakeOrderBtn></MakeOrderBtn>
+                            <OrderForm />
                         </Flex>
                     </Container>
 
