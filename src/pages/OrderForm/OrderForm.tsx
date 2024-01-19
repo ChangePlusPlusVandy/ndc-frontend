@@ -11,8 +11,9 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import OrderFormRequest from "./OrderFormRequest";
 import OrderFormDeliveryInfo from "./OrderFormDeliveryInfo";
+import OrderFormReview from "./OrderFormReview";
 import OrderFormConfirmation from "./OrderFormConfirmation";
-import { set } from "react-hook-form";
+
 import MakeOrderBtn from "../PartnerDashboard/MakeOrderBtn";
 
 const initialSizes = {
@@ -34,10 +35,12 @@ const initialDeliveryInfo = {
 const OrderForm: React.FC = () => {
     const [opened, { open, close }] = useDisclosure(false);
     const [sizes, setSizes] = useState(initialSizes);
-    const [activePage, setActivePage] = useState<string | null>("request-diapers");
+    const [activePage, setActivePage] = useState<string | null>(
+        "request-diapers"
+    );
     const [deliveryInfo, setDeliveryInfo] = useState(initialDeliveryInfo);
 
-    //TODO: 
+    //TODO:
     //set a requirement that at least 1 diaper must be ordered
     // set up validation for the delivery info dates - force user to write something for the required parts
 
@@ -103,84 +106,135 @@ const OrderForm: React.FC = () => {
                     blur: 3,
                 }}
                 withCloseButton={false}
-                centered
                 scrollAreaComponent={ScrollArea.Autosize}
             >
-                <CloseButton onClick={handleClose} />
-                {!(activePage == "confirmation") ? (
-                    <>
-                        <Tabs value={activePage} onChange={setActivePage}>
-                            <Container m="md">
-                                <Tabs.List grow justify="center">
-                                    <Tabs.Tab value="request-diapers">
-                                        Request Diapers
-                                    </Tabs.Tab>
-                                    <Tabs.Tab value="delivery-info">
-                                        Delivery Information
-                                    </Tabs.Tab>
-                                </Tabs.List>
-                            </Container>
-                            <Tabs.Panel value="request-diapers">
-                                <OrderFormRequest
-                                    sizes={sizes}
-                                    setSizes={setSizes}
-                                />
-                                <Flex
-                                    gap="md"
-                                    justify="flex-end"
-                                    direction="row"
-                                    wrap="wrap"
-                                >
-                                    <Button
-                                        onClick={() => setActivePage("delivery-info")}
-                                        variant="filled"
-                                        color="blue"
-                                        m="lg"
+                 <Flex
+                        justify="flex-end"
+                        direction="row"
+                        pr="1rem"
+                    >
+                        <CloseButton onClick={handleClose} />
+                    </Flex>
+                <Container px={"lg"}>
+                   
+                    {!(activePage == "confirmation") ? (
+                        <>
+                            <Tabs value={activePage} onChange={setActivePage}>
+                                <Container mx="lg">
+                                    <Tabs.List grow justify="center">
+                                        <Tabs.Tab value="request-diapers">
+                                            Request Diapers
+                                        </Tabs.Tab>
+                                        <Tabs.Tab value="delivery-info">
+                                            Delivery Information
+                                        </Tabs.Tab>
+                                        <Tabs.Tab value="review-order">
+                                            Review Order
+                                        </Tabs.Tab>
+                                    </Tabs.List>
+                                </Container>
+
+                                <Tabs.Panel value="request-diapers">
+                                    <OrderFormRequest
+                                        sizes={sizes}
+                                        setSizes={setSizes}
+                                    />
+                                    <Flex
+                                        gap="md"
+                                        justify="flex-end"
+                                        direction="row"
+                                        wrap="wrap"
                                     >
-                                        Next
-                                    </Button>
-                                </Flex>
-                            </Tabs.Panel>
-                            <Tabs.Panel value="delivery-info">
-                                <OrderFormDeliveryInfo
-                                    deliveryInfo={deliveryInfo}
-                                    setDeliveryInfo={setDeliveryInfo}
-                                    initialDeliveryInfo={initialDeliveryInfo}
-                                />
-                                <Flex
-                                    gap="md"
-                                    justify="flex-end"
-                                    direction="row"
-                                    wrap="wrap"
-                                >
-                                    <Button
-                                        onClick={() => setActivePage("request-diapers")}
-                                        variant="outline"
-                                        color="grey"
-                                        m="lg"
+                                        <Button
+                                            onClick={() =>
+                                                setActivePage("delivery-info")
+                                            }
+                                            variant="filled"
+                                            color="blue"
+                                            m="lg"
+                                        >
+                                            Next
+                                        </Button>
+                                    </Flex>
+                                </Tabs.Panel>
+                                <Tabs.Panel value="delivery-info">
+                                    <OrderFormDeliveryInfo
+                                        deliveryInfo={deliveryInfo}
+                                        setDeliveryInfo={setDeliveryInfo}
+                                        initialDeliveryInfo={
+                                            initialDeliveryInfo
+                                        }
+                                    />
+                                    <Flex
+                                        gap="md"
+                                        justify="flex-end"
+                                        direction="row"
+                                        wrap="wrap"
                                     >
-                                        Back
-                                    </Button>
-                                    <Button
-                                        onClick={handleSubmit}
-                                        variant="filled"
-                                        color="blue"
-                                        m="lg"
+                                        <Button
+                                            onClick={() =>
+                                                setActivePage("request-diapers")
+                                            }
+                                            variant="outline"
+                                            color="grey"
+                                            m="lg"
+                                        >
+                                            Back
+                                        </Button>
+                                        <Button
+                                            onClick={() =>
+                                                setActivePage("review-order")
+                                            }
+                                            variant="filled"
+                                            color="blue"
+                                            m="lg"
+                                        >
+                                            Next
+                                        </Button>
+                                    </Flex>
+                                </Tabs.Panel>
+                                <Tabs.Panel value="review-order">
+                                    <OrderFormReview
+                                        sizes={sizes}
+                                        deliveryInfo={deliveryInfo}
+                                        numDiapers={numDiapers()}
+                                    />
+                                    <Flex
+                                        gap="md"
+                                        justify="flex-end"
+                                        direction="row"
+                                        wrap="wrap"
                                     >
-                                        Submit
-                                    </Button>
-                                </Flex>
-                            </Tabs.Panel>
-                        </Tabs>
-                    </>
-                ) : (
-                    
-                    <OrderFormConfirmation
-                        date={deliveryInfo.date}
-                        distributionPlace={deliveryInfo.distributionPlace}
-                        numDiapers={numDiapers()}
-                    />
-                )}
+                                        <Button
+                                            onClick={() =>
+                                                setActivePage("delivery-info")
+                                            }
+                                            variant="outline"
+                                            color="grey"
+                                            m="lg"
+                                        >
+                                            Back
+                                        </Button>
+                                        <Button
+                                            onClick={handleSubmit}
+                                            variant="filled"
+                                            color="blue"
+                                            m="lg"
+                                        >
+                                            Submit
+                                        </Button>
+                                    </Flex>
+                                </Tabs.Panel>
+                            </Tabs>
+                        </>
+                    ) : (
+                        <OrderFormConfirmation
+                            date={deliveryInfo.date}
+                            distributionPlace={deliveryInfo.distributionPlace}
+                            numDiapers={numDiapers()}
+                        />
+                    )}
+                </Container>
             </Modal>
             <MakeOrderBtn handleOnClick={handleOpen} />
         </>
