@@ -18,6 +18,10 @@ function Dashboard() {
     const handleProfile = () =>{
         navigate('./profile');
     }
+    const handleOrderInfo = () => {
+        navigate('./order-info'); 
+    }
+
     return (
         <>
             <Flex direction = "row">
@@ -37,6 +41,7 @@ function Dashboard() {
                             <MyAccountBtn></MyAccountBtn>
                             <ViewOrderBtn></ViewOrderBtn>
                             <OrderForm />
+                            <Button radius = "xs" variant = "filled" color = "gray" size = "md" h = {70} onClick={handleOrderInfo}>See all orders</Button>
                         </Flex>
                     </Container>
 
