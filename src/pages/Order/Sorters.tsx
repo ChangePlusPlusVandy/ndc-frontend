@@ -1,7 +1,13 @@
 import {Menu, Button, Image, rem} from '@mantine/core';
 import downArrow from '../../assets/downArrow.jpg'; 
+import { MouseEventHandler } from 'react';
 
-const Sorter: React.FC = () => {
+interface SorterProps {
+    sortDate: MouseEventHandler, 
+    sortNum: MouseEventHandler
+}
+
+const Sorter: React.FC<SorterProps> = ({sortDate, sortNum}: SorterProps) => {
     return (
         <Menu offset={0}>
             <Menu.Target>
@@ -9,10 +15,10 @@ const Sorter: React.FC = () => {
             </Menu.Target>
 
             <Menu.Dropdown>
-                <Menu.Item>
+                <Menu.Item onClick={sortDate}>
                     Sort by date 
                 </Menu.Item>
-                <Menu.Item>
+                <Menu.Item onClick={sortNum}>
                     Sort by # of diapers
                 </Menu.Item>
             </Menu.Dropdown>

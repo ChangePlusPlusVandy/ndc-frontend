@@ -1,42 +1,30 @@
 import React, {useEffect, useState} from 'react';
+import Order from './OrderClass'; 
 import "./OrderPartner.css";  
 
 interface TableProps {
+    orders: Order[], 
     orderType: string,
 }
 
-class Order {
-    datePlaced: Date;
-    status: string; 
-    numDiapers: number; 
+const OrderTable: React.FC<TableProps> = ({orders, orderType}: TableProps) => {
 
-    constructor(datePlaced=new Date(), status="", numDiapers=0) {
-        this.datePlaced = datePlaced; 
-        this.status = status; 
-        this.numDiapers = numDiapers; 
-    }
-}
-
-const OrderTable: React.FC<TableProps> = (props: TableProps) => {
-    const [orders, setOrders] = useState<Order[]>([]); 
-    
     useEffect(() => {
         const getOrders = async () => {
-            fetch("http://localhost:3001/", {
+            fetch("${import.meta.env.VITE_BACKEND_URL}/INSERT_PATH_HERE", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(props),
+                    body: JSON.stringify(orderType),
                 })
                 .then((response) => (response.json()))
                 .then ((data) => {
-                    let temp: Order[] = []; 
+                    orders = []; 
                     data.forEach((elem: any) => {
-                        temp.push(new Order(elem.datePlaced, elem.numDiapers)); 
+                        orders.push(new Order(elem.datePlaced, elem.status, elem.newborn, elem.size1, 
+                            elem.size2, elem.size3, elem.size4, elem.size5, elem.size6)); 
                     }) 
-
-                    setOrders(temp); 
                 })
                 .catch(console.error); 
         }

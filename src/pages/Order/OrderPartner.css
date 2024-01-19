@@ -21,6 +21,12 @@ header {
     color: black; 
 }
 
+.filterButton {
+    background-color: rgb(222, 222, 222); 
+    color: black; 
+    margin-top: 2.5%; 
+}
+
 .tab {
     position: relative;
     border-bottom: 0.1rem solid var(--mantine-color-gray-4);
