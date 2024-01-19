@@ -5,6 +5,7 @@ import Order from './OrderClass';
 import OrderTable from './OrderTable';
 import Filter from './Filters'; 
 import Sorter from './Sorters';  
+import OrderForm from '../OrderForm/OrderForm'; 
 import "./OrderPartner.css"; 
 import ndcLogo from '../../assets/ndc-logo.png'; 
 
@@ -122,9 +123,9 @@ const OrderPartner: React.FC = () => {
                     <OrderTable orders={orders} orderType={"OPEN"}></OrderTable>
                 </Tabs.Panel>
             </Tabs>
-            
+
             <div className="buttonContain width-90">
-                <Button variant='filled' color='rgba(92, 92, 92, 1)' component='a' href="/">Make an Order</Button>
+                <OrderForm></OrderForm>
             </div>
                 
         </main>

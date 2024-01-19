@@ -17,6 +17,7 @@ import Login from "./pages/Auth/Login";
 import PrivateRoute from "./pages/Auth/PrivateRoute";
 import Register from "./pages/Auth/Register";
 import Profile from "./pages/Profile";
+import OrderPartner from "./pages/Order/OrderPartner"
 import AuthWrapper from "./pages/Auth/AuthWrapper";
 
 const DashboardAccessControl: React.FC = () => {
@@ -36,7 +37,7 @@ const App: React.FC = () => {
           <Route path="/register" element={AuthWrapper(<Register />)} />
           <Route path="/forgot-password" element={AuthWrapper(<ForgotPassword />)} />
 
-          <Route path="/order" element={<OrderPartner />} />
+          <Route path="/order-info" element={<OrderPartner />} />
         </Routes>
       </RouterProvider>
     </AuthProvider>
