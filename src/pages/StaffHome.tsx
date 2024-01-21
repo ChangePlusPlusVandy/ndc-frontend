@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 
-import OrderForm from "./OrderForm/OrderForm";
-
 interface DiaperSizes {
     newborn: number;
     size1: number;
@@ -23,9 +21,7 @@ interface InventoryApiResponse {
 }
 
 const Home: React.FC = () => {
-    const [inventory, setInventory] = useState<InventoryApiResponse | null>(
-        null
-    );
+    const [inventory, setInventory] = useState<InventoryApiResponse | null>(null)
     const { currentUser } = useAuth();
 
     useEffect(() => {
@@ -39,16 +35,11 @@ const Home: React.FC = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 };
-                console.log(token);
-
                 // below, the /api is replaced with the server url defined in vite.config.ts
                 // so, if the server is defined as "localhost:3001" in that file,
                 // the fetch url will be "localhost:3001/example"
-                const res = await fetch(
-                    `${import.meta.env.VITE_BACKEND_URL}/inventory/`,
-                    payloadHeader
-                );
-                const data = (await res.json()) as InventoryApiResponse;
+                const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/inventory/`, payloadHeader);
+                const data = await res.json() as InventoryApiResponse;
                 setInventory(data);
             } catch (err) {
                 console.error(err);
@@ -59,30 +50,11 @@ const Home: React.FC = () => {
         }
     }, [currentUser]);
 
+
+
     return (
         <div>
-            <OrderForm />
-
-            <div>
-                <h2>wrapped:</h2>
-                <h4>newborn: {inventory?.wrapped.newborn} </h4>
-                <h4>size1: {inventory?.wrapped.size1}</h4>
-                <h4>size2: {inventory?.wrapped.size2}</h4>
-                <h4>size3: {inventory?.wrapped.size3}</h4>
-                <h4>size4: {inventory?.wrapped.size4}</h4>
-                <h4>size5: {inventory?.wrapped.size5}</h4>
-                <h4>size6: {inventory?.wrapped.size6}</h4>
-            </div>
-            <div>
-                <h2>Unwrapped: </h2>
-                <h4>newborn: {inventory?.unwrapped.newborn}</h4>
-                <h4>size1: {inventory?.unwrapped.size1}</h4>
-                <h4>size2: {inventory?.unwrapped.size2}</h4>
-                <h4>size3: {inventory?.unwrapped.size3}</h4>
-                <h4>size4: {inventory?.unwrapped.size4}</h4>
-                <h4>size5: {inventory?.unwrapped.size5}</h4>
-                <h4>size6: {inventory?.unwrapped.size6}</h4>
-            </div>
+            <h1>You Are a Staff Member</h1>
             <br />
             <Link to="/profile">Profile</Link>
         </div>
