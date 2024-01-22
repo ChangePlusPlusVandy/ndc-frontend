@@ -56,6 +56,13 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+
+  .mantine-DateInput-levelsGroup{
+    height: 20em;
+    width: 20em;
+  }
+
+
 /*.container {
   display: flex;
   flex-direction: row;
