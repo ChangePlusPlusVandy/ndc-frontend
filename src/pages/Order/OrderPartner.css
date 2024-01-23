@@ -103,6 +103,16 @@ th:nth-child(1) {
     justify-content: center;
 }
 
+.single-order{
+    border-radius: 5px;
+    background-color: var(--background-color);
+    padding: 0.5em;
+}
+.single-order:hover{
+    background-color: var(--mantine-color-gray-4);
+    cursor: pointer;
+}
+
 
 
 

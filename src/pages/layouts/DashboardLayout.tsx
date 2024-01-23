@@ -30,8 +30,8 @@ export default function DashboardLayout() {
             </AppShell.Header>
             <AppShell.Navbar p="md">
                 <Stack>
-                    <Link className="nav-button" to="/">Dashboard</Link>
                     <Link className="nav-button" to="/profile">Account</Link>
+                    <Link className="nav-button" to="/">Dashboard</Link>
                     <Link className="nav-button" to="/order-info">Orders</Link>
                 </Stack>
             </AppShell.Navbar>

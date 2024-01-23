@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Order from './OrderClass';
 import "./OrderPartner.css";
+import { Container, Flex, Group, Stack, Text } from '@mantine/core';
 
 
 interface TableProps {
@@ -14,28 +15,28 @@ const OrderTable: React.FC<TableProps> = ({ orders, orderType }: TableProps) => 
     return (
         <div>
             <div>
-                <div>
-                    <p>Order</p>
-                    <p>Date Placed</p>
-                    <p>Number of Diapers</p>
-                </div>
-            </div>
-            <div>
-                {orders?.map((val: Order, index: number) => {
-                    return (
-                        <p key={index} className="backWhite">
-                            <p>Order</p>
-                            <p>{val.datePlaced.toDateString()}</p>
-                            <p>{val.numDiapers}</p>
-                            <p>...</p>
-                        </p>
-                    )
-                })}
-                <div>
-                    <p>temp</p>
-                    <p>temp</p>
-                    <p>temp</p>
-                </div>
+                <Stack gap="xs">
+                    <Container w="100%" fluid mt="7">
+                        <Group style={{ width: '100%' }} grow gap="xl">
+                            <Text>Number</Text>
+                            <Text>Date Placed</Text>
+                            <Text># of Diapers</Text>
+                            <Text>Status</Text>
+                        </Group>
+                    </Container>
+                    {orders?.map((val: Order, index: number) => {
+                        return (
+                            <Container className="single-order" w="100%" fluid key={index}>
+                                <Group style={{ width: '100%' }} grow gap="xl">
+                                    <Text>#{index}</Text>
+                                    <Text>{val.datePlaced.toDateString()}</Text>
+                                    <Text>{val.numDiapers}</Text>
+                                    <Text>{val.status}</Text>
+                                </Group>
+                            </Container>
+                        )
+                    })}
+                </Stack>
             </div>
 
         </div>

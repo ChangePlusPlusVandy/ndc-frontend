@@ -10,6 +10,21 @@ import "./OrderPartner.css";
 import ndcLogo from '../../assets/ndc-logo.png';
 import { useAuth } from "../../AuthContext";
 
+interface OrderResponse {
+    dateCompleted: string;
+    datePlaced: string;
+    newborn: number;
+    numDiapers: number;
+    partner: string;
+    size1: number;
+    size2: number;
+    size3: number;
+    size4: number;
+    size5: number;
+    size6: number;
+    status: string;
+}
+
 const OrderPartner: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [opened, { open, close }] = useDisclosure(false);
@@ -27,12 +42,27 @@ const OrderPartner: React.FC = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            let data = await res.json();
-            console.log(data);
-
+            let data = (await res.json()).map((elem: OrderResponse) => {
+                return new Order(
+                    new Date(elem.datePlaced),
+                    new Date(elem.dateCompleted) || new Date(),
+                    elem.status,
+                    elem.newborn,
+                    elem.size1,
+                    elem.size2,
+                    elem.size3,
+                    elem.size4,
+                    elem.size5,
+                    elem.size6,
+                )
+            });
+            setOrders(data);
         }
         getOrders();
     }, [])
+    useEffect(() => {
+        console.log(orders);
+    }, [orders]);
 
     const sortDate = () => {
         let orderCopy: Order[] = orders.slice();
