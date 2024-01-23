@@ -60,9 +60,7 @@ const OrderPartner: React.FC = () => {
         }
         getOrders();
     }, [])
-    useEffect(() => {
-        console.log(orders);
-    }, [orders]);
+
 
     const sortDate = () => {
         let orderCopy: Order[] = orders.slice();
@@ -111,7 +109,6 @@ const OrderPartner: React.FC = () => {
     const filterSize = () => {
         close();
 
-        console.log(targetSizes);
         let orderCopy: Order[] = [];
         orders.forEach((elem: Order) => {
             targetSizes.forEach((target: number) => {
