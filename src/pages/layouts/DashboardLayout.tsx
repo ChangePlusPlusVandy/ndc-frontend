@@ -2,6 +2,7 @@ import { AppShell, Burger, Group, Skeleton, Image, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Link, Outlet } from 'react-router-dom';
 import Logo from '../../assets/logo-horizontal.png';
+import UserThumb from '../../assets/Images/StaffImages/UserThumb.png';
 import "./DashboardLayout.css"
 
 export default function DashboardLayout() {
@@ -30,6 +31,7 @@ export default function DashboardLayout() {
             </AppShell.Header>
             <AppShell.Navbar p="md">
                 <Stack>
+                    <img src={UserThumb} alt="User pic" className="navbar-profile-pic" />
                     <Link className="nav-button" to="/profile">Account</Link>
                     <Link className="nav-button" to="/">Dashboard</Link>
                     <Link className="nav-button" to="/order-info">Orders</Link>

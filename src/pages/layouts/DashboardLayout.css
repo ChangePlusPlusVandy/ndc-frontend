@@ -12,3 +12,11 @@
     color: black;
     font-size: 1em;
 }
+
+.navbar-profile-pic{
+    height: 7em;
+    width: 7em;
+    border-radius: 50%;
+    margin: auto;
+    margin-bottom: 1em;
+}

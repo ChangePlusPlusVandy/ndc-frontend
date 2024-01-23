@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Order from './OrderClass';
 import "./OrderPartner.css";
+import OrderPopup from '../OrderPopup';
 import { Container, Flex, Group, Stack, Text } from '@mantine/core';
 
 
@@ -10,8 +11,6 @@ interface TableProps {
 }
 
 const OrderTable: React.FC<TableProps> = ({ orders, orderType }: TableProps) => {
-
-
     return (
         <div>
             <div>
@@ -27,12 +26,14 @@ const OrderTable: React.FC<TableProps> = ({ orders, orderType }: TableProps) => 
                     {orders?.map((val: Order, index: number) => {
                         return (
                             <Container className="single-order" w="100%" fluid key={index}>
-                                <Group style={{ width: '100%' }} grow gap="xl">
-                                    <Text>#{index}</Text>
-                                    <Text>{val.datePlaced.toDateString()}</Text>
-                                    <Text>{val.numDiapers}</Text>
-                                    <Text>{val.status}</Text>
-                                </Group>
+                                <OrderPopup>
+                                    <Group style={{ width: '100%' }} grow gap="xl">
+                                        <Text>#{index}</Text>
+                                        <Text>{val.datePlaced.toDateString()}</Text>
+                                        <Text>{val.numDiapers}</Text>
+                                        <Text>{val.status}</Text>
+                                    </Group>
+                                </OrderPopup>
                             </Container>
                         )
                     })}

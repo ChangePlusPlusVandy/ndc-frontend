@@ -23,7 +23,7 @@ const initialValues = [
   { label: "Viewed", checked: false, key: randomId() },
 ];
 
-const OrderPopup: React.FC = () => {
+const OrderPopup: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [date, setDate] = useState<Date | null>(null);
   const [value, setValue] = useState<Date | null>(null);
@@ -50,6 +50,9 @@ const OrderPopup: React.FC = () => {
 
   return (
     <>
+      <div onClick={open}>
+        {children}
+      </div>
       <Modal opened={opened} onClose={close} withCloseButton={false} centered size="xl">
         <div className="header">
           <Title ta="center" order={2}>
@@ -58,39 +61,39 @@ const OrderPopup: React.FC = () => {
         </div>
         <form className="form" onSubmit={() => console.log("Submitted")}>
           <div className="form-inputs">
-              <TextInput
-                className="modal-input"
-                label="Partner Name"
-                placeholder="Enter Name"
-                size="md"
-                leftSection={
-                  <Avatar radius="xl" /> //TODO: Profile image
-                }
-              />
-              <DateInput
-                className="modal-input"
-                value={date}
-                onChange={setDate}
-                label="Order Date"
-                placeholder="Select Date"
-                size="md"
-              />
-              <TextInput
-                className="modal-input"
-                label="Location"
-                placeholder="Enter Location"
-                size="md"
-              />
-              <NumberInput
-                className="modal-input"
-                label="Quantity"
-                placeholder="Enter Quantity"
-                size="md"
-                allowDecimal={false}
-                rightSection={
-                    <OrderPopupQuantities />
-                }
-              />
+            <TextInput
+              className="modal-input"
+              label="Partner Name"
+              placeholder="Enter Name"
+              size="md"
+              leftSection={
+                <Avatar radius="xl" /> //TODO: Profile image
+              }
+            />
+            <DateInput
+              className="modal-input"
+              value={date}
+              onChange={setDate}
+              label="Order Date"
+              placeholder="Select Date"
+              size="md"
+            />
+            <TextInput
+              className="modal-input"
+              label="Location"
+              placeholder="Enter Location"
+              size="md"
+            />
+            <NumberInput
+              className="modal-input"
+              label="Quantity"
+              placeholder="Enter Quantity"
+              size="md"
+              allowDecimal={false}
+              rightSection={
+                <OrderPopupQuantities />
+              }
+            />
           </div>
 
           <div className="submit-panel">
@@ -99,8 +102,6 @@ const OrderPopup: React.FC = () => {
           </div>
         </form>
       </Modal>
-
-      <span onClick={open}>Order</span>
     </>
   );
 };
