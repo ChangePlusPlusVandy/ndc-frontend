@@ -197,7 +197,7 @@ const OrderForm: React.FC<OrderFormProps> = ({opened, open, close, isDashboardBu
                 )}
                 
             </Modal>
-            {(isDashboardButton) ? <MakeOrderBtn onClick={handleOpen} /> : <Button size="lg" c="white" bg="gray"><Flex gap="md"><IconSquarePlus size="1.5rem" /><Text>Make Order</Text></Flex></Button>}
+            {(isDashboardButton) ? <MakeOrderBtn onClick={handleOpen} /> : <Button size="lg" c="white" bg="gray" onClick={handleOpen}><Flex gap="md"><IconSquarePlus size="1.5rem" /><Text>Make Order</Text></Flex></Button>}
         </>
     );
 };
