@@ -1,19 +1,16 @@
-import React from 'react';
-import { Button, Text, Title, Image, Flex } from '@mantine/core';
-import placeholder from '../../assets/placeholder.png';
+import React from "react";
+import { Card, Container, Stack, Text, Title, Image, Flex } from "@mantine/core";
+import { IconUserCircle } from "@tabler/icons-react";
 
 function MyAccountBtn() {
     return (
-        <Button radius="xs" variant="filled" color="gray" size="md" h={70}>
-            <Flex direction="column" justify="center" align="center">
-                <Image mt={2} h={20} w={20} src={placeholder} alt="Placeholder" />
-                <Text fw={500}>
-                    My Account
-                </Text>
-            </Flex>
-
-        </Button>
+        <Card w={"100%"} bg={"gray"} component="button" p="xl">
+            <Container>
+                <IconUserCircle size={"5rem"} color={"white"} />
+                <Text c={"white"}>My Account</Text>
+            </Container>
+        </Card>
     );
-};
+}
 
 export default MyAccountBtn;
