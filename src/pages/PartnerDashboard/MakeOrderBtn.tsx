@@ -1,15 +1,5 @@
 import React from "react";
-import {
-    Button,
-    Container,
-    Text,
-    Stack,
-    Title,
-    Image,
-    Flex,
-    Paper,
-    Card,
-} from "@mantine/core";
+import { Container, Text, Card } from "@mantine/core";
 import { IconSquarePlus } from "@tabler/icons-react";
 
 type MakeOrderButtonProps = {

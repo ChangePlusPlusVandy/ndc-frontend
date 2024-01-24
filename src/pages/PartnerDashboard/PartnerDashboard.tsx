@@ -1,31 +1,17 @@
 import React from "react";
-import {
-    Stack,
-    Flex,
-    Button,
-    Text,
-    Title,
-    Container,
-    Image,
-    Center,
-    Card,
-    Group,
-} from "@mantine/core";
+import { Stack, Flex, Text, Container, Card } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 // Importing dashboard components
 import Greeting from "./Greeting";
-import MakeOrderBtn from "./MakeOrderBtn";
 import MyAccountBtn from "./MyAccountBtn";
 import ViewOrderBtn from "./ViewOrderBtn";
-import placeholder from "../../assets/placeholder.png";
 import { useNavigate } from "react-router-dom";
 import "../../styles/PartnerDash.css";
 
 import { IconCheck, IconMailOpened, IconBell } from "@tabler/icons-react";
 
 import OrderForm from "../OrderForm/OrderForm";
-import { useRef } from "react";
 
 function Dashboard() {
     const [opened, { open, close }] = useDisclosure(false);
@@ -50,10 +36,15 @@ function Dashboard() {
                     justify="space-between"
                     align="stretch"
                 >
-                    <MyAccountBtn></MyAccountBtn>
+                    <MyAccountBtn onClick={handleProfile}></MyAccountBtn>
                     <ViewOrderBtn onClick={handleOrderInfo}></ViewOrderBtn>
-                    
-                    <OrderForm isDashboardButton={true} opened={opened} open={open} close={close} />
+
+                    <OrderForm
+                        isDashboardButton={true}
+                        opened={opened}
+                        open={open}
+                        close={close}
+                    />
                 </Flex>
                 <Flex
                     direction={{ base: "column", sm: "row" }}
@@ -90,7 +81,13 @@ function Dashboard() {
                                 bg="gray"
                                 p="lg"
                             >
-                                <Flex gap={{base: "md", md: "sm"}} align="center" direction={{base: "column", md: "row"}} c="white" w="100%">
+                                <Flex
+                                    gap={{ base: "md", md: "sm" }}
+                                    align="center"
+                                    direction={{ base: "column", md: "row" }}
+                                    c="white"
+                                    w="100%"
+                                >
                                     <IconMailOpened size={"1.5rem"} />
                                     <Text>OPEN</Text>
                                     <Flex
@@ -109,7 +106,13 @@ function Dashboard() {
                                 bg="gray"
                                 p="lg"
                             >
-                                <Flex gap={{base: "md", md: "sm"}} align="center" direction={{base: "column", md: "row"}} c="white" w="100%">
+                                <Flex
+                                    gap={{ base: "md", md: "sm" }}
+                                    align="center"
+                                    direction={{ base: "column", md: "row" }}
+                                    c="white"
+                                    w="100%"
+                                >
                                     <IconBell size={"1.5rem"} />
                                     <Text>UNREVIEWED</Text>
                                     <Flex
@@ -128,7 +131,13 @@ function Dashboard() {
                                 bg="gray"
                                 p="lg"
                             >
-                                <Flex gap={{base: "md", md: "sm"}} align="center" direction={{base: "column", md: "row"}} c="white" w="100%">
+                                <Flex
+                                    gap={{ base: "md", md: "sm" }}
+                                    align="center"
+                                    direction={{ base: "column", md: "row" }}
+                                    c="white"
+                                    w="100%"
+                                >
                                     <IconCheck size={"1.5rem"} />
                                     <Text>APPROVED</Text>
                                     <Flex
