@@ -11,6 +11,8 @@ import {
     Card,
     Group,
 } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+
 // Importing dashboard components
 import Greeting from "./Greeting";
 import MakeOrderBtn from "./MakeOrderBtn";
@@ -26,7 +28,8 @@ import OrderForm from "../OrderForm/OrderForm";
 import { useRef } from "react";
 
 function Dashboard() {
-    const ref = useRef<HTMLInputElement>(null);
+    const [opened, { open, close }] = useDisclosure(false);
+
     const navigate = useNavigate();
     const handleProfile = () => {
         navigate("./profile");
@@ -43,13 +46,14 @@ function Dashboard() {
             <Stack p="xl" bg="#F1F3F5">
                 <Flex
                     gap="lg"
-                    direction={{ base: "column", sm: "row" }}
+                    direction={{ base: "column", md: "row" }}
                     justify="space-between"
-                    align="center"
+                    align="stretch"
                 >
                     <MyAccountBtn></MyAccountBtn>
                     <ViewOrderBtn onClick={handleOrderInfo}></ViewOrderBtn>
-                    <OrderForm />
+                    
+                    <OrderForm isDashboardButton={true} opened={opened} open={open} close={close} />
                 </Flex>
                 <Flex
                     direction={{ base: "column", sm: "row" }}
@@ -86,7 +90,7 @@ function Dashboard() {
                                 bg="gray"
                                 p="lg"
                             >
-                                <Group c="white" w="100%">
+                                <Flex gap={{base: "md", md: "sm"}} align="center" direction={{base: "column", md: "row"}} c="white" w="100%">
                                     <IconMailOpened size={"1.5rem"} />
                                     <Text>OPEN</Text>
                                     <Flex
@@ -96,7 +100,7 @@ function Dashboard() {
                                     >
                                         <Text>250+</Text>
                                     </Flex>
-                                </Group>
+                                </Flex>
                             </Card>
                             <Card
                                 radius="xs"
@@ -105,7 +109,7 @@ function Dashboard() {
                                 bg="gray"
                                 p="lg"
                             >
-                                <Group c="white">
+                                <Flex gap={{base: "md", md: "sm"}} align="center" direction={{base: "column", md: "row"}} c="white" w="100%">
                                     <IconBell size={"1.5rem"} />
                                     <Text>UNREVIEWED</Text>
                                     <Flex
@@ -115,7 +119,7 @@ function Dashboard() {
                                     >
                                         <Text>250+</Text>
                                     </Flex>
-                                </Group>
+                                </Flex>
                             </Card>
                             <Card
                                 radius="xs"
@@ -124,7 +128,7 @@ function Dashboard() {
                                 bg="gray"
                                 p="lg"
                             >
-                                <Group c="white">
+                                <Flex gap={{base: "md", md: "sm"}} align="center" direction={{base: "column", md: "row"}} c="white" w="100%">
                                     <IconCheck size={"1.5rem"} />
                                     <Text>APPROVED</Text>
                                     <Flex
@@ -134,7 +138,7 @@ function Dashboard() {
                                     >
                                         <Text>250+</Text>
                                     </Flex>
-                                </Group>
+                                </Flex>
                             </Card>
                         </Flex>
                     </Flex>
@@ -161,7 +165,13 @@ function Dashboard() {
                                 c="white"
                                 component="button"
                             >
-                                <Flex flex={1} w={"100%"} direction={"column"} justify={"space-between"} align="center">
+                                <Flex
+                                    flex={1}
+                                    w={"100%"}
+                                    direction={"column"}
+                                    justify={"space-between"}
+                                    align="center"
+                                >
                                     <Text size="xs">Last Year</Text>
                                     <Text size="lg">250+</Text>
                                 </Flex>
@@ -174,7 +184,13 @@ function Dashboard() {
                                 c="white"
                                 component="button"
                             >
-                                <Flex flex={1} w={"100%"} direction={"column"} justify={"space-between"} align="center">
+                                <Flex
+                                    flex={1}
+                                    w={"100%"}
+                                    direction={"column"}
+                                    justify={"space-between"}
+                                    align="center"
+                                >
                                     <Text size="xs">Last 6 Months</Text>
                                     <Text size="lg">100</Text>
                                 </Flex>
@@ -187,7 +203,13 @@ function Dashboard() {
                                 c="white"
                                 component="button"
                             >
-                                <Flex flex={1} w={"100%"} direction={"column"} justify={"space-between"} align="center">
+                                <Flex
+                                    flex={1}
+                                    w={"100%"}
+                                    direction={"column"}
+                                    justify={"space-between"}
+                                    align="center"
+                                >
                                     <Text size="xs">Last Month</Text>
 
                                     <Text size="lg">100</Text>

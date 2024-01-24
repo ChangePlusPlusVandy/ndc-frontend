@@ -8,17 +8,25 @@ import {
     Image,
     Flex,
     Paper,
-    Card
+    Card,
 } from "@mantine/core";
 import { IconSquarePlus } from "@tabler/icons-react";
 
-interface MakeOrderButtonProps {
-    handleOnClick: () => void;
-}
+type MakeOrderButtonProps = {
+    onClick: any;
+};
 
-const MakeOrderBtn: React.FC<MakeOrderButtonProps> = ({ handleOnClick }) => {
+const MakeOrderBtn: React.FC<MakeOrderButtonProps> = ({
+    onClick,
+}: MakeOrderButtonProps) => {
     return (
-        <Card w={"100%"} bg={"gray"} component="button" p="xl" onClick={handleOnClick}>
+        <Card
+            w={"100%"}
+            bg={"gray"}
+            component="button"
+            p="xl"
+            onClick={onClick}
+        >
             <Container>
                 <IconSquarePlus size={"5rem"} color={"white"} />
                 <Text c={"white"}>Make Order</Text>
