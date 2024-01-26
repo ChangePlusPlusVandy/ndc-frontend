@@ -132,10 +132,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           firebaseUid: uid
         })
       }
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login/create-partner`, requestOptions);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login/create-partner/`, requestOptions);
       const partnerUser = await res.json()
       setIsStaff(false);
-      setMongoId(partnerUser._id)
+      setMongoId(partnerUser._id);
     } catch (err) {
       console.error(err);
     }

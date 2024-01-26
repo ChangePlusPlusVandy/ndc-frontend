@@ -1,13 +1,23 @@
-import React from 'react';
-import { Button, Avatar, Text, Title, Container } from '@mantine/core';
+import React, { useEffect, useState } from "react";
+import { Title } from "@mantine/core";
+import { useAuth } from "../../AuthContext";
+import { User } from "firebase/auth";
 
 function Greeting() {
-    
+    const { getUser } = useAuth();
+    const [user, setUser] = useState<User | null>(null);
+    const currentUser = getUser();
+
+    useEffect(() => {
+        if (currentUser) {
+            setUser(currentUser);
+        }
+    }, [currentUser]);
     return (
-        <Title order = {3} c = "black" fw = {400} size = {30}>
-            Hello, <Text fw = {750} span c = "black" inherit> "Partner Name"</Text>
+        <Title c="black" ta={"center"}>
+            Hello, {user?.displayName}
         </Title>
-    ); 
+    );
 }
 
 export default Greeting;

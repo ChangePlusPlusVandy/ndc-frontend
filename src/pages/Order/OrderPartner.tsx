@@ -159,7 +159,8 @@ const OrderPartner: React.FC = () => {
             </Tabs>
 
             <div className="buttonContain width-90">
-                <OrderForm></OrderForm>
+                <OrderForm isDashboardButton={false} opened={opened} open={open} close={close} />
+
             </div>
 
         </main>
