@@ -61,7 +61,6 @@ const Home: React.FC = () => {
 
     return (
         <div>
-            <OrderForm />
 
             <div>
                 <h2>wrapped:</h2>

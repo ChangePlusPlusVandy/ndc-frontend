@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Stack, Flex, Text, Container, Card } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -8,15 +8,19 @@ import MyAccountBtn from "./MyAccountBtn";
 import ViewOrderBtn from "./ViewOrderBtn";
 import { useNavigate } from "react-router-dom";
 import "../../styles/PartnerDash.css";
-
+import { useAuth } from "../../AuthContext";
 import { IconCheck, IconMailOpened, IconBell } from "@tabler/icons-react";
 
 import OrderForm from "../OrderForm/OrderForm";
 
 function Dashboard() {
     const [opened, { open, close }] = useDisclosure(false);
-
     const navigate = useNavigate();
+
+    const { currentUser } = useAuth();
+    useEffect(() => {
+        console.log(currentUser);
+    }, [])
     const handleProfile = () => {
         navigate("./profile");
     };
@@ -24,7 +28,7 @@ function Dashboard() {
         navigate("./order-info");
     };
     return (
-        <Container>
+        <Container px="6em" fluid>
             <Flex p="md" wrap="wrap" justify="center">
                 <Greeting></Greeting>
             </Flex>
