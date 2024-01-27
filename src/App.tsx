@@ -38,6 +38,7 @@ const App: React.FC = () => {
           <Route path="/" element={<DashboardLayout />}>
             <Route index element={<PrivateRoute element={<DashboardAccessControl />} />} />
             <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
+            <Route path="/dashboard" element={<StaffDashboard/>} />
 
             <Route path="/order-info" element={<OrderPartner />} />
           </Route>
