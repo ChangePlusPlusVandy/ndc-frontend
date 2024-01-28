@@ -1,22 +1,27 @@
-import React from 'react';
-import { Button, Text, Title, Image, Flex}  from '@mantine/core';
-import placeholder from './Images/placeholder.png';
+import React from "react";
+import { Container, Text, Card } from "@mantine/core";
+import { IconSquarePlus } from "@tabler/icons-react";
 
-interface MakeOrderButtonProps {
-    handleOnClick: () => void;
-}
+type MakeOrderButtonProps = {
+    onClick: any;
+};
 
-const MakeOrderBtn: React.FC<MakeOrderButtonProps> = ({handleOnClick}) =>{
+const MakeOrderBtn: React.FC<MakeOrderButtonProps> = ({
+    onClick,
+}: MakeOrderButtonProps) => {
     return (
-        <Button onClick={handleOnClick} radius = "xs" variant = "filled" color = "gray" size = "md" h = {70}>
-            <Flex direction = "column" justify = "center" align = "center">
-                <Image  mt = {2} h = {20} w = {20} src = {placeholder} alt = "Placeholder" />
-                <Text fw = {500}>
-                    Make Order
-                </Text>
-            </Flex>
-            
-        </Button>
+        <Card
+            w={"100%"}
+            bg={"gray"}
+            component="button"
+            p="xl"
+            onClick={onClick}
+        >
+            <Container>
+                <IconSquarePlus size={"5rem"} color={"white"} />
+                <Text c={"white"}>Make Order</Text>
+            </Container>
+        </Card>
     );
 };
 

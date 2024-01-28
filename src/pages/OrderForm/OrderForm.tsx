@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import {
     Tabs,
     Flex,
@@ -7,13 +7,15 @@ import {
     Modal,
     ScrollArea,
     CloseButton,
+    Text
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import OrderFormRequest from "./OrderFormRequest";
 import OrderFormDeliveryInfo from "./OrderFormDeliveryInfo";
 import OrderFormConfirmation from "./OrderFormConfirmation";
-import { set } from "react-hook-form";
+import { useAuth } from "../../AuthContext";
 import MakeOrderBtn from "../PartnerDashboard/MakeOrderBtn";
+import { IconSquarePlus } from "@tabler/icons-react";
+
 
 const initialSizes = {
     newborn: 0,
@@ -31,12 +33,19 @@ const initialDeliveryInfo = {
     additionalInstructions: "",
 };
 
-const OrderForm: React.FC = () => {
-    const [opened, { open, close }] = useDisclosure(false);
+type OrderFormProps = {
+    opened: boolean,
+    open: any,
+    close: any,
+    isDashboardButton: boolean
+};
+
+const OrderForm: React.FC<OrderFormProps> = ({opened, open, close, isDashboardButton}: OrderFormProps) => {
     const [sizes, setSizes] = useState(initialSizes);
     const [activePage, setActivePage] = useState<string | null>("request-diapers");
     const [deliveryInfo, setDeliveryInfo] = useState(initialDeliveryInfo);
 
+    const { mongoId, currentUser } = useAuth();
     //TODO: 
     //set a requirement that at least 1 diaper must be ordered
     // set up validation for the delivery info dates - force user to write something for the required parts
@@ -45,6 +54,8 @@ const OrderForm: React.FC = () => {
         setSizes({ ...initialSizes });
         setDeliveryInfo({ ...initialDeliveryInfo });
     };
+
+    
 
     const handleOpen = () => {
         clearForm();
@@ -66,16 +77,17 @@ const OrderForm: React.FC = () => {
 
     const handleSubmit = async () => {
         setActivePage("confirmation");
+        const token = await currentUser?.getIdToken();
         const response = await fetch(
-            `${import.meta.env.VITE_BACKEND_URL}/orders`,
+            `${import.meta.env.VITE_BACKEND_URL}/order`,
             {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                    partner: null, // TODO
-                    id: null, // TODO
+                    partner: mongoId,
                     datePlaced: deliveryInfo.date,
                     dateCompleted: null,
                     status: "PLACED",
@@ -97,6 +109,7 @@ const OrderForm: React.FC = () => {
             <Modal
                 size="xl"
                 opened={opened}
+
                 onClose={handleClose}
                 overlayProps={{
                     backgroundOpacity: 0.55,
@@ -174,15 +187,16 @@ const OrderForm: React.FC = () => {
                         </Tabs>
                     </>
                 ) : (
-                    
+
                     <OrderFormConfirmation
                         date={deliveryInfo.date}
                         distributionPlace={deliveryInfo.distributionPlace}
                         numDiapers={numDiapers()}
                     />
                 )}
+                
             </Modal>
-            <MakeOrderBtn handleOnClick={handleOpen} />
+            {(isDashboardButton) ? <MakeOrderBtn onClick={handleOpen} /> : <Button size="lg" c="white" bg="gray" onClick={handleOpen}><Flex gap="md"><IconSquarePlus size="1.5rem" /><Text>Make Order</Text></Flex></Button>}
         </>
     );
 };

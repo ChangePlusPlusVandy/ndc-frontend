@@ -1,18 +1,25 @@
-import React from 'react';
-import { Button, Text, Title, Image, Flex}  from '@mantine/core';
-import placeholder from './Images/placeholder.png';
+import React from "react";
+import { Card, Container, Text } from "@mantine/core";
+import { IconListSearch } from "@tabler/icons-react";
 
-function ViewOrderBtn(){
+interface ViewOrderButtonProps {
+    onClick: () => void;
+}
+
+const ViewOrderBtn: React.FC<ViewOrderButtonProps> = ({ onClick }) => {
     return (
-        <Button radius = "xs" variant = "filled" color = "gray" size = "md" h = {70}>
-            <Flex direction = "column" justify = "center" align = "center">
-                <Image  mt = {2} h = {20} w = {20} src = {placeholder} alt = "Placeholder" />
-                <Text fw = {500}>
-                    View Order
-                </Text>
-            </Flex>
-            
-        </Button>
+        <Card
+            w={"100%"}
+            bg={"gray"}
+            component="button"
+            p="xl"
+            onClick={onClick}
+        >
+            <Container>
+                <IconListSearch size={"5rem"} color={"white"} />
+                <Text c={"white"}>View Order</Text>
+            </Container>
+        </Card>
     );
 };
 

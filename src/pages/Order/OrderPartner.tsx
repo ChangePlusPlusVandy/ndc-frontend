@@ -1,116 +1,151 @@
 import { Group, Tabs, Modal, MultiSelect, Button, Image, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import {useState} from 'react';  
-import Order from './OrderClass'; 
+import { useState, useEffect } from 'react';
+import Order from './OrderClass';
 import OrderTable from './OrderTable';
-import Filter from './Filters'; 
-import Sorter from './Sorters';  
-import OrderForm from '../OrderForm/OrderForm'; 
-import "./OrderPartner.css"; 
-import ndcLogo from '../../assets/ndc-logo.png'; 
+import Filter from './Filters';
+import Sorter from './Sorters';
+import OrderForm from '../OrderForm/OrderForm';
+import "./OrderPartner.css";
+import ndcLogo from '../../assets/ndc-logo.png';
+import { useAuth } from "../../AuthContext";
+
+interface OrderResponse {
+    dateCompleted: string;
+    datePlaced: string;
+    newborn: number;
+    numDiapers: number;
+    partner: string;
+    size1: number;
+    size2: number;
+    size3: number;
+    size4: number;
+    size5: number;
+    size6: number;
+    status: string;
+}
 
 const OrderPartner: React.FC = () => {
-    const [orders, setOrders] = useState<Order[]>([]); 
-    const [filterOpened, { open, close }] = useDisclosure(false);
-    const [targetSizes, setTargetSizes] = useState<number[]>([]); 
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [filterOpened, filterHandlers] = useDisclosure(false);
+    const [opened, {open, close}] = useDisclosure(false);
+    const [targetSizes, setTargetSizes] = useState<number[]>([]);
+    const { mongoId, currentUser } = useAuth();
+
+    useEffect(() => {
+        const getOrders = async () => {
+            const token = await currentUser?.getIdToken();
+
+            let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/order?partnerId=${mongoId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            let data = (await res.json()).map((elem: OrderResponse) => {
+                return new Order(
+                    new Date(elem.datePlaced),
+                    new Date(elem.dateCompleted) || new Date(),
+                    elem.status,
+                    elem.newborn,
+                    elem.size1,
+                    elem.size2,
+                    elem.size3,
+                    elem.size4,
+                    elem.size5,
+                    elem.size6,
+                )
+            });
+            setOrders(data);
+        }
+        getOrders();
+    }, [])
+
 
     const sortDate = () => {
         let orderCopy: Order[] = orders.slice();
-        orderCopy.sort((a, b) => (a.datePlaced < b.datePlaced ? -1 : 1)); 
-        setOrders(orderCopy); 
+        orderCopy.sort((a, b) => (a.datePlaced < b.datePlaced ? -1 : 1));
+        setOrders(orderCopy);
     }
 
     const sortNum = () => {
-        let orderCopy: Order[] = orders.slice(); 
+        let orderCopy: Order[] = orders.slice();
         orderCopy.sort((a, b) => (a.numDiapers > b.numDiapers ? -1 : 1));
-        setOrders(orderCopy); 
+        setOrders(orderCopy);
     }
 
     const filterMonth = () => {
-        let orderCopy: Order[] = []; 
-        let today: Date = new Date(); 
-        let currMonth: Number = today.getMonth(); 
+        let orderCopy: Order[] = [];
+        let today: Date = new Date();
+        let currMonth: Number = today.getMonth();
         orders.forEach((elem: Order) => {
-            if (elem.datePlaced.getMonth() == currMonth) orderCopy.push(elem); 
-        }) 
+            if (elem.datePlaced.getMonth() == currMonth) orderCopy.push(elem);
+        })
 
-        setOrders(orderCopy); 
+        setOrders(orderCopy);
     }
 
     const filterQuarter = () => {
-        let orderCopy: Order[] = []; 
-        let today: Date = new Date(); 
-        let currQuarter: Number = today.getMonth() / 3; 
+        let orderCopy: Order[] = [];
+        let today: Date = new Date();
+        let currQuarter: Number = today.getMonth() / 3;
         orders.forEach((elem: Order) => {
-            if (elem.datePlaced.getMonth() / 3 == currQuarter) orderCopy.push(elem); 
-        }); 
+            if (elem.datePlaced.getMonth() / 3 == currQuarter) orderCopy.push(elem);
+        });
 
-        setOrders(orderCopy); 
+        setOrders(orderCopy);
     }
 
     const addTarget = (value: String) => {
-        const valueNum = (value != "newborn") ? parseInt(value.slice(-1)) : 0;  
-        
-        let temp: number[] = targetSizes.slice(); 
+        const valueNum = (value != "newborn") ? parseInt(value.slice(-1)) : 0;
+
+        let temp: number[] = targetSizes.slice();
         if (!targetSizes.includes(valueNum)) {
-            temp.push(valueNum); 
-            setTargetSizes(temp); 
+            temp.push(valueNum);
+            setTargetSizes(temp);
         }
-    } 
+    }
 
     const filterSize = () => {
-        close();  
+        filterHandlers.close();
 
-        console.log(targetSizes); 
-        let orderCopy: Order[] = []; 
+        let orderCopy: Order[] = [];
         orders.forEach((elem: Order) => {
             targetSizes.forEach((target: number) => {
                 if ((elem.diaperDist[target] || 0) > 0) orderCopy.push(elem);
             }, elem)
         });
 
-        setOrders(orderCopy); 
+        setOrders(orderCopy);
     }
 
     return (
         <main>
-            <header>
-                <Group justify="space-between" className="width-90">
-                    <Button leftSection={<Image w={rem(64)} src={ndcLogo} />} variant='white' color='black'>
-                        Nashville D.C.
-                    </Button>
-                    <div className='orderTitle'>Orders</div>
-                    <Button leftSection={"[photo]"} variant='white' color='black'> 
-                        My Profile
-                    </Button>
-                </Group>
-                
-            </header>
-
             <Group justify='space-between' className='width-90 modButtons'>
-                <Filter filterMonth={filterMonth} filterQuarter={filterQuarter} filterSize={open}></Filter>
+                <Filter filterMonth={filterMonth} filterQuarter={filterQuarter} filterSize={filterHandlers.open}></Filter>
                 <Sorter sortDate={sortDate} sortNum={sortNum}></Sorter>
             </Group>
 
-            <Modal opened={filterOpened} onClose={close} title="Select Filter Size">
+            <Modal opened={filterOpened} onClose={filterHandlers.close} title="Select Filter Size">
                 <MultiSelect
-                label="Filter sizes"
-                placeholder="Pick value"
-                data={['newborn', 'size 1', 'size 2', 'size 3', 'size 4', 'size 5', 'size 6']}
-                clearable
-                onOptionSubmit={addTarget}
+                    label="Filter sizes"
+                    placeholder="Pick value"
+                    data={['newborn', 'size 1', 'size 2', 'size 3', 'size 4', 'size 5', 'size 6']}
+                    clearable
+                    onOptionSubmit={addTarget}
                 />
 
-                <Button className='filterButton' onClick={filterSize}>Filter!</Button> 
+                <Button className='filterButton' onClick={filterSize}>Filter!</Button>
             </Modal>
-            
+
             <Tabs variant='unstyled' defaultValue={"open"} className="width-90">
                 <Tabs.List grow>
                     <Tabs.Tab className="tableHeader tab" value="open">Open</Tabs.Tab>
                     <Tabs.Tab className="tableHeader tab" value="review">Under Review</Tabs.Tab>
                     <Tabs.Tab className="tableHeader tab" value="approved">Approved</Tabs.Tab>
                 </Tabs.List>
-                
+
                 <Tabs.Panel value="open">
                     <OrderTable orders={orders} orderType={"OPEN"}></OrderTable>
                 </Tabs.Panel>
@@ -125,13 +160,14 @@ const OrderPartner: React.FC = () => {
             </Tabs>
 
             <div className="buttonContain width-90">
-                <OrderForm></OrderForm>
+                <OrderForm isDashboardButton={false} opened={opened} open={open} close={close} />
+
             </div>
-                
+
         </main>
-        
+
     );
 };
 
-export default OrderPartner; 
+export default OrderPartner;
 

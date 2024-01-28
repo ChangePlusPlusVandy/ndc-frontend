@@ -10,6 +10,7 @@ import {
 import React, { useContext, useState, useEffect, createContext } from "react";
 import auth from "./firebase";
 import type { UserCredential, User } from "firebase/auth";
+import { set } from "react-hook-form";
 
 interface AuthContextData {
   currentUser: User | null;
@@ -24,6 +25,7 @@ interface AuthContextData {
   logout: () => Promise<void>;
   getUser: () => User | null;
   isStaff: boolean | null;
+  mongoId: string | null;
   forgotPassword: (email: string) => Promise<void>;
   confirmReset: (code: string, password: string) => Promise<void>;
 }
@@ -38,6 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isStaff, setIsStaff] = useState<boolean | null>(null);
+  const [mongoId, setMongoId] = useState<string | null>(null);
 
   async function login(email: string, password: string) {
     return await signInWithEmailAndPassword(auth, email, password).then(
@@ -52,8 +55,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
           let checkPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login?firebaseUid=${userCredential.user.uid}`, requestOptions);
           let data = await checkPartner.json();
-          if (!data.error)
+
+          if (!data.error) {
+            setMongoId(data.data._id);
             setIsStaff(data.isStaff);
+          }
         } catch (err) {
           console.error(err)
         }
@@ -95,9 +101,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           firebaseUid: uid,
         })
       }
-      const res = await fetch("/api/staff/", requestOptions);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/staff/`, requestOptions);
       const staffUser = await res.json();
       setIsStaff(true);
+      setMongoId(staffUser._id)
     } catch (err) {
       console.error(err);
     }
@@ -125,16 +132,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           firebaseUid: uid
         })
       }
-      const res = await fetch("/api/partner/", requestOptions);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login/create-partner/`, requestOptions);
       const partnerUser = await res.json()
       setIsStaff(false);
+      setMongoId(partnerUser._id);
     } catch (err) {
       console.error(err);
     }
   }
 
   async function logout(): Promise<void> {
-    setIsStaff(null)
+    setIsStaff(null);
+    setMongoId(null);
     return await signOut(auth);
   }
 
@@ -153,8 +162,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
+      if (user) {
+        const storedMongoId = window.localStorage.getItem("mongoId");
+        if (storedMongoId) {
+          setMongoId(storedMongoId);
+        }
+      } else {
+        window.localStorage.removeItem("mongoId");
+      }
       setIsLoading(false);
     });
+
     return unsubscribe;
   }, []);
 
@@ -163,15 +181,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (userToken) {
       window.localStorage.setItem("auth", userToken);
     }
+    if (mongoId) {
+      window.localStorage.setItem("mongoId", mongoId);
+    }
+
   };
 
   useEffect(() => {
     if (currentUser) {
-      setToken()
+      setToken();
     } else {
       window.localStorage.removeItem("auth");
     }
   }, [currentUser])
+
+  useEffect(() => {
+    if (mongoId) {
+      window.localStorage.setItem("mongoId", mongoId);
+    }
+  }, [mongoId])
 
 
   const value = {
@@ -181,6 +209,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     logout,
     getUser,
     isStaff,
+    mongoId,
     forgotPassword,
     confirmReset,
   };

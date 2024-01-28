@@ -1,65 +1,47 @@
-import React, {useEffect, useState} from 'react';
-import Order from './OrderClass'; 
-import "./OrderPartner.css";  
+import React, { useEffect, useState } from 'react';
+import Order from './OrderClass';
+import "./OrderPartner.css";
+import OrderPopup from '../OrderPopup';
+import { Container, Flex, Group, Stack, Text } from '@mantine/core';
+
 
 interface TableProps {
-    orders: Order[], 
+    orders: Order[],
     orderType: string,
 }
 
-const OrderTable: React.FC<TableProps> = ({orders, orderType}: TableProps) => {
-
-    useEffect(() => {
-        const getOrders = async () => {
-            fetch("${import.meta.env.VITE_BACKEND_URL}/INSERT_PATH_HERE", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(orderType),
-                })
-                .then((response) => (response.json()))
-                .then ((data) => {
-                    orders = []; 
-                    data.forEach((elem: any) => {
-                        orders.push(new Order(elem.datePlaced, elem.status, elem.newborn, elem.size1, 
-                            elem.size2, elem.size3, elem.size4, elem.size5, elem.size6)); 
-                    }) 
-                })
-                .catch(console.error); 
-        }
-        getOrders(); 
-    }, [])
-
+const OrderTable: React.FC<TableProps> = ({ orders, orderType }: TableProps) => {
     return (
-        <table>
-                <thead>
-                    <tr>
-                        <th>Order</th>
-                        <th>Date Placed</th>
-                        <th>Number of Diapers</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <div>
+            <div>
+                <Stack gap="xs">
+                    <Container w="100%" fluid mt="7">
+                        <Group style={{ width: '100%' }} grow gap="xl">
+                            <Text>Number</Text>
+                            <Text>Date Placed</Text>
+                            <Text># of Diapers</Text>
+                            <Text>Status</Text>
+                        </Group>
+                    </Container>
                     {orders?.map((val: Order, index: number) => {
                         return (
-                            <tr key={index} className="backWhite">
-                                <td>Order</td>
-                                <td>{val.datePlaced.toDateString()}</td>
-                                <td>{val.numDiapers}</td>
-                                <td>...</td>
-                            </tr>
+                            <Container className="single-order" w="100%" fluid key={index}>
+                                <OrderPopup>
+                                    <Group style={{ width: '100%' }} grow gap="xl">
+                                        <Text>#{index}</Text>
+                                        <Text>{val.datePlaced.toDateString()}</Text>
+                                        <Text>{val.numDiapers}</Text>
+                                        <Text>{val.status}</Text>
+                                    </Group>
+                                </OrderPopup>
+                            </Container>
                         )
                     })}
-                    <tr>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                    </tr>
-                </tbody>
-                
-        </table>
-    )
+                </Stack>
+            </div>
+
+        </div>
+    );
 }
 
 export default OrderTable; 
