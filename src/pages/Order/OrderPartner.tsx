@@ -11,7 +11,7 @@ import ndcLogo from '../../assets/ndc-logo.png';
 
 const OrderPartner: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]); 
-    const [opened, { open, close }] = useDisclosure(false);
+    const [filterOpened, { open, close }] = useDisclosure(false);
     const [targetSizes, setTargetSizes] = useState<number[]>([]); 
 
     const sortDate = () => {
@@ -92,7 +92,7 @@ const OrderPartner: React.FC = () => {
                 <Sorter sortDate={sortDate} sortNum={sortNum}></Sorter>
             </Group>
 
-            <Modal opened={opened} onClose={close} title="Select Filter Size">
+            <Modal opened={filterOpened} onClose={close} title="Select Filter Size">
                 <MultiSelect
                 label="Filter sizes"
                 placeholder="Pick value"
