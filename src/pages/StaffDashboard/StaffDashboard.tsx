@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import "./StaffDashboard.css";
 import UserThumb from "../../assets/Images/StaffImages/UserThumb.png";
 import AdminBook from "../../assets/Images/StaffImages/AdminBook.png";
-import BarChart from "../../assets/Images/StaffImages/BarChart.png";
-import PieChart from "../../assets/Images/StaffImages/PieChart.png";
 import StaffOrderPad from "./StaffOrderPad";
 import { Link } from "react-router-dom";
 import Chart from 'chart.js/auto';
@@ -110,7 +108,6 @@ const StaffDashboard: React.FC = () => {
                                 <h2 className="grey-text center-t">
                                     DIAPERS DELIVERED
                                 </h2>
-                                {/* <img src={BarChart} alt="bar chart" className="wr-width-2" /> */}
                                 <canvas ref={chartRef2} id="myChart" ></canvas>
                             </div>
                         </div>
