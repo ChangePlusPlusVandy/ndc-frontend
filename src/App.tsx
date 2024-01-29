@@ -1,7 +1,7 @@
 import React, { useContext, ReactNode } from "react";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
-
+import '@mantine/charts/styles.css';
 import {
   Route,
   Routes,
@@ -36,7 +36,7 @@ const App: React.FC = () => {
           <Route path="/forgot-password" element={AuthWrapper(<ForgotPassword />)} />
 
           <Route path="/" element={<DashboardLayout />}>
-            <Route index element={<PrivateRoute element={<DashboardAccessControl />} />} />
+            <Route index element={<PrivateRoute element={<StaffDashboard />} />} />
             <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
 
             <Route path="/order-info" element={<OrderPartner />} />

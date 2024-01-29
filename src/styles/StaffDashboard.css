@@ -1,0 +1,5 @@
+.grid-col {
+    display: flex;
+    align-items: stretch;
+    justify: stretch;
+}
