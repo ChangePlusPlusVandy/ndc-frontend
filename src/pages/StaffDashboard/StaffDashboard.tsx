@@ -55,7 +55,9 @@ const StaffDashboard: React.FC = () => {
 
     return (
         <>
-            <Title ta={{base: "center", sm: "left"}} p="md">Hello, Staff Name</Title>
+            <Title ta={{ base: "center", sm: "left" }} p="md">
+                Hello, Staff Name
+            </Title>
             <Grid grow gutter="md" justify="center" align="stretch">
                 <Grid.Col
                     className="grid-col"
@@ -107,14 +109,15 @@ const StaffDashboard: React.FC = () => {
                 </Grid.Col>
                 <Grid.Col className="grid-col" span={{ base: 12, sm: 2 }}>
                     <Flex
-                        justify="space-between"
+                        justify="stretch"
                         gap="md"
                         p="0"
                         flex="1"
-                        direction="column"
+                        direction={{ base: "row", sm: "column" }}
                         align="stretch"
                     >
                         <Flex
+                            flex="1"
                             ta="center"
                             p="md"
                             direction="column"
@@ -124,6 +127,7 @@ const StaffDashboard: React.FC = () => {
                             <Title>100</Title>
                         </Flex>
                         <Flex
+                            flex="1"
                             ta="center"
                             p="md"
                             direction="column"
@@ -133,6 +137,7 @@ const StaffDashboard: React.FC = () => {
                             <Title>50</Title>
                         </Flex>
                         <Flex
+                            flex="1"
                             ta="center"
                             p="md"
                             direction="column"
