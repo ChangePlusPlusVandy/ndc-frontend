@@ -3,15 +3,15 @@ import { rem, Container, Text, Title, Flex, Grid, Table } from "@mantine/core";
 import { DonutChart, BarChart } from "@mantine/charts";
 
 import "../../styles/StaffDashboard.css";
-import { IconCircleFilled } from "@tabler/icons-react";
+import { IconCircleFilled, IconCircle } from "@tabler/icons-react";
 
 const StaffDashboard: React.FC = () => {
     useEffect(() => {}, []);
 
     const fakeDonutChart = [
-        { name: "Unreviewed", value: 400, color: "blue" },
-        { name: "Open", value: 300, color: "red" },
-        { name: "Approved", value: 300, color: "green" },
+        { name: "Unreviewed", value: 400, color: "#ead3e4" },
+        { name: "Open", value: 300, color: "#653661" },
+        { name: "Approved", value: 300, color: "#c99bc3" },
     ];
 
     const fakeTable = [
@@ -39,23 +39,23 @@ const StaffDashboard: React.FC = () => {
     ];
 
     const fakeBarChartHorizontal = [
-        { month: "January", Maybe: 1200 },
-        { month: "February", Maybe: 1900 },
-        { month: "March", Maybe: 400 },
-        { month: "April", Maybe: 1000 },
+        { month: "Jan.", Maybe: 1200 },
+        { month: "Feb.", Maybe: 1900 },
+        { month: "Mar.", Maybe: 400 },
+        { month: "Apr.", Maybe: 1000 },
         { month: "May", Maybe: 800 },
-        { month: "June", Maybe: 750 },
-        { month: "July", Maybe: 500 },
-        { month: "August", Maybe: 300 },
-        { month: "September", Maybe: 750 },
-        { month: "October", Maybe: 400 },
-        { month: "November", Maybe: 750 },
-        { month: "December", Maybe: 750 },
+        { month: "Jun.", Maybe: 750 },
+        { month: "Jul.", Maybe: 500 },
+        { month: "Aug.", Maybe: 300 },
+        { month: "Sep.", Maybe: 750 },
+        { month: "Oct.", Maybe: 400 },
+        { month: "Nov.", Maybe: 750 },
+        { month: "Dec.", Maybe: 750 },
     ];
 
     return (
         <>
-            <Title p="md">Hello, Staff Name</Title>
+            <Title ta={{base: "center", sm: "left"}} p="md">Hello, Staff Name</Title>
             <Grid grow gutter="md" justify="center" align="stretch">
                 <Grid.Col
                     className="grid-col"
@@ -64,15 +64,17 @@ const StaffDashboard: React.FC = () => {
                     <Flex
                         justify="space-between"
                         flex="1"
-                        bg="white"
+                        className="dashboard-box"
                         p="md"
                         direction="column"
                     >
                         <Text>Orders</Text>
                         <Flex p="lg" justify="center">
                             <DonutChart
-                                withTooltip={false}
                                 data={fakeDonutChart}
+                                withLabelsLine={false}
+                                withLabels
+                                tooltipDataSource="segment"
                             />
                         </Flex>
                         <Flex
@@ -80,15 +82,24 @@ const StaffDashboard: React.FC = () => {
                             justify={{ base: "center", xs: "space-evenly" }}
                         >
                             <Flex justify="center" gap="md" align={"center"}>
-                                <IconCircleFilled color="red" size=".75rem" />
+                                <IconCircle
+                                    className="unreviewed-icon"
+                                    size=".75rem"
+                                />
                                 <Text>Unreviewed</Text>
                             </Flex>
                             <Flex justify="center" gap="md" align={"center"}>
-                                <IconCircleFilled color="blue" size=".75rem" />
+                                <IconCircle
+                                    className="open-icon"
+                                    size=".75rem"
+                                />
                                 <Text>Open</Text>
                             </Flex>
                             <Flex justify="center" gap="md" align={"center"}>
-                                <IconCircleFilled color="green" size=".75rem" />
+                                <IconCircle
+                                    className="approved-icon"
+                                    size=".75rem"
+                                />
                                 <Text>Approved</Text>
                             </Flex>
                         </Flex>
@@ -103,15 +114,30 @@ const StaffDashboard: React.FC = () => {
                         direction="column"
                         align="stretch"
                     >
-                        <Flex ta="center" p="md" direction="column" bg="white">
+                        <Flex
+                            ta="center"
+                            p="md"
+                            direction="column"
+                            className="dashboard-box"
+                        >
                             <Text>Open</Text>
                             <Title>100</Title>
                         </Flex>
-                        <Flex ta="center" p="md" direction="column" bg="white">
+                        <Flex
+                            ta="center"
+                            p="md"
+                            direction="column"
+                            className="dashboard-box"
+                        >
                             <Text>Unreviewed</Text>
                             <Title>50</Title>
                         </Flex>
-                        <Flex ta="center" p="md" direction="column" bg="white">
+                        <Flex
+                            ta="center"
+                            p="md"
+                            direction="column"
+                            className="dashboard-box"
+                        >
                             <Text>Approved</Text>
                             <Title>25</Title>
                         </Flex>
@@ -124,7 +150,7 @@ const StaffDashboard: React.FC = () => {
                     <Flex
                         justify="space-between"
                         flex="1"
-                        bg="white"
+                        className="dashboard-box"
                         p="md"
                         direction="column"
                     >
@@ -142,7 +168,7 @@ const StaffDashboard: React.FC = () => {
                 </Grid.Col>
                 <Grid.Col className="grid-col" span={{ base: 12, sm: 6 }}>
                     <Flex
-                        bg="white"
+                        className="dashboard-box"
                         gap="md"
                         flex="1"
                         p="md"
@@ -156,9 +182,8 @@ const StaffDashboard: React.FC = () => {
                             type="stacked"
                             orientation="vertical"
                             series={[
-                                { name: "Yes", color: "violet.6" },
-                                { name: "No", color: "blue.6" },
-                                { name: "Tablets", color: "teal.6" },
+                                { name: "Yes", color: "#804d7a" },
+                                { name: "No", color: "#eedee7" },
                             ]}
                         />
                     </Flex>
@@ -167,7 +192,7 @@ const StaffDashboard: React.FC = () => {
                     <Flex
                         p="md"
                         gap="md"
-                        bg="white"
+                        className="dashboard-box"
                         flex="1"
                         direction="column"
                     >
@@ -176,7 +201,7 @@ const StaffDashboard: React.FC = () => {
                             h={250}
                             data={fakeBarChartHorizontal}
                             dataKey="month"
-                            series={[{ name: "Maybe", color: "violet.6" }]}
+                            series={[{ name: "Maybe", color: "#804d7a" }]}
                             tickLine="y"
                         />
                     </Flex>

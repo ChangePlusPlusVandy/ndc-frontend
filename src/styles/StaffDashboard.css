@@ -3,3 +3,36 @@
     align-items: stretch;
     justify: stretch;
 }
+
+:root {
+    --primary-color: #94408F;
+    --primary-color-20: #ead3e4;
+    --primary-color-50: #c99bc3;
+    --darker-primary-color: #653661;
+    --light-color: #FFF7F9;
+    --chart-color-1: #804d7a;
+    --chart-color-2: #eedee7;
+    --dark-color-1: #201a1e;
+    --dark-color-2: #4e444b;
+}
+
+.dashboard-box {
+    background-color: var(--light-color);
+    color: var(--dark-color-1);
+}
+
+.unreviewed-icon {
+    fill: var(--primary-color-20);
+    color: var(--primary-color-20);
+}
+
+.open-icon {
+    fill: var(--darker-primary-color);
+    color: var(--darker-primary-color);
+}
+
+.approved-icon {
+    fill: var(--primary-color);
+    color: var(--primary-color);
+    opacity: 50%;
+}
