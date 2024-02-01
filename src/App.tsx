@@ -36,7 +36,7 @@ const App: React.FC = () => {
           <Route path="/forgot-password" element={AuthWrapper(<ForgotPassword />)} />
 
           <Route path="/" element={<DashboardLayout />}>
-            <Route index element={<PrivateRoute element={<StaffDashboard />} />} />
+            <Route index element={<PrivateRoute element={<DashboardAccessControl />} />} />
             <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
 
             <Route path="/order-info" element={<OrderPartner />} />

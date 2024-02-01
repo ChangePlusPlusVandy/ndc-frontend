@@ -9,7 +9,8 @@
     --primary-color-20: #ead3e4;
     --primary-color-50: #c99bc3;
     --darker-primary-color: #653661;
-    --light-color: #FFF7F9;
+    --light-color-1: #FFF7F9;
+    --light-color-2: #fdf0f7; 
     --chart-color-1: #804d7a;
     --chart-color-2: #eedee7;
     --dark-color-1: #201a1e;
@@ -17,7 +18,7 @@
 }
 
 .dashboard-box {
-    background-color: var(--light-color);
+    background-color: var(--light-color-1);
     color: var(--dark-color-1);
 }
 

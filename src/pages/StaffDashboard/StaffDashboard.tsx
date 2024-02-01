@@ -73,6 +73,7 @@ const StaffDashboard: React.FC = () => {
                         <Text>Orders</Text>
                         <Flex p="lg" justify="center">
                             <DonutChart
+                                
                                 data={fakeDonutChart}
                                 withLabelsLine={false}
                                 withLabels
@@ -113,11 +114,12 @@ const StaffDashboard: React.FC = () => {
                         gap="md"
                         p="0"
                         flex="1"
-                        direction={{ base: "row", sm: "column" }}
+                        direction={{ base: "column", xs: "row", sm: "column" }}
                         align="stretch"
                     >
                         <Flex
                             flex="1"
+                            justify="center"
                             ta="center"
                             p="md"
                             direction="column"
@@ -128,6 +130,7 @@ const StaffDashboard: React.FC = () => {
                         </Flex>
                         <Flex
                             flex="1"
+                            justify="center"
                             ta="center"
                             p="md"
                             direction="column"
@@ -138,6 +141,7 @@ const StaffDashboard: React.FC = () => {
                         </Flex>
                         <Flex
                             flex="1"
+                            justify="center"
                             ta="center"
                             p="md"
                             direction="column"
@@ -153,7 +157,8 @@ const StaffDashboard: React.FC = () => {
                     span={{ base: 12, sm: 4, md: 5 }}
                 >
                     <Flex
-                        justify="space-between"
+                        justify="flex-start"
+                        gap="md"
                         flex="1"
                         className="dashboard-box"
                         p="md"
