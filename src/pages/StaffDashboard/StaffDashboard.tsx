@@ -217,9 +217,6 @@ const StaffDashboard: React.FC = () => {
                     </Flex>
                 </Grid.Col>
             </Grid>
-            <Flex direction="column" justify="space-between" align="stretch">
-                <Flex gap="md" justify="space-between" align="stretch"></Flex>
-            </Flex>
         </>
     );
 };

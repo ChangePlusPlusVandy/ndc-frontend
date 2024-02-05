@@ -14,7 +14,7 @@ function Greeting() {
         }
     }, [currentUser]);
     return (
-        <Title c="black" ta={"center"}>
+        <Title c="black" ta={{base: "center", sm: "left"}}>
             Hello, {user?.displayName}
         </Title>
     );

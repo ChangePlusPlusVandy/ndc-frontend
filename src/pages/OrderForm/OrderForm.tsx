@@ -13,7 +13,6 @@ import OrderFormRequest from "./OrderFormRequest";
 import OrderFormDeliveryInfo from "./OrderFormDeliveryInfo";
 import OrderFormConfirmation from "./OrderFormConfirmation";
 import { useAuth } from "../../AuthContext";
-import MakeOrderBtn from "../PartnerDashboard/MakeOrderBtn";
 import { IconSquarePlus } from "@tabler/icons-react";
 
 
@@ -196,7 +195,7 @@ const OrderForm: React.FC<OrderFormProps> = ({opened, open, close, isDashboardBu
                 )}
                 
             </Modal>
-            {(isDashboardButton) ? <MakeOrderBtn onClick={handleOpen} /> : <Button size="lg" c="white" bg="gray" onClick={handleOpen}><Flex gap="md"><IconSquarePlus size="1.5rem" /><Text>Make Order</Text></Flex></Button>}
+            <Button radius="1rem" size="md" c="white" bg="gray" onClick={handleOpen}><Flex gap="md"><IconSquarePlus size="1.5rem" /><Text>Make an Order</Text></Flex></Button>
         </>
     );
 };
