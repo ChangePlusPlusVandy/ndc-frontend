@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import {
     Tabs,
     Flex,
@@ -11,6 +11,7 @@ import {
 } from "@mantine/core";
 import OrderFormRequest from "./OrderFormRequest";
 import OrderFormDeliveryInfo from "./OrderFormDeliveryInfo";
+import OrderFormReview from "./OrderFormReview";
 import OrderFormConfirmation from "./OrderFormConfirmation";
 import { useAuth } from "../../AuthContext";
 import MakeOrderBtn from "../PartnerDashboard/MakeOrderBtn";
@@ -40,9 +41,11 @@ type OrderFormProps = {
     isDashboardButton: boolean
 };
 
-const OrderForm: React.FC<OrderFormProps> = ({opened, open, close, isDashboardButton}: OrderFormProps) => {
+const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardButton }: OrderFormProps) => {
     const [sizes, setSizes] = useState(initialSizes);
-    const [activePage, setActivePage] = useState<string | null>("request-diapers");
+    const [activePage, setActivePage] = useState<string | null>(
+        "request-diapers"
+    );
     const [deliveryInfo, setDeliveryInfo] = useState(initialDeliveryInfo);
 
     const { mongoId, currentUser } = useAuth();
@@ -55,7 +58,7 @@ const OrderForm: React.FC<OrderFormProps> = ({opened, open, close, isDashboardBu
         setDeliveryInfo({ ...initialDeliveryInfo });
     };
 
-    
+
 
     const handleOpen = () => {
         clearForm();
@@ -116,7 +119,6 @@ const OrderForm: React.FC<OrderFormProps> = ({opened, open, close, isDashboardBu
                     blur: 3,
                 }}
                 withCloseButton={false}
-                centered
                 scrollAreaComponent={ScrollArea.Autosize}
             >
                 <CloseButton onClick={handleClose} />
@@ -194,7 +196,7 @@ const OrderForm: React.FC<OrderFormProps> = ({opened, open, close, isDashboardBu
                         numDiapers={numDiapers()}
                     />
                 )}
-                
+
             </Modal>
             {(isDashboardButton) ? <MakeOrderBtn onClick={handleOpen} /> : <Button size="lg" c="white" bg="gray" onClick={handleOpen}><Flex gap="md"><IconSquarePlus size="1.5rem" /><Text>Make Order</Text></Flex></Button>}
         </>
