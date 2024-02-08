@@ -24,6 +24,15 @@
 .submit-element {
     left-padding:20em;
 }
+.quantity-inputs-container {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.quantity-input {
+    width: 40%;
+    margin-bottom: 1em;
+}
 .submit-button {
     margin-left: auto;
 }
