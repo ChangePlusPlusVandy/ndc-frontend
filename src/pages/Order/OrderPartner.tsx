@@ -11,6 +11,7 @@ import ndcLogo from '../../assets/ndc-logo.png';
 import { useAuth } from "../../AuthContext";
 
 interface OrderResponse {
+    _id: string;
     dateCompleted: string;
     datePlaced: string;
     newborn: number;
@@ -44,6 +45,7 @@ const OrderPartner: React.FC = () => {
             });
             let data = (await res.json()).map((elem: OrderResponse) => {
                 return new Order(
+                    elem._id,
                     new Date(elem.datePlaced),
                     new Date(elem.dateCompleted) || new Date(),
                     elem.status,
@@ -159,7 +161,8 @@ const OrderPartner: React.FC = () => {
             </Tabs>
 
             <div className="buttonContain width-90">
-                <OrderForm></OrderForm>
+                <OrderForm isDashboardButton={false} opened={opened} open={open} close={close} />
+
             </div>
 
         </main>

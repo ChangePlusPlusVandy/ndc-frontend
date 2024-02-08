@@ -26,7 +26,7 @@ const OrderTable: React.FC<TableProps> = ({ orders, orderType }: TableProps) => 
                     {orders?.map((val: Order, index: number) => {
                         return (
                             <Container className="single-order" w="100%" fluid key={index}>
-                                <OrderPopup>
+                                <OrderPopup order={val}>
                                     <Group style={{ width: '100%' }} grow gap="xl">
                                         <Text>#{index}</Text>
                                         <Text>{val.datePlaced.toDateString()}</Text>

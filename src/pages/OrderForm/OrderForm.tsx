@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
     Tabs,
     Flex,
@@ -7,15 +7,16 @@ import {
     Modal,
     ScrollArea,
     CloseButton,
+    Text
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import OrderFormRequest from "./OrderFormRequest";
 import OrderFormDeliveryInfo from "./OrderFormDeliveryInfo";
 import OrderFormReview from "./OrderFormReview";
 import OrderFormConfirmation from "./OrderFormConfirmation";
-
-import MakeOrderBtn from "../PartnerDashboard/MakeOrderBtn";
 import { useAuth } from "../../AuthContext";
+import MakeOrderBtn from "../PartnerDashboard/MakeOrderBtn";
+import { IconSquarePlus } from "@tabler/icons-react";
+
 
 const initialSizes = {
     newborn: 0,
@@ -33,8 +34,14 @@ const initialDeliveryInfo = {
     additionalInstructions: "",
 };
 
-const OrderForm: React.FC = () => {
-    const [opened, { open, close }] = useDisclosure(false);
+type OrderFormProps = {
+    opened: boolean,
+    open: any,
+    close: any,
+    isDashboardButton: boolean
+};
+
+const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardButton }: OrderFormProps) => {
     const [sizes, setSizes] = useState(initialSizes);
     const [activePage, setActivePage] = useState<string | null>(
         "request-diapers"
@@ -42,8 +49,7 @@ const OrderForm: React.FC = () => {
     const [deliveryInfo, setDeliveryInfo] = useState(initialDeliveryInfo);
 
     const { mongoId, currentUser } = useAuth();
-
-    //TODO:
+    //TODO: 
     //set a requirement that at least 1 diaper must be ordered
     // set up validation for the delivery info dates - force user to write something for the required parts
 
@@ -51,6 +57,8 @@ const OrderForm: React.FC = () => {
         setSizes({ ...initialSizes });
         setDeliveryInfo({ ...initialDeliveryInfo });
     };
+
+
 
     const handleOpen = () => {
         clearForm();
@@ -104,6 +112,7 @@ const OrderForm: React.FC = () => {
             <Modal
                 size="xl"
                 opened={opened}
+
                 onClose={handleClose}
                 overlayProps={{
                     backgroundOpacity: 0.55,
@@ -187,8 +196,9 @@ const OrderForm: React.FC = () => {
                         numDiapers={numDiapers()}
                     />
                 )}
+
             </Modal>
-            <MakeOrderBtn handleOnClick={handleOpen} />
+            {(isDashboardButton) ? <MakeOrderBtn onClick={handleOpen} /> : <Button size="lg" c="white" bg="gray" onClick={handleOpen}><Flex gap="md"><IconSquarePlus size="1.5rem" /><Text>Make Order</Text></Flex></Button>}
         </>
     );
 };

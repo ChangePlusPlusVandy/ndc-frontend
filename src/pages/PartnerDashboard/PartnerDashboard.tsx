@@ -1,98 +1,238 @@
-import React from 'react';
-import { Flex, Button, Text, Title, Container, Image } from '@mantine/core';
+import React, { useEffect } from "react";
+import { Stack, Flex, Text, Container, Card } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+
 // Importing dashboard components
 import Greeting from "./Greeting";
-import MakeOrderBtn from "./MakeOrderBtn";
 import MyAccountBtn from "./MyAccountBtn";
 import ViewOrderBtn from "./ViewOrderBtn";
-import placeholder from '../../assets/placeholder.png';
 import { useNavigate } from "react-router-dom";
+import "../../styles/PartnerDash.css";
+import { useAuth } from "../../AuthContext";
+import { IconCheck, IconMailOpened, IconBell } from "@tabler/icons-react";
 
-import OrderForm from '../OrderForm/OrderForm';
-import { useRef } from 'react';
-
+import OrderForm from "../OrderForm/OrderForm";
 
 function Dashboard() {
-    const ref = useRef<HTMLInputElement>(null);
+    const [opened, { open, close }] = useDisclosure(false);
     const navigate = useNavigate();
+
+    const { currentUser } = useAuth();
+    useEffect(() => {
+        console.log(currentUser);
+    }, [])
     const handleProfile = () => {
-        navigate('./profile');
-    }
+        navigate("./profile");
+    };
     const handleOrderInfo = () => {
-        navigate('./order-info');
-    }
+        navigate("./order-info");
+    };
     return (
-        <div className="partner-dash-container">
-
+        <Container px="6em" fluid>
+            <Flex p="md" wrap="wrap" justify="center">
+                <Greeting></Greeting>
+            </Flex>
             {/* main section */}
-            <Flex bg="#F1F3F5" direction="column">
-                <Container size="80%">
-                    <Flex direction="row" wrap="wrap" justify="center" ml={10} pt={30} pb={25}>
-                        <Greeting></Greeting>
-                    </Flex>
-                    <Flex pb={20} direction="row" gap={40} justify="center">
-                        <MyAccountBtn></MyAccountBtn>
-                        <ViewOrderBtn></ViewOrderBtn>
-                        <OrderForm />
-                        <Button radius="xs" variant="filled" color="gray" size="md" h={70} onClick={handleOrderInfo}>See all orders</Button>
-                    </Flex>
-                </Container>
+            <Stack p="xl" bg="#F1F3F5">
+                <Flex
+                    gap="lg"
+                    direction={{ base: "column", md: "row" }}
+                    justify="space-between"
+                    align="stretch"
+                >
+                    <MyAccountBtn onClick={handleProfile}></MyAccountBtn>
+                    <ViewOrderBtn onClick={handleOrderInfo}></ViewOrderBtn>
 
-
-                <Flex direction="row" justify="center" style={{ gap: 70, justifyContent: 'center' }}>
-                    <Flex wrap="nowrap" direction="column" bg="white" mt={10} w={250} ml="10%" h={400} mb={30}>
-                        <Text ml={15} mr={15} c="black" fw={700} mb={20}>
+                    <OrderForm
+                        isDashboardButton={true}
+                        opened={opened}
+                        open={open}
+                        close={close}
+                    />
+                </Flex>
+                <Flex
+                    direction={{ base: "column", sm: "row" }}
+                    gap="lg"
+                    align="stretch"
+                >
+                    <Flex
+                        direction={"column"}
+                        justify={"stretch"}
+                        w={{ base: "100%", sm: "50%" }}
+                        bg="white"
+                        p="md"
+                    >
+                        <Text
+                            pb={"lg"}
+                            ta={{ base: "center", sm: "left" }}
+                            c="black"
+                        >
                             ORDERS
                         </Text>
-                        <Button h={50} radius="xs" ml={15} mr={15} mb={20} w="88%" justify="left" variant="filled" color="gray">
-                            <Image mt={11} style={{ alignSelf: 'flex-start' }} fit="contain" radius="md" h={25} src={placeholder} alt="Placeholder" />
-                            <Text ml={10} c="white" size="sm" fw={500}>
-                                OPEN
-                            </Text >
-                        </Button>
-                        <Button h={50} radius="xs" ml={15} mr={15} mb={20} w="88%" justify="left" variant="filled" color="gray">
-                            <Image mt={11} style={{ alignSelf: 'flex-start' }} fit="contain" radius="md" h={25} src={placeholder} alt="Placeholder" />
-                            <Text ml={10} c="white" size="sm" fw={500}>
-                                UNREVIEWED
-                            </Text>
-                        </Button>
-                        <Button h={50} radius="xs" ml={15} mr={15} mb={20} w="88%" justify="left" variant="filled" color="gray">
-                            <Image mt={11} style={{ alignSelf: 'flex-start' }} fit="contain" radius="md" h={25} src={placeholder} alt="Placeholder" />
-                            <Text ml={10} c="white" size="sm" fw={500}>
-                                APPROVED
-                            </Text>
-                        </Button>
+
+                        <Flex
+                            flex={1}
+                            wrap={"wrap"}
+                            direction="column"
+                            align="space-between"
+                            justify="space-between"
+                            gap={"lg"}
+                        >
+                            <Card
+                                radius="xs"
+                                ta="left"
+                                variant="filled"
+                                bg="gray"
+                                p="lg"
+                            >
+                                <Flex
+                                    gap={{ base: "md", md: "sm" }}
+                                    align="center"
+                                    direction={{ base: "column", md: "row" }}
+                                    c="white"
+                                    w="100%"
+                                >
+                                    <IconMailOpened size={"1.5rem"} />
+                                    <Text>OPEN</Text>
+                                    <Flex
+                                        justify={"flex-end"}
+                                        flex="1"
+                                        ta="right"
+                                    >
+                                        <Text>250+</Text>
+                                    </Flex>
+                                </Flex>
+                            </Card>
+                            <Card
+                                radius="xs"
+                                ta="left"
+                                variant="filled"
+                                bg="gray"
+                                p="lg"
+                            >
+                                <Flex
+                                    gap={{ base: "md", md: "sm" }}
+                                    align="center"
+                                    direction={{ base: "column", md: "row" }}
+                                    c="white"
+                                    w="100%"
+                                >
+                                    <IconBell size={"1.5rem"} />
+                                    <Text>UNREVIEWED</Text>
+                                    <Flex
+                                        justify={"flex-end"}
+                                        flex="1"
+                                        ta="right"
+                                    >
+                                        <Text>250+</Text>
+                                    </Flex>
+                                </Flex>
+                            </Card>
+                            <Card
+                                radius="xs"
+                                ta="left"
+                                variant="filled"
+                                bg="gray"
+                                p="lg"
+                            >
+                                <Flex
+                                    gap={{ base: "md", md: "sm" }}
+                                    align="center"
+                                    direction={{ base: "column", md: "row" }}
+                                    c="white"
+                                    w="100%"
+                                >
+                                    <IconCheck size={"1.5rem"} />
+                                    <Text>APPROVED</Text>
+                                    <Flex
+                                        justify={"flex-end"}
+                                        flex="1"
+                                        ta="right"
+                                    >
+                                        <Text>250+</Text>
+                                    </Flex>
+                                </Flex>
+                            </Card>
+                        </Flex>
                     </Flex>
 
-                    {/* Section with graph*/}
-                    <Flex wrap="nowrap" direction="column" justify="space-evenly" bg="white" mt={10} w={500} mr="10%" h={400}>
-                        {/* Graph, TBA */}
-                        <Flex h={250} mb={20}>
-                        </Flex>
+                    <Flex
+                        wrap="nowrap"
+                        direction="column"
+                        justify="end"
+                        w={{ base: "100%", sm: "50%" }}
+                        bg="white"
+                        p="md"
+                    >
+                        <Flex h="20rem"></Flex>
+                        <Flex
+                            direction={{ base: "column", sm: "row" }}
+                            gap="lg"
+                            justify="space-between"
+                            align={{ base: "normal", sm: "stretch" }}
+                        >
+                            <Card
+                                w={{ base: "100%", sm: "33%" }}
+                                radius="xs"
+                                bg="gray"
+                                c="white"
+                                component="button"
+                            >
+                                <Flex
+                                    flex={1}
+                                    w={"100%"}
+                                    direction={"column"}
+                                    justify={"space-between"}
+                                    align="center"
+                                >
+                                    <Text size="xs">Last Year</Text>
+                                    <Text size="lg">250+</Text>
+                                </Flex>
+                            </Card>
+                            <Card
+                                w={{ base: "100%", sm: "33%" }}
+                                radius="xs"
+                                bg="gray"
+                                ta="center"
+                                c="white"
+                                component="button"
+                            >
+                                <Flex
+                                    flex={1}
+                                    w={"100%"}
+                                    direction={"column"}
+                                    justify={"space-between"}
+                                    align="center"
+                                >
+                                    <Text size="xs">Last 6 Months</Text>
+                                    <Text size="lg">100</Text>
+                                </Flex>
+                            </Card>
+                            <Card
+                                w={{ base: "100%", sm: "33%" }}
+                                radius="xs"
+                                bg="gray"
+                                ta="center"
+                                c="white"
+                                component="button"
+                            >
+                                <Flex
+                                    flex={1}
+                                    w={"100%"}
+                                    direction={"column"}
+                                    justify={"space-between"}
+                                    align="center"
+                                >
+                                    <Text size="xs">Last Month</Text>
 
-                        <Flex style={{ margin: 10, gap: 10, justifyContent: 'center', alignItems: "flex-end" }}>
-                            <Button size="lg" radius="xs" color="gray">
-                                <Text size="xs">
-                                    Last Year
-                                </Text>
-
-                            </Button>
-                            <Button size="lg" radius="xs" color="gray">
-                                <Text size="xs">
-                                    Last 6 Months
-                                </Text>
-                            </Button>
-                            <Button size="lg" radius="xs" color="gray">
-                                <Text size="xs">
-                                    Last Month
-                                </Text>
-                            </Button>
+                                    <Text size="lg">100</Text>
+                                </Flex>
+                            </Card>
                         </Flex>
                     </Flex>
                 </Flex>
-            </Flex>
-
-        </div>
+            </Stack>
+        </Container>
     );
 }
 

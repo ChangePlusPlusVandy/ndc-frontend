@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Title, Text, Container, TextInput, Textarea } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import { set } from "react-hook-form";
 
 type DeliveryProps = {
     deliveryInfo: any;
