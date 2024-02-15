@@ -124,21 +124,9 @@ const OrderPartner: React.FC = () => {
     return (
         <main>
             <Group justify='space-between' className='width-90 modButtons'>
-                <Filter filterMonth={filterMonth} filterQuarter={filterQuarter} filterSize={open}></Filter>
+                <Filter baseOrders={orders} setOrders={setOrders}></Filter>
                 <Sorter sortDate={sortDate} sortNum={sortNum}></Sorter>
             </Group>
-
-            <Modal opened={opened} onClose={close} title="Select Filter Size">
-                <MultiSelect
-                    label="Filter sizes"
-                    placeholder="Pick value"
-                    data={['newborn', 'size 1', 'size 2', 'size 3', 'size 4', 'size 5', 'size 6']}
-                    clearable
-                    onOptionSubmit={addTarget}
-                />
-
-                <Button className='filterButton' onClick={filterSize}>Filter!</Button>
-            </Modal>
 
             <Tabs variant='unstyled' defaultValue={"open"} className="width-90">
                 <Tabs.List grow>
