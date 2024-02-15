@@ -4,162 +4,211 @@ import UserThumb from "../../assets/Images/StaffImages/UserThumb.png";
 import AdminBook from "../../assets/Images/StaffImages/AdminBook.png";
 import StaffOrderPad from "./StaffOrderPad";
 import { Link } from "react-router-dom";
-import Chart from 'chart.js/auto';
+import Chart from "chart.js/auto";
 import EditInventoryModal from "./EditInventoryModal";
 import { useAuth } from "../../AuthContext";
+import { defaultDateFormatter } from "@mantine/dates/lib/utils/get-formatted-date";
 
 export interface InventoryResponse {
-    id: number;
-    wrapped: {
-        newborn: number;
-        size1: number;
-        size2: number;
-        size3: number;
-        size4: number;
-        size5: number;
-        size6: number;
-    };
-    unwrapped: {
-        newborn: number;
-        size1: number;
-        size2: number;
-        size3: number;
-        size4: number;
-        size5: number;
-        size6: number;
-    };
+  id: number;
+  wrapped: {
+    [key: string]: number;
+    newborn: number;
+    size1: number;
+    size2: number;
+    size3: number;
+    size4: number;
+    size5: number;
+    size6: number;
+  };
+  unwrapped: {
+    [key: string]: number;
+    newborn: number;
+    size1: number;
+    size2: number;
+    size3: number;
+    size4: number;
+    size5: number;
+    size6: number;
+  };
 }
 
+const defaultInventoryResponse: InventoryResponse = {
+  id: 0,
+  wrapped: {
+    newborn: 0,
+    size1: 0,
+    size2: 0,
+    size3: 0,
+    size4: 0,
+    size5: 0,
+    size6: 0,
+  },
+  unwrapped: {
+    newborn: 0,
+    size1: 0,
+    size2: 0,
+    size3: 0,
+    size4: 0,
+    size5: 0,
+    size6: 0,
+  },
+};
+
 const StaffDashboard: React.FC = () => {
+  const chartRef = useRef<HTMLCanvasElement>(null);
+  const chartRef2 = useRef<HTMLCanvasElement>(null);
+  const [inventory, setInventory] = useState<InventoryResponse>(defaultInventoryResponse);
+  const { mongoId, currentUser } = useAuth();
 
-    const chartRef = useRef<HTMLCanvasElement>(null);
-    const chartRef2 = useRef<HTMLCanvasElement>(null);
-    const [inventory, setInventory] = useState<InventoryResponse>();
-    const { mongoId, currentUser } = useAuth();
+  const Wrappeddata = {
+    labels: ["Wrapped", "Unwrapped"],
+    datasets: [
+      {
+        label: "My First Dataset",
+        data: [300, 50],
+        backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
+        hoverOffset: 4,
+      },
+    ],
+  };
 
-
-    const Wrappeddata = {
-        labels: ['Wrapped', 'Unwrapped'],
-        datasets: [{
-            label: 'My First Dataset',
-            data: [300, 50],
-            backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)'],
-            hoverOffset: 4
-        }]
-    };
-    
-    const diapperWrappingChart = async () => {
-        if(chartRef.current != null){
-            const ctx = chartRef.current.getContext('2d');
-            if (ctx) {
-                const chart = new Chart(ctx, {
-                    type: 'pie',
-                    data: Wrappeddata,
-                });
-                return () => chart.destroy();
-            }
-        }
+  const diapperWrappingChart = async () => {
+    if (chartRef.current != null) {
+      const ctx = chartRef.current.getContext("2d");
+      if (ctx) {
+        const chart = new Chart(ctx, {
+          type: "pie",
+          data: Wrappeddata,
+        });
+        return () => chart.destroy();
+      }
     }
+  };
 
-    const deliveredData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September','October','November','December'],
-        datasets: [{
-            label: 'Delivered',
-            data: [65, 59, 80, 81, 56, 55, 40, 50, 60, 70, 80, 90],
-            backgroundColor: 'grey',
-            hoverOffset: 4
-        }]
-    }
+  const deliveredData = {
+    labels: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ],
+    datasets: [
+      {
+        label: "Delivered",
+        data: [65, 59, 80, 81, 56, 55, 40, 50, 60, 70, 80, 90],
+        backgroundColor: "grey",
+        hoverOffset: 4,
+      },
+    ],
+  };
 
-    const getInventory = async () => {
-        const token = await currentUser?.getIdToken();
+  const getInventory = async () => {
+    const token = await currentUser?.getIdToken();
 
-        let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/inventory`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
+    let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/inventory`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data: InventoryResponse = await res.json();
+    setInventory(data);
+    console.log(inventory);
+  };
+
+  const diapperDeliveredChart = async () => {
+    if (chartRef2.current != null) {
+      const ctx = chartRef2.current.getContext("2d");
+      if (ctx) {
+        const chart = new Chart(ctx, {
+          type: "bar",
+          data: deliveredData,
         });
 
-        const data:InventoryResponse = await res.json();
-        setInventory(data);
-        console.log(inventory);
+        return () => chart.destroy();
+      }
     }
+  };
 
-    const diapperDeliveredChart = async () => {
-        if(chartRef2.current != null){
-            const ctx = chartRef2.current.getContext('2d');
-            if (ctx) {
-                const chart = new Chart(ctx, {
-                    type: 'bar',
-                    data: deliveredData,
-                });
+  useEffect(() => {
+    diapperWrappingChart();
+  }, [Wrappeddata]);
 
-                return () => chart.destroy();
-            }
-        }
-    }
+  useEffect(() => {
+    diapperDeliveredChart();
+  }, [deliveredData]);
 
-    useEffect(() => {
-        diapperWrappingChart();
-    }, [Wrappeddata]);
+  useEffect(() => {
+    getInventory();
+  }, []);
 
-    useEffect(() => {
-        diapperDeliveredChart();
-    },[deliveredData]);
-
-    useEffect(() => {
-        getInventory();
-    }, []);
-
-
-    return (
-        <div>
-            <div className="body-m gray-1">
-                <h1>Hello, Staff Name</h1>
-                <div className="flex inner-container flex-row">
-                    <div className="flex flex-col m bt">
-                        <Link to="../profile" style={{ textDecoration: 'none' }} className="white flex flex-col">
-                            <img src={UserThumb} alt="User pic" className="pic-size" />
-                            <h2>My Account</h2>
-                        </Link >
-                        <Link to="/" style={{ textDecoration: 'none' }} className="white flex flex-col" >
-                            <img src={AdminBook} alt="Admin pic" className="pic-size" />
-                            <h2>Admin Page</h2>
-                        </Link>
-                    </div>
-                    <div className="flex flex-col">
-                        <div className="flex flex-col pure-white">
-                            <h2 className="grey-text margin-order">ORDERS</h2>
-                            <EditInventoryModal inventory={inventory}/> //!REMOVE REMOVE REMOVE REMOVE REMOVE TEST TEST TEST TEST TEST 
-                            <button onClick={getInventory}>Test ME</button>
-                            <div className="flex flex-row">
-                                <StaffOrderPad text="Open" />
-                                <StaffOrderPad text="Unreviewed" />
-                                <StaffOrderPad text="Approved" />
-                            </div>
-                        </div>
-                        <div className="flex flex-row">
-                            <div className="wr-width pure-white m-r">
-                                <h2 className="grey-text center-t">
-                                    DIAPER WRAPPING
-                                </h2>
-                                {/* <img src={PieChart} alt="pie chart" className="wr-width" /> */} 
-                                    <canvas ref={chartRef} id="myWrappingChart" width="400" height="400"></canvas>                                
-                            </div>
-                            <div className="wr-width-2 pure-white m-r">
-                                <h2 className="grey-text center-t">
-                                    DIAPERS DELIVERED
-                                </h2>
-                                <canvas ref={chartRef2} id="myDelivieriesChart" ></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  return (
+    <div>
+      <div className="body-m gray-1">
+        <h1>Hello, Staff Name</h1>
+        <div className="flex inner-container flex-row">
+          <div className="flex flex-col m bt">
+            <Link
+              to="../profile"
+              style={{ textDecoration: "none" }}
+              className="white flex flex-col"
+            >
+              <img src={UserThumb} alt="User pic" className="pic-size" />
+              <h2>My Account</h2>
+            </Link>
+            <Link
+              to="/"
+              style={{ textDecoration: "none" }}
+              className="white flex flex-col"
+            >
+              <img src={AdminBook} alt="Admin pic" className="pic-size" />
+              <h2>Admin Page</h2>
+            </Link>
+          </div>
+          <div className="flex flex-col">
+            <div className="flex flex-col pure-white">
+              <h2 className="grey-text margin-order">ORDERS</h2>
+              <EditInventoryModal inventory={inventory} /> //!REMOVE REMOVE
+              REMOVE REMOVE REMOVE TEST TEST TEST TEST TEST
+              <button onClick={getInventory}>Test ME</button>
+              <div className="flex flex-row">
+                <StaffOrderPad text="Open" />
+                <StaffOrderPad text="Unreviewed" />
+                <StaffOrderPad text="Approved" />
+              </div>
             </div>
+            <div className="flex flex-row">
+              <div className="wr-width pure-white m-r">
+                <h2 className="grey-text center-t">DIAPER WRAPPING</h2>
+                {/* <img src={PieChart} alt="pie chart" className="wr-width" /> */}
+                <canvas
+                  ref={chartRef}
+                  id="myWrappingChart"
+                  width="400"
+                  height="400"
+                ></canvas>
+              </div>
+              <div className="wr-width-2 pure-white m-r">
+                <h2 className="grey-text center-t">DIAPERS DELIVERED</h2>
+                <canvas ref={chartRef2} id="myDelivieriesChart"></canvas>
+              </div>
+            </div>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default StaffDashboard;
