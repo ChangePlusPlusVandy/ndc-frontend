@@ -34,6 +34,7 @@ export default function DashboardLayout() {
                     <img src={UserThumb} alt="User pic" className="navbar-profile-pic" />
                     <Link className="nav-button" to="/profile">Account</Link>
                     <Link className="nav-button" to="/">Dashboard</Link>
+                    <Link className="nav-button" to="/order-manage">Order Management</Link>
                     <Link className="nav-button" to="/order-info">Orders</Link>
                 </Stack>
             </AppShell.Navbar>

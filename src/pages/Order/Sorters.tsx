@@ -1,5 +1,5 @@
 import { Menu, Button, Image, rem } from '@mantine/core';
-import downArrow from '../../assets/downArrow.jpg';
+import { IconChevronDown } from '@tabler/icons-react';
 import { MouseEventHandler } from 'react';
 
 interface SorterProps {
@@ -21,7 +21,7 @@ const Sorter: React.FC<SorterProps> = ({ sortDate, sortNum }: SorterProps) => {
         <>
             <Menu offset={0}>
                 <Menu.Target>
-                    <Button className='whiteButton' rightSection={<Image w={rem(20)} src={downArrow} />}>Sort By</Button>
+                    <Button className='whiteButton' rightSection={<IconChevronDown></IconChevronDown>}>Sort By</Button>
                 </Menu.Target>
 
                 <Menu.Dropdown>
