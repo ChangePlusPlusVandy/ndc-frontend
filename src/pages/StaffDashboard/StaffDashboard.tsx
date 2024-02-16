@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+//import Chart from 'chart.js/auto';
+
 import { rem, Container, Text, Title, Flex, Grid, Table } from "@mantine/core";
 import { DonutChart, BarChart } from "@mantine/charts";
 
@@ -6,12 +9,61 @@ import "../../styles/StaffDashboard.css";
 import { IconCircleFilled, IconCircle } from "@tabler/icons-react";
 
 const StaffDashboard: React.FC = () => {
+
+    const chartRef = useRef<HTMLCanvasElement>(null);
+    const chartRef2 = useRef<HTMLCanvasElement>(null);
+
+    /*const diapperWrappingChart = async () => {
+        if(chartRef.current != null){
+            const ctx = chartRef.current.getContext('2d');
+            if (ctx) {
+                const chart = new Chart(ctx, {
+                    type: 'pie',
+                    data: Wrappeddata,
+                });
+                return () => chart.destroy();
+            }
+        }
+    }*/
+
+    const deliveredData = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September','October','November','December'],
+        datasets: [{
+            label: 'Delivered',
+            data: [65, 59, 80, 81, 56, 55, 40, 50, 60, 70, 80, 90],
+            backgroundColor: 'grey',
+            hoverOffset: 4
+        }]
+    }
+
+    /*const diapperDeliveredChart = async () => {
+        if(chartRef2.current != null){
+            const ctx = chartRef2.current.getContext('2d');
+            if (ctx) {
+                const chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: deliveredData,
+                });
+
+                return () => chart.destroy();
+            }
+        }
+    }
+
+    useEffect(() => {
+        diapperWrappingChart();
+    }, [Wrappeddata]);
+
+    useEffect(() => {
+        diapperDeliveredChart();
+    },[deliveredData]);*/
+
     useEffect(() => {}, []);
 
     const fakeDonutChart = [
-        { name: "Unreviewed", value: 400, color: "#ead3e4" },
-        { name: "Open", value: 300, color: "#653661" },
-        { name: "Approved", value: 300, color: "#c99bc3" },
+        { name: "Unreviewed", value: 400, color: "var(--chart-light-color)" },
+        { name: "Open", value: 300, color: "var(--chart-dark-color)" },
+        { name: "Approved", value: 300, color: "var(--chart-primary-color)" },
     ];
 
     const fakeTable = [
@@ -165,7 +217,7 @@ const StaffDashboard: React.FC = () => {
                         direction="column"
                     >
                         <Text>Order Requests</Text>
-                        <Table highlightOnHover>
+                        <Table>
                             <Table.Thead>
                                 <Table.Tr>
                                     <Table.Th>Order #</Table.Th>
@@ -192,8 +244,8 @@ const StaffDashboard: React.FC = () => {
                             type="stacked"
                             orientation="vertical"
                             series={[
-                                { name: "Yes", color: "#804d7a" },
-                                { name: "No", color: "#eedee7" },
+                                { name: "Yes", color: "var(--chart-dark-color)" },
+                                { name: "No", color: "var(--chart-light-color)" },
                             ]}
                         />
                     </Flex>
@@ -211,7 +263,7 @@ const StaffDashboard: React.FC = () => {
                             h={250}
                             data={fakeBarChartHorizontal}
                             dataKey="month"
-                            series={[{ name: "Maybe", color: "#804d7a" }]}
+                            series={[{ name: "Maybe", color: "var(--chart-dark-color)" }]}
                             tickLine="y"
                         />
                     </Flex>

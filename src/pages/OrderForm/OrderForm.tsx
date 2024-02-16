@@ -197,7 +197,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardB
                 )}
 
             </Modal>
-            <Button radius="1rem" size="md" c="white" bg="gray" onClick={handleOpen}><Flex gap="md"><IconSquarePlus size="1.5rem" /><Text>Make an Order</Text></Flex></Button>
+            <Button radius="0.5rem" size="md" color="var(--primary-color)" onClick={handleOpen}><Flex gap="md"><IconSquarePlus size="1.5rem" /><Text c={"var(--light-color)"}>Make an Order</Text></Flex></Button>
         </>
     );
 };

@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { LineChart } from "@mantine/charts";
+import { IconCircleFilled, IconCircle } from "@tabler/icons-react";
 
 // Importing dashboard components
 import Greeting from "./Greeting";
@@ -24,19 +25,20 @@ import { useAuth } from "../../AuthContext";
 import { IconCheck, IconMailOpened, IconBell } from "@tabler/icons-react";
 
 import OrderForm from "../OrderForm/OrderForm";
+import { string } from "yup";
 
 export const data = [
     {
         date: "Mar 22",
-        Orders: 2890,
+        Orders: 245,
     },
     {
         date: "Mar 23",
-        Orders: 2756,
+        Orders: 956,
     },
     {
         date: "Mar 24",
-        Orders: 3322,
+        Orders: 2500,
     },
     {
         date: "Mar 25",
@@ -108,13 +110,14 @@ function Dashboard() {
             key={element.orderNumber}
             bg={
                 selectedRows.includes(element.orderNumber)
-                    ? "var(--mantine-color-blue-light)"
+                    ? "var(--highlight-color)"
                     : undefined
             }
         >
             <Table.Td>
                 <Checkbox
                     aria-label="Select row"
+                    color="var(--secondary-color)"
                     checked={selectedRows.includes(element.orderNumber)}
                     onChange={(event) =>
                         setSelectedRows(
@@ -128,18 +131,25 @@ function Dashboard() {
                     }
                 />
             </Table.Td>
-            <Table.Td>{element.orderNumber}</Table.Td>
-            <Table.Td>{element.distributionPlace}</Table.Td>
-            <Table.Td>{element.date}</Table.Td>
-            <Table.Td>{element.totalQuantity}</Table.Td>
-
-            <Table.Td>{element.orderStatus}</Table.Td>
+            <Table.Td ta="center">{element.orderNumber}</Table.Td>
+            <Table.Td ta="center">{element.distributionPlace}</Table.Td>
+            <Table.Td ta="center">{element.date}</Table.Td>
+            <Table.Td ta="end">{element.totalQuantity}</Table.Td>
+            <Table.Td>
+                <Flex justify="center" gap="md" align={"center"}>
+                    <IconCircle
+                        className={element.orderStatus == "Unreviewed" ? "unreviewed-icon" : element.orderStatus == "Open" ? "open-icon" : "approved-icon"}
+                        size=".75rem"
+                    />
+                    <Text>{element.orderStatus}</Text>
+                </Flex>
+            </Table.Td>
         </Table.Tr>
     ));
 
     return (
         <>
-            <Flex p="md" wrap="wrap" justify="space-between">
+            <Flex p="lg" wrap="wrap" justify="space-between">
                 <Greeting />
                 <OrderForm
                     isDashboardButton={true}
@@ -148,17 +158,38 @@ function Dashboard() {
                     close={close}
                 />
             </Flex>
-            <Grid grow gutter="md" justify="center" align="stretch">
-                <Grid.Col className="grid-col" span={12}>
+            <Grid p="lg" grow gutter="md" justify="center" align="stretch">
+                <Grid.Col
+                    className="grid-col"
+                    span={{ base: 12, sm: 6, md: 9 }}
+                >
                     <Flex
-                        justify="flex-start"
-                        gap="md"
+                        justify="space-between"
                         flex="1"
+                        className="dashboard-box"
+                        p="md"
                         direction="column"
                     >
                         <Text>Orders</Text>
+
+                        <Flex p="lg" justify="center">
+                            <LineChart
+                                h={300}
+                                data={data}
+                                dataKey="date"
+                                series={[
+                                    {
+                                        name: "Orders",
+                                        color: "var(--primary-color)",
+                                    },
+                                ]}
+                                curveType="natural"
+                                withDots={false}
+                            />
+                        </Flex>
                     </Flex>
                 </Grid.Col>
+
                 <Grid.Col className="grid-col" span={{ base: 12, sm: 3 }}>
                     <Flex
                         justify="stretch"
@@ -170,7 +201,7 @@ function Dashboard() {
                     >
                         <Flex
                             flex="1"
-                            justify="center"
+                            justify="space-between"
                             ta="center"
                             p="md"
                             gap="md"
@@ -182,7 +213,7 @@ function Dashboard() {
                         </Flex>
                         <Flex
                             flex="1"
-                            justify="center"
+                            justify="space-between"
                             ta="center"
                             p="md"
                             gap="md"
@@ -195,7 +226,7 @@ function Dashboard() {
                         </Flex>
                         <Flex
                             flex="1"
-                            justify="center"
+                            justify="space-between"
                             ta="center"
                             p="md"
                             gap="md"
@@ -208,53 +239,39 @@ function Dashboard() {
                         </Flex>
                     </Flex>
                 </Grid.Col>
-                <Grid.Col
-                    className="grid-col"
-                    span={{ base: 12, sm: 6, md: 9 }}
-                >
+                <Grid.Col className="grid-col" span={12}>
                     <Flex
-                        justify="space-between"
-                        flex="1"
                         className="dashboard-box"
-                        p="md"
                         direction="column"
-                    >
-                        <Flex p="lg" justify="center">
-                            <LineChart
-                                h={300}
-                                data={data}
-                                dataKey="date"
-                                series={[{ name: "Orders", color: "indigo.6" }]}
-                                curveType="natural"
-                                withDots={false}
-                            />
-                        </Flex>
-                    </Flex>
-                </Grid.Col>
-
-                <Grid.Col className="grid-col" span={12}>
-                    <Flex
-                        justify="space-between"
-                        gap="md"
                         flex="1"
-                        align="center"
-                        direction="row"
+                        p="md"
                     >
-                        <Text>Recent Orders</Text>
-                        <Button size="md">View All</Button>
-                    </Flex>
-                </Grid.Col>
-                <Grid.Col className="grid-col" span={12}>
-                    <Flex className="dashboard-box" gap="md" flex="1" p="md">
-                        <Table highlightOnHover>
+                        <Flex
+                            justify="space-between"
+                            gap="md"
+                            flex="1"
+                            align="center"
+                            direction="row"
+                        >
+                            <Text>Recent Orders</Text>
+                            <Button variant="subtle" size="sm" color="#653661">
+                                View All
+                            </Button>
+                        </Flex>
+                        <Table>
                             <Table.Thead>
                                 <Table.Tr>
                                     <Table.Th />
-                                    <Table.Th>Order #</Table.Th>
-                                    <Table.Th>Distribution Center</Table.Th>
-                                    <Table.Th>Order Date</Table.Th>
-                                    <Table.Th>Total Quantity</Table.Th>
-                                    <Table.Th ta={"right"}>
+                                    <Table.Th ta="center">Order #</Table.Th>
+                                    <Table.Th ta="center">
+                                        Distribution Center
+                                    </Table.Th>
+                                    <Table.Th ta="center">Order Date</Table.Th>
+                                    <Table.Th ta="end">Total Quantity</Table.Th>
+                                    <Table.Th
+                                        className="table-order-status"
+                                        ta={"center"}
+                                    >
                                         Order Status
                                     </Table.Th>
                                 </Table.Tr>
@@ -264,7 +281,6 @@ function Dashboard() {
                     </Flex>
                 </Grid.Col>
             </Grid>
-            {/* main section */}
         </>
     );
 }

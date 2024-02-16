@@ -3,11 +3,33 @@
 }
 
 :root {
-  --primary-color: #474646;
-  --secondary-color: #626161;
-  --accent-color: #d4d4d4;
-  --background-color: #ffffff;
-  --button-color: #8a9ddc;
+  --primary-color: #804d7a;
+  --secondary-color: #4e444b;
+  --accent-color: none;
+  --background-color: #ebdfe5;
+  --light-color: #fff7f9;
+  --text-color: #21272a;
+  --button-color: var(--primary-color);
+  --highlight-color: #F3E7F0;
+  --chart-dark-color: #653661;
+  --chart-primary-color: #c99bc3;
+  --chart-light-color: #ead3e4;
+}
+
+
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+button {
+  background-color: var(--button-color);
+}
+
+header {
+  background-color: var(--primary-color);
+  margin-bottom: 2.5%;
 }
 
 .app {
