@@ -5,15 +5,16 @@ import {useAuth} from "../../AuthContext";
 import { IconSearch, IconArrowsDownUp } from "@tabler/icons-react";
 import Order from "../Order/OrderClass";
 import Filter from "../Order/Filters";
+import Sorter from "../Order/Sorters";
 import "../../styles/OrderManagement.css";
 
 interface OrderResponse {
     _id: string;
+    partner: string, 
     dateCompleted: string;
     datePlaced: string;
-    newborn: number;
     numDiapers: number;
-    partner: string;
+    newborn: number;
     size1: number;
     size2: number;
     size3: number;
@@ -45,6 +46,7 @@ const OrderManagement: React.FC = () => {
             let data = (await res.json()).map((elem: OrderResponse) => {
                 return new Order(
                     elem._id,
+                    elem.partner,
                     new Date(elem.datePlaced), 
                     new Date(elem.dateCompleted),
                     elem.status, 
@@ -64,12 +66,9 @@ const OrderManagement: React.FC = () => {
         getOrders();
     }, [])
 
-    const sort = () => {
-        let orderCopy: Order[] = shownOrders.slice(); 
-        if (asc) orderCopy.sort((a, b) => (a.id < b.id ? -1 : 1)); 
-        else orderCopy.sort((a, b) => (a.id > b.id ? -1 : 1));
-        
-        setAsc(!asc); 
+    const reverse = () => {
+        let orderCopy: Order[] = shownOrders.slice();
+        orderCopy.reverse();  
         setShownOrders(orderCopy); 
     }
 
@@ -94,7 +93,8 @@ const OrderManagement: React.FC = () => {
             <Group justify="space-between" className="modifiers">
                 <div>
                     <Filter baseOrders={orders} setOrders={setShownOrders} classes="mod-button"></Filter>
-                    <Button className="mod-button" onClick={sort}><IconArrowsDownUp></IconArrowsDownUp></Button>
+                    <Sorter orders={orders} setOrders={setShownOrders} classes="mod-button" whichSorters={["OrderName", "PartnerName", "Date", "Num", "Status"]}></Sorter>
+                    <Button className="mod-button" onClick={reverse}><IconArrowsDownUp></IconArrowsDownUp></Button>
                 </div>
                 
                 <Autocomplete leftSection={<IconSearch></IconSearch>} data={[]} value={searchVal} onChange={searchBar}></Autocomplete>
