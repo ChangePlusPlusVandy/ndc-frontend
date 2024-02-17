@@ -14,13 +14,13 @@ const StaffOrderTable: React.FC<TableProps> = ({ orders }: TableProps) => {
         <div>
             <div>
                 <Stack gap="xs">
-                    <Container w="100%" fluid mt="7">
+                    <Container w="100%" fluid mt="7" className='staff-header'>
                         <Group style={{ width: '100%' }} grow gap="xl">
-                            <Text>Order #</Text>
-                            {/* <Text>Partner Name</Text> */}
-                            <Text>Order Date</Text>
-                            <Text>Total Quantity</Text>
-                            <Text>Order Status</Text>
+                            <Text fw={700}>Order #</Text>
+                            <Text fw={700}>Partner Name</Text>
+                            <Text fw={700}>Order Date</Text>
+                            <Text fw={700}>Total Quantity</Text>
+                            <Text fw={700}>Order Status</Text>
                         </Group>
                     </Container>
                     {orders?.map((val: Order, index: number) => {
@@ -28,12 +28,11 @@ const StaffOrderTable: React.FC<TableProps> = ({ orders }: TableProps) => {
                             <Container className="" w="100%" fluid key={index}>
                                 <OrderPopup order={val}>
                                     <Group style={{ width: '100%' }} grow gap="xl">
-                                        {/* <Button>#{index}</Button> */}
                                         <Text>#{val.id}</Text>
-                                        {/* <Text>{val.partnerName}</Text> */}
+                                        <Text>{val.partner}</Text>
                                         <Text>{val.datePlaced.toDateString()}</Text>
                                         <Text>{val.numDiapers}</Text>
-                                        <Flex direction="row" gap="sm">
+                                        <Flex direction="row" gap="sm" align={"center"}>
                                             <StatusImage status={val.status}></StatusImage>
                                             <Text>{val.status}</Text>
                                         </Flex>

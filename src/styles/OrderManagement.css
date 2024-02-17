@@ -9,6 +9,7 @@
     --chart-color-2: #eedee7;
     --dark-color-1: #201a1e;
     --dark-color-2: #4e444b;
+    --gray-color: #bab6b9; 
 }
 
 body {
@@ -25,15 +26,16 @@ body {
     color: black; 
 }
 
-.circle {
-    display: flex;
-    width: 1em;
-    height: 1em;
-    border-radius: 50%;
+.staff-header {
+    padding-bottom: 0.5rem; 
+    border-bottom: 0.125rem solid var(--gray-color); 
 }
 
-.green_circle {
-    background-color: green; 
+.circle {
+    vertical-align: bottom;
+    width: 0.875em;
+    height: 0.875em;
+    border-radius: 50%;
 }
 
 .red_circle {
@@ -42,4 +44,12 @@ body {
 
 .yellow_circle {
     background-color: yellow; 
+}
+
+.light-green_circle {
+    background-color: greenyellow; 
+}
+
+.green_circle {
+    background-color: green; 
 }
