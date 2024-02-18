@@ -8,9 +8,15 @@ import Filter from "../Order/Filters";
 import Sorter from "../Order/Sorters";
 import "../../styles/OrderManagement.css";
 
+interface PartnerType {
+    _id: string, 
+    firstName: string, 
+    lastName: string
+}
+
 interface OrderResponse {
-    _id: string;
-    partner: string, 
+    _id: string,
+    partner: PartnerType, 
     dateCompleted: string;
     datePlaced: string;
     numDiapers: number;
@@ -27,7 +33,6 @@ interface OrderResponse {
 const OrderManagement: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]); 
     const [shownOrders, setShownOrders] = useState<Order[]>([]); 
-    const [asc, setAsc] = useState<Boolean>(true); 
     const [searchVal, setSearchVal] = useState(""); 
     const {currentUser} = useAuth(); 
 
@@ -46,7 +51,7 @@ const OrderManagement: React.FC = () => {
             let data = (await res.json()).map((elem: OrderResponse) => {
                 return new Order(
                     elem._id,
-                    elem.partner,
+                    elem.partner ? (elem.partner.firstName + " " +  elem.partner.lastName) : "Unknown",
                     new Date(elem.datePlaced), 
                     new Date(elem.dateCompleted),
                     elem.status, 
@@ -59,6 +64,7 @@ const OrderManagement: React.FC = () => {
                     elem.size6,
                 )
             });
+            console.log(data); 
             setOrders(data);
             setShownOrders(data); 
         }
@@ -78,8 +84,10 @@ const OrderManagement: React.FC = () => {
         let orderCopy: Order[] = []; 
 
         orders.forEach((order: Order) => {
-            if (order.id.includes(searchVal) ||  
-            order.datePlaced.toDateString().includes(searchVal) || order.numDiapers.toString().includes(searchVal) || order.status.includes(searchVal)) {
+            if (order.partner.toLowerCase().includes(value.toLowerCase()) ||  
+            order.datePlaced.toDateString().includes(value) || 
+            order.numDiapers.toString().includes(value) || 
+            order.status.includes(value.toUpperCase())) {
                 orderCopy.push(order); 
             }
         });
@@ -88,7 +96,7 @@ const OrderManagement: React.FC = () => {
     }
 
     return (
-        <main className="page-wrapper">
+        <div className="page-wrapper">
             <h1>Order Management</h1>
             <Group justify="space-between" className="modifiers">
                 <div>
@@ -100,7 +108,7 @@ const OrderManagement: React.FC = () => {
                 <Autocomplete leftSection={<IconSearch></IconSearch>} data={[]} value={searchVal} onChange={searchBar}></Autocomplete>
             </Group>
             <StaffOrderTable orders={shownOrders}></StaffOrderTable>
-        </main>
+        </div>
         
     ); 
 }

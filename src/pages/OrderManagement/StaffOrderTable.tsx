@@ -16,7 +16,6 @@ const StaffOrderTable: React.FC<TableProps> = ({ orders }: TableProps) => {
                 <Stack gap="xs">
                     <Container w="100%" fluid mt="7" className='staff-header'>
                         <Group style={{ width: '100%' }} grow gap="xl">
-                            <Text fw={700}>Order #</Text>
                             <Text fw={700}>Partner Name</Text>
                             <Text fw={700}>Order Date</Text>
                             <Text fw={700}>Total Quantity</Text>
@@ -25,10 +24,9 @@ const StaffOrderTable: React.FC<TableProps> = ({ orders }: TableProps) => {
                     </Container>
                     {orders?.map((val: Order, index: number) => {
                         return (
-                            <Container className="" w="100%" fluid key={index}>
+                            <Container className="OrderPopup-container" w="100%" fluid key={index}>
                                 <OrderPopup order={val}>
                                     <Group style={{ width: '100%' }} grow gap="xl">
-                                        <Text>#{val.id}</Text>
                                         <Text>{val.partner}</Text>
                                         <Text>{val.datePlaced.toDateString()}</Text>
                                         <Text>{val.numDiapers}</Text>
