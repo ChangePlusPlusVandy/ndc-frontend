@@ -1,4 +1,4 @@
-import { AppShell, Burger, Group, Skeleton, Image, Stack } from '@mantine/core';
+import { AppShell, Burger, Group, Image, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Link, Outlet } from 'react-router-dom';
 import Logo from '../../assets/logo-horizontal.png';
@@ -17,7 +17,6 @@ export default function DashboardLayout() {
                 breakpoint: 'sm',
                 collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
             }}
-            padding="md"
         >
             <AppShell.Header>
                 <Group h="100%" px="md" justify='space-between'>

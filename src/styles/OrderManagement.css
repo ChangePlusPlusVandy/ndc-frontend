@@ -12,8 +12,9 @@
     --gray-color: #bab6b9; 
 }
 
-body {
+.page-wrapper {
     background-color: var(--primary-color-20);
+    padding: 1rem; 
 }
 
 .modifiers {
@@ -29,6 +30,11 @@ body {
 .staff-header {
     padding-bottom: 0.5rem; 
     border-bottom: 0.125rem solid var(--gray-color); 
+}
+
+.OrderPopup-container:hover {
+    background-color: var(--primary-color-50); 
+    cursor: pointer; 
 }
 
 .circle {
