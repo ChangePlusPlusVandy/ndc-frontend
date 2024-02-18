@@ -17,7 +17,7 @@ import StaffDashboard from "./pages/StaffDashboard/StaffDashboard";
 import Login from "./pages/Auth/Login";
 import PrivateRoute from "./pages/Auth/PrivateRoute";
 import Register from "./pages/Auth/Register";
-import Profile from "./pages/Profile";
+import Profile from "./pages/Profile/Profile";
 import OrderPartner from "./pages/Order/OrderPartner"
 import AuthWrapper from "./pages/Auth/AuthWrapper";
 
