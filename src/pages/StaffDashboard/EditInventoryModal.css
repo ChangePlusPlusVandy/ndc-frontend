@@ -1,9 +1,27 @@
 .container {
     width: 60vw;
 }
-.num-input {
-    padding-right: 6vw;
-}
 .header {
     margin-bottom: 1em;
+}
+.table-element {
+    padding: 0vw 3vw;
+    text-align: center;
+}
+.bold {
+    font-weight: bold;
+}
+.submit {
+    display: flex;
+    margin: auto;
+    margin-top: 3em;
+    margin-bottom: 1em;
+}
+.table-header {
+    padding-bottom: 1em;
+    border-bottom: 1px solid gray;
+}
+.form {
+    display: flex; 
+    justify-content: center; 
 }

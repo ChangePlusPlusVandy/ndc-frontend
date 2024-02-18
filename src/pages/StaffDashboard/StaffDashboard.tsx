@@ -10,7 +10,7 @@ import { useAuth } from "../../AuthContext";
 import { defaultDateFormatter } from "@mantine/dates/lib/utils/get-formatted-date";
 
 export interface InventoryResponse {
-  id: number;
+  _id: number;
   wrapped: {
     [key: string]: number;
     newborn: number;
@@ -34,7 +34,7 @@ export interface InventoryResponse {
 }
 
 const defaultInventoryResponse: InventoryResponse = {
-  id: 0,
+  _id: 0,
   wrapped: {
     newborn: 0,
     size1: 0,
@@ -179,9 +179,6 @@ const StaffDashboard: React.FC = () => {
           <div className="flex flex-col">
             <div className="flex flex-col pure-white">
               <h2 className="grey-text margin-order">ORDERS</h2>
-              <EditInventoryModal inventory={inventory} /> //!REMOVE REMOVE
-              REMOVE REMOVE REMOVE TEST TEST TEST TEST TEST
-              <button onClick={getInventory}>Test ME</button>
               <div className="flex flex-row">
                 <StaffOrderPad text="Open" />
                 <StaffOrderPad text="Unreviewed" />
