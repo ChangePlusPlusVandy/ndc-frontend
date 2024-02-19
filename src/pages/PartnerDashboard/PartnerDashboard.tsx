@@ -149,7 +149,7 @@ function Dashboard() {
 
     return (
         <>
-            <Flex p="lg" wrap="wrap" justify="space-between">
+            <Flex p="lg" wrap="wrap" justify="space-between" align="center">
                 <Greeting />
                 <OrderForm
                     isDashboardButton={true}
@@ -170,7 +170,7 @@ function Dashboard() {
                         p="md"
                         direction="column"
                     >
-                        <Text>Orders</Text>
+                        <Text className="mantine-Subtitle-root">Orders</Text>
 
                         <Flex p="lg" justify="center">
                             <LineChart
@@ -253,7 +253,7 @@ function Dashboard() {
                             align="center"
                             direction="row"
                         >
-                            <Text>Recent Orders</Text>
+                            <Text className="mantine-Subtitle-root">Recent Orders</Text>
                             <Button variant="subtle" size="sm" color="#653661">
                                 View All
                             </Button>

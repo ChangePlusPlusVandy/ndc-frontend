@@ -1,89 +1,110 @@
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 :root {
-  --primary-color: #804d7a;
-  --secondary-color: #4e444b;
-  --accent-color: none;
-  --background-color: #ebdfe5;
-  --light-color: #fff7f9;
-  --text-color: #21272a;
-  --button-color: var(--primary-color);
-  --highlight-color: #F3E7F0;
-  --chart-dark-color: #653661;
-  --chart-primary-color: #c99bc3;
-  --chart-light-color: #ead3e4;
+    --primary-color: #804d7a;
+    --secondary-color: #4e444b;
+    --accent-color: none;
+    --background-color: #ebdfe5;
+    --light-color: #fff7f9;
+    --text-color: #21272a;
+    --input-outline-color: #80747c;
+    --button-color: var(--primary-color);
+    --highlight-color: #f3e7f0;
+    --chart-dark-color: #653661;
+    --chart-primary-color: #c99bc3;
+    --chart-light-color: #ead3e4;
 }
 
-
-
 body {
-  background-color: var(--background-color);
-  color: var(--text-color);
+    font-family: brandon-grotesque, sans-serif;
+    font-weight: normal;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.mantine-Title-root {
+    font-family: brandon-grotesque, sans-serif;
+    font-weight: bold;
+}
+
+.mantine-Subtitle-root {
+    font-weight: bold;
+}
+
+.mantine-TextInput-label {
+    font-weight: bold;
+}
+
+.mantine-TextInput-input {
+    outline: 2px solid var(--input-outline-color);
+    outline-offset: -2px;
+}
+
+.mantine-TextInput-input:focus {
+    outline: 2px solid var(--highlight-color);
 }
 
 button {
-  background-color: var(--button-color);
+    background-color: var(--button-color);
 }
 
 header {
-  background-color: var(--primary-color);
-  margin-bottom: 2.5%;
+    background-color: var(--primary-color);
+    margin-bottom: 2.5%;
 }
 
 .app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #194568;
-  color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #194568;
+    color: #fff;
 }
 
 .logoRow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 5em;
 }
 
 .textLogo {
-  font-size: 2em;
-  font-weight: 700;
-  margin: 0 0.5em;
-  transition: all 0.2s ease-in-out;
-  color: #d46b46;
-  text-decoration: none;
+    font-size: 2em;
+    font-weight: 700;
+    margin: 0 0.5em;
+    transition: all 0.2s ease-in-out;
+    color: #d46b46;
+    text-decoration: none;
 }
 
 .textLogo:hover {
-  color: #d46b46aa;
-  cursor: pointer;
-  transform: translateY(-2px);
+    color: #d46b46aa;
+    cursor: pointer;
+    transform: translateY(-2px);
 }
 
 .logo {
-  height: 7em;
-  padding: 1.5em;
-  will-change: filter;
+    height: 7em;
+    padding: 1.5em;
+    will-change: filter;
 }
 
 .logo:hover {
-  filter: drop-shadow(0 0 2em #d46b46aa);
+    filter: drop-shadow(0 0 2em #d46b46aa);
 }
 
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+    filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-
-  .mantine-DateInput-levelsGroup{
+.mantine-DateInput-levelsGroup {
     height: 20em;
     width: 20em;
-  }
-
+}
 
 /*.container {
   display: flex;

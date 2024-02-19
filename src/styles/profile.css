@@ -1,0 +1,19 @@
+.dashboard-box {
+    background-color: var(--light-color);
+    border-radius: .5rem;
+}
+
+.grid-col {
+    display: flex;
+    align-items: stretch;
+    justify: stretch;
+}
+
+.square-icon {
+    height: 1rem;
+    width: 1rem;
+}
+
+.mantine-Avatar-root {
+    border-radius: 50%;
+}
