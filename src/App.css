@@ -27,6 +27,7 @@ body {
 .mantine-Title-root {
     font-family: brandon-grotesque, sans-serif;
     font-weight: bold;
+    margin: 0;
 }
 
 .mantine-Subtitle-root {
@@ -44,6 +45,10 @@ body {
 
 .mantine-TextInput-input:focus {
     outline: 2px solid var(--highlight-color);
+}
+
+.mantine-Checkbox-icon {
+    margin: auto;
 }
 
 button {

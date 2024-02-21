@@ -1,8 +1,4 @@
-import {
-    MantineProvider,
-    createTheme,
-    TypographyStylesProvider,
-} from "@mantine/core";
+import { MantineProvider, createTheme } from "@mantine/core";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
@@ -21,9 +17,7 @@ const theme = createTheme({
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
         <MantineProvider theme={theme}>
-            <TypographyStylesProvider>
-                <App />
-            </TypographyStylesProvider>
+            <App />
         </MantineProvider>
     </React.StrictMode>
 );
