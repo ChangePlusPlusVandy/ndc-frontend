@@ -7,14 +7,12 @@ import { Link } from "react-router-dom";
 import Chart from "chart.js/auto";
 import { useAuth } from "../../AuthContext";
 
-import Order from "../Order/OrderClass";
-
 const StaffDashboard: React.FC = () => {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartRef2 = useRef<HTMLCanvasElement>(null);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [monthlyData, setMonthlyData] = useState<number[] | null>(null);
 
   const { mongoId, currentUser } = useAuth();
 
@@ -22,8 +20,9 @@ const StaffDashboard: React.FC = () => {
     try {
       const token = await currentUser?.getIdToken();
 
+      // Use "45591986a6c384137500f75d" to replace mongoId for testing.
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/order?partnerId=${mongoId}`,
+        `${import.meta.env.VITE_BACKEND_URL}order?partnerId=${mongoId}`,
         {
           method: "GET",
           headers: {
@@ -45,6 +44,28 @@ const StaffDashboard: React.FC = () => {
     }
   };
 
+  const processDataByMonth = (data2: any[]) => {
+    const monthlyData = new Array(12).fill(0);
+
+    // For each element,
+    data2.forEach((item) => {
+      // Parse the date...
+      const date = new Date(item.datePlaced);
+      // ...and get the month.
+      const month = date.getMonth();
+      monthlyData[month]++;
+    });
+
+    return monthlyData;
+  };
+
+  useEffect(() => {
+    if (data != null) {
+      const monthlyData = processDataByMonth(data);
+      setMonthlyData(monthlyData);
+    }
+  }, [data != null]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -54,6 +75,7 @@ const StaffDashboard: React.FC = () => {
     datasets: [
       {
         label: "My First Dataset",
+        // to be replaced by actual data
         data: [300, 50],
         backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
         hoverOffset: 4,
@@ -92,7 +114,7 @@ const StaffDashboard: React.FC = () => {
     datasets: [
       {
         label: "Delivered",
-        data: [65, 59, 80, 81, 56, 55, 40, 50, 60, 70, 80, 90],
+        data: monthlyData,
         backgroundColor: "grey",
         hoverOffset: 4,
       },
@@ -158,18 +180,22 @@ const StaffDashboard: React.FC = () => {
               </div>
             </div>
             <div className="flex flex-row">
-              <div className="wr-width pure-white m-r">
-                <h2 className="grey-text center-t">DIAPER WRAPPING</h2>
-                <canvas
+              {/* <div className="wr-width pure-white m-r">
+              <h2 className="grey-text center-t">DIAPER WRAPPING</h2>
+              <canvas
                   ref={chartRef}
                   id="myChart"
                   width="400"
                   height="400"
                 ></canvas>
-              </div>
+              </div> */}
               <div className="wr-width-2 pure-white m-r">
                 <h2 className="grey-text center-t">DIAPERS DELIVERED</h2>
-                <canvas ref={chartRef2} id="myChart"></canvas>
+                {monthlyData != null ? (
+                  <canvas ref={chartRef2} id="myChart"></canvas>
+                ) : (
+                  <p>Loading...</p>
+                )}
               </div>
             </div>
           </div>
