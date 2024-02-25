@@ -1,7 +1,7 @@
 import React, { useContext, ReactNode } from "react";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
-
+import '@mantine/charts/styles.css';
 import {
   Route,
   Routes,
@@ -17,7 +17,7 @@ import StaffDashboard from "./pages/StaffDashboard/StaffDashboard";
 import Login from "./pages/Auth/Login";
 import PrivateRoute from "./pages/Auth/PrivateRoute";
 import Register from "./pages/Auth/Register";
-import Profile from "./pages/Profile";
+import Profile from "./pages/Profile/Profile";
 import OrderPartner from "./pages/Order/OrderPartner";
 import OrderManagement from "./pages/OrderManagement/OrderManagement";
 import AuthWrapper from "./pages/Auth/AuthWrapper";
@@ -39,7 +39,7 @@ const App: React.FC = () => {
           <Route path="/" element={<DashboardLayout />}>
             <Route index element={<PrivateRoute element={<DashboardAccessControl />} />} />
             <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
-            <Route path="/dashboard" element={<StaffDashboard/>} />
+            <Route path="/dashboard" element={<StaffDashboard />} />
 
             <Route path="/order-info" element={<OrderPartner />} />
             <Route path="/order-manage" element={<OrderManagement />} />
