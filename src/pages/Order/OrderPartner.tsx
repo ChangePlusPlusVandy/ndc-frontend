@@ -46,6 +46,7 @@ const OrderPartner: React.FC = () => {
             let data = (await res.json()).map((elem: OrderResponse) => {
                 return new Order(
                     elem._id,
+                    elem.partner, 
                     new Date(elem.datePlaced),
                     new Date(elem.dateCompleted) || new Date(),
                     elem.status,
@@ -64,81 +65,12 @@ const OrderPartner: React.FC = () => {
     }, [])
 
 
-    const sortDate = () => {
-        let orderCopy: Order[] = orders.slice();
-        orderCopy.sort((a, b) => (a.datePlaced < b.datePlaced ? -1 : 1));
-        setOrders(orderCopy);
-    }
-
-    const sortNum = () => {
-        let orderCopy: Order[] = orders.slice();
-        orderCopy.sort((a, b) => (a.numDiapers > b.numDiapers ? -1 : 1));
-        setOrders(orderCopy);
-    }
-
-    const filterMonth = () => {
-        let orderCopy: Order[] = [];
-        let today: Date = new Date();
-        let currMonth: Number = today.getMonth();
-        orders.forEach((elem: Order) => {
-            if (elem.datePlaced.getMonth() == currMonth) orderCopy.push(elem);
-        })
-
-        setOrders(orderCopy);
-    }
-
-    const filterQuarter = () => {
-        let orderCopy: Order[] = [];
-        let today: Date = new Date();
-        let currQuarter: Number = today.getMonth() / 3;
-        orders.forEach((elem: Order) => {
-            if (elem.datePlaced.getMonth() / 3 == currQuarter) orderCopy.push(elem);
-        });
-
-        setOrders(orderCopy);
-    }
-
-    const addTarget = (value: String) => {
-        const valueNum = (value != "newborn") ? parseInt(value.slice(-1)) : 0;
-
-        let temp: number[] = targetSizes.slice();
-        if (!targetSizes.includes(valueNum)) {
-            temp.push(valueNum);
-            setTargetSizes(temp);
-        }
-    }
-
-    const filterSize = () => {
-        close();
-
-        let orderCopy: Order[] = [];
-        orders.forEach((elem: Order) => {
-            targetSizes.forEach((target: number) => {
-                if ((elem.diaperDist[target] || 0) > 0) orderCopy.push(elem);
-            }, elem)
-        });
-
-        setOrders(orderCopy);
-    }
-
     return (
         <main>
             <Group justify='space-between' className='width-90 modButtons'>
-                <Filter filterMonth={filterMonth} filterQuarter={filterQuarter} filterSize={open}></Filter>
-                <Sorter sortDate={sortDate} sortNum={sortNum}></Sorter>
+                <Filter baseOrders={orders} setOrders={setOrders} classes=''></Filter>
+                <Sorter orders={orders} setOrders={setOrders} whichSorters={["Date", "Num"]} classes={"whiteButton"}></Sorter>
             </Group>
-
-            <Modal opened={opened} onClose={close} title="Select Filter Size">
-                <MultiSelect
-                    label="Filter sizes"
-                    placeholder="Pick value"
-                    data={['newborn', 'size 1', 'size 2', 'size 3', 'size 4', 'size 5', 'size 6']}
-                    clearable
-                    onOptionSubmit={addTarget}
-                />
-
-                <Button className='filterButton' onClick={filterSize}>Filter!</Button>
-            </Modal>
 
             <Tabs variant='unstyled' defaultValue={"open"} className="width-90">
                 <Tabs.List grow>
