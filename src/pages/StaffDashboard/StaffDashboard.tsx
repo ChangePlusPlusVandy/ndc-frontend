@@ -33,8 +33,8 @@ export interface InventoryResponse {
 
 const StaffDashboard: React.FC = () => {
 
-  const chartRef = useRef<HTMLCanvasElement>(null);
-  const chartRef2 = useRef<HTMLCanvasElement>(null);
+  // const chartRef = useRef<HTMLCanvasElement>(null);
+  // const chartRef2 = useRef<HTMLCanvasElement>(null);
 
   /*const diapperWrappingChart = async () => {
       if(chartRef.current != null){
@@ -49,30 +49,30 @@ const StaffDashboard: React.FC = () => {
       }
   }*/
 
-  const deliveredData = {
-    labels: [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ],
-    datasets: [
-      {
-        label: "Delivered",
-        data: [65, 59, 80, 81, 56, 55, 40, 50, 60, 70, 80, 90],
-        backgroundColor: "grey",
-        hoverOffset: 4,
-      },
-    ],
-  };
+  // const deliveredData = {
+  //   labels: [
+  //     "January",
+  //     "February",
+  //     "March",
+  //     "April",
+  //     "May",
+  //     "June",
+  //     "July",
+  //     "August",
+  //     "September",
+  //     "October",
+  //     "November",
+  //     "December",
+  //   ],
+  //   datasets: [
+  //     {
+  //       label: "Delivered",
+  //       data: [65, 59, 80, 81, 56, 55, 40, 50, 60, 70, 80, 90],
+  //       backgroundColor: "grey",
+  //       hoverOffset: 4,
+  //     },
+  //   ],
+  // };
 
   // const getInventory = async () => {
   //   const token = await currentUser?.getIdToken();
