@@ -36,6 +36,9 @@ const OrderPartner: React.FC = () => {
         const getOrders = async () => {
             const token = await currentUser?.getIdToken();
 
+            console.log("TOKEN", token)
+            console.log("MONGOID", mongoId)
+
             let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/order?partnerId=${mongoId}`, {
                 method: "GET",
                 headers: {
@@ -46,7 +49,7 @@ const OrderPartner: React.FC = () => {
             let data = (await res.json()).map((elem: OrderResponse) => {
                 return new Order(
                     elem._id,
-                    elem.partner, 
+                    elem.partner,
                     new Date(elem.datePlaced),
                     new Date(elem.dateCompleted) || new Date(),
                     elem.status,
@@ -61,7 +64,9 @@ const OrderPartner: React.FC = () => {
             });
             setOrders(data);
         }
-        getOrders();
+        if (currentUser && mongoId) {
+            getOrders();
+        }
     }, [])
 
 
