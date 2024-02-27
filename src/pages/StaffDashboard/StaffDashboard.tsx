@@ -8,6 +8,29 @@ import { DonutChart, BarChart } from "@mantine/charts";
 import "../../styles/StaffDashboard.css";
 import { IconCircleFilled, IconCircle } from "@tabler/icons-react";
 
+
+export interface InventoryResponse {
+  id: number;
+  wrapped: {
+    newborn: number;
+    size1: number;
+    size2: number;
+    size3: number;
+    size4: number;
+    size5: number;
+    size6: number;
+  };
+  unwrapped: {
+    newborn: number;
+    size1: number;
+    size2: number;
+    size3: number;
+    size4: number;
+    size5: number;
+    size6: number;
+  };
+}
+
 const StaffDashboard: React.FC = () => {
 
   const chartRef = useRef<HTMLCanvasElement>(null);
