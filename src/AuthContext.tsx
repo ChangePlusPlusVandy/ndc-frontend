@@ -166,43 +166,64 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
-      if (window.sessionStorage.getItem("mongoId")) {
-        setMongoId(window.sessionStorage.getItem("mongoId"));
+      if (user) {
+        // Immediately save the token to sessionStorage upon user state change
+        const token = await user.getIdToken();
+        window.sessionStorage.setItem("auth", token);
 
+        // Check if mongoId is available in sessionStorage first to avoid unnecessary API calls
+        const sessionMongoId = window.sessionStorage.getItem("mongoId");
+        if (sessionMongoId) {
+          setMongoId(sessionMongoId);
+          (async () => {
+            const token = await user?.getIdToken();
 
-        (async () => {
-          const token = await user?.getIdToken();
-
-          const requestOptions = {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+            const requestOptions = {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              }
             }
-          }
 
-          let checkPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/staff?id=${window.sessionStorage.getItem("mongoId")}`, requestOptions);
-          let data = await checkPartner.json();
+            let checkPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/staff?id=${window.sessionStorage.getItem("mongoId")}`, requestOptions);
+            let data = await checkPartner.json();
 
 
-          if (data && !data.error) {
-            setIsStaff(true);
-          } else {
-            setIsStaff(false);
-          }
-        })();
+            if (data && !data.error) {
+              setIsStaff(true);
+            } else {
+              setIsStaff(false);
+            }
+
+
+          })();
+        } else {
+          // Only fetch user details if mongoId is not in sessionStorage
+          // Implement fetching logic here if needed
+          // After fetching, don't forget to set mongoId and isStaff accordingly
+        }
+      } else {
+        // Clear session storage and state if no user is logged in
+        window.sessionStorage.removeItem("auth");
+        setIsStaff(null);
+        setMongoId(null);
       }
-
-
       setIsLoading(false);
     });
 
-    console.log("hello world")
-
-    return unsubscribe;
+    // Cleanup function to unsubscribe
+    return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    // This effect ensures that mongoId is immediately saved to sessionStorage when it's updated
+    if (mongoId) {
+      window.sessionStorage.setItem("mongoId", mongoId);
+    }
+  }, [mongoId]);
 
   const setToken = async () => {
     const userToken = await currentUser?.getIdToken();
