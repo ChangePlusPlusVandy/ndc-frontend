@@ -56,9 +56,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           let checkPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login?firebaseUid=${userCredential.user.uid}`, requestOptions);
           let data = await checkPartner.json();
 
+          console.log("reached here")
+          console.log("LOGGED IN AUTH ", data)
+
           if (!data.error) {
             setMongoId(data.data._id);
             setIsStaff(data.isStaff);
+
+            window.localStorage.setItem("mongoId", data.data._id);
           }
         } catch (err) {
           console.error(err)
@@ -144,6 +149,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function logout(): Promise<void> {
     setIsStaff(null);
     setMongoId(null);
+    window.localStorage.removeItem("mongoId");
     return await signOut(auth);
   }
 
@@ -162,16 +168,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
-      if (user) {
-        const storedMongoId = window.localStorage.getItem("mongoId");
-        if (storedMongoId) {
-          setMongoId(storedMongoId);
-        }
-      } else {
-        window.localStorage.removeItem("mongoId");
+      if (window.localStorage.getItem("mongoId")) {
+        setMongoId(window.localStorage.getItem("mongoId"));
+
+
+        (async () => {
+          const token = await user?.getIdToken();
+
+          const requestOptions = {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            }
+          }
+
+          let checkPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/staff?id=${window.localStorage.getItem("mongoId")}`, requestOptions);
+          let data = await checkPartner.json();
+
+
+          if (data && !data.error) {
+            setIsStaff(true);
+          } else {
+            setIsStaff(false);
+          }
+        })();
       }
+
+
       setIsLoading(false);
     });
+
+    console.log("hello world")
 
     return unsubscribe;
   }, []);
@@ -181,9 +209,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (userToken) {
       window.localStorage.setItem("auth", userToken);
     }
-    if (mongoId) {
-      window.localStorage.setItem("mongoId", mongoId);
-    }
+
 
   };
 
@@ -195,11 +221,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [currentUser])
 
-  useEffect(() => {
-    if (mongoId) {
-      window.localStorage.setItem("mongoId", mongoId);
-    }
-  }, [mongoId])
+  // useEffect(() => {
+  //   if (mongoId) {
+  //     window.localStorage.setItem("mongoId", mongoId);
+  //   }
+  // }, [mongoId])
 
 
   const value = {

@@ -23,8 +23,8 @@ const OrderTable: React.FC<TableProps> = ({ orders, orderType }: TableProps) => 
                             <Text>Status</Text>
                         </Group>
                     </Container>
-                    {orders?.map((val: Order, index: number) => {
-                        return (
+                    {orders?.map((val: Order, index: number) =>
+                        <div key={index}>
                             <Container className="single-order" w="100%" fluid key={index}>
                                 <OrderPopup order={val}>
                                     <Group style={{ width: '100%' }} grow gap="xl">
@@ -35,8 +35,9 @@ const OrderTable: React.FC<TableProps> = ({ orders, orderType }: TableProps) => 
                                     </Group>
                                 </OrderPopup>
                             </Container>
-                        )
-                    })}
+                        </div>
+
+                    )}
                 </Stack>
             </div>
 
