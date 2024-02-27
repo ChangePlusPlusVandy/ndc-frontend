@@ -63,7 +63,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setMongoId(data.data._id);
             setIsStaff(data.isStaff);
 
-            window.localStorage.setItem("mongoId", data.data._id);
+            window.sessionStorage.setItem("mongoId", data.data._id);
           }
         } catch (err) {
           console.error(err)
@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
+          Authorization: `Bearer ${window.sessionStorage.getItem("auth")}`,
         },
         body: JSON.stringify({
           firstName: firstName,
@@ -121,7 +121,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
+          Authorization: `Bearer ${window.sessionStorage.getItem("auth")}`,
         },
         body: JSON.stringify({
           firstName: firstName,
@@ -149,7 +149,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function logout(): Promise<void> {
     setIsStaff(null);
     setMongoId(null);
-    window.localStorage.removeItem("mongoId");
+    window.sessionStorage.removeItem("mongoId");
     return await signOut(auth);
   }
 
@@ -168,8 +168,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
-      if (window.localStorage.getItem("mongoId")) {
-        setMongoId(window.localStorage.getItem("mongoId"));
+      if (window.sessionStorage.getItem("mongoId")) {
+        setMongoId(window.sessionStorage.getItem("mongoId"));
 
 
         (async () => {
@@ -183,7 +183,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
           }
 
-          let checkPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/staff?id=${window.localStorage.getItem("mongoId")}`, requestOptions);
+          let checkPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/staff?id=${window.sessionStorage.getItem("mongoId")}`, requestOptions);
           let data = await checkPartner.json();
 
 
@@ -207,7 +207,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const setToken = async () => {
     const userToken = await currentUser?.getIdToken();
     if (userToken) {
-      window.localStorage.setItem("auth", userToken);
+      window.sessionStorage.setItem("auth", userToken);
     }
 
 
@@ -217,13 +217,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (currentUser) {
       setToken();
     } else {
-      window.localStorage.removeItem("auth");
+      window.sessionStorage.removeItem("auth");
     }
   }, [currentUser])
 
   // useEffect(() => {
   //   if (mongoId) {
-  //     window.localStorage.setItem("mongoId", mongoId);
+  //     window.sessionStorage.setItem("mongoId", mongoId);
   //   }
   // }, [mongoId])
 
