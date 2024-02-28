@@ -56,9 +56,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           let checkPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login?firebaseUid=${userCredential.user.uid}`, requestOptions);
           let data = await checkPartner.json();
 
+          console.log("reached here")
+          console.log("LOGGED IN AUTH ", data)
+
           if (!data.error) {
             setMongoId(data.data._id);
             setIsStaff(data.isStaff);
+
+            window.sessionStorage.setItem("mongoId", data.data._id);
           }
         } catch (err) {
           console.error(err)
@@ -91,7 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
+          Authorization: `Bearer ${window.sessionStorage.getItem("auth")}`,
         },
         body: JSON.stringify({
           firstName: firstName,
@@ -116,7 +121,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${window.localStorage.getItem("auth")}`,
+          Authorization: `Bearer ${window.sessionStorage.getItem("auth")}`,
         },
         body: JSON.stringify({
           firstName: firstName,
@@ -144,6 +149,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function logout(): Promise<void> {
     setIsStaff(null);
     setMongoId(null);
+    window.sessionStorage.removeItem("mongoId");
     return await signOut(auth);
   }
 
@@ -160,30 +166,71 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
       if (user) {
-        const storedMongoId = window.localStorage.getItem("mongoId");
-        if (storedMongoId) {
-          setMongoId(storedMongoId);
+        // Immediately save the token to sessionStorage upon user state change
+        const token = await user.getIdToken();
+        window.sessionStorage.setItem("auth", token);
+
+        // Check if mongoId is available in sessionStorage first to avoid unnecessary API calls
+        const sessionMongoId = window.sessionStorage.getItem("mongoId");
+        if (sessionMongoId) {
+          setMongoId(sessionMongoId);
+          (async () => {
+            const token = await user?.getIdToken();
+
+            const requestOptions = {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              }
+            }
+
+            let checkPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/staff?id=${window.sessionStorage.getItem("mongoId")}`, requestOptions);
+            let data = await checkPartner.json();
+
+
+            if (data && !data.error) {
+              setIsStaff(true);
+            } else {
+              setIsStaff(false);
+            }
+
+
+          })();
+        } else {
+          // Only fetch user details if mongoId is not in sessionStorage
+          // Implement fetching logic here if needed
+          // After fetching, don't forget to set mongoId and isStaff accordingly
         }
       } else {
-        window.localStorage.removeItem("mongoId");
+        // Clear session storage and state if no user is logged in
+        window.sessionStorage.removeItem("auth");
+        setIsStaff(null);
+        setMongoId(null);
       }
       setIsLoading(false);
     });
 
-    return unsubscribe;
+    // Cleanup function to unsubscribe
+    return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    // This effect ensures that mongoId is immediately saved to sessionStorage when it's updated
+    if (mongoId) {
+      window.sessionStorage.setItem("mongoId", mongoId);
+    }
+  }, [mongoId]);
 
   const setToken = async () => {
     const userToken = await currentUser?.getIdToken();
     if (userToken) {
-      window.localStorage.setItem("auth", userToken);
+      window.sessionStorage.setItem("auth", userToken);
     }
-    if (mongoId) {
-      window.localStorage.setItem("mongoId", mongoId);
-    }
+
 
   };
 
@@ -191,15 +238,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (currentUser) {
       setToken();
     } else {
-      window.localStorage.removeItem("auth");
+      window.sessionStorage.removeItem("auth");
     }
   }, [currentUser])
 
-  useEffect(() => {
-    if (mongoId) {
-      window.localStorage.setItem("mongoId", mongoId);
-    }
-  }, [mongoId])
+  // useEffect(() => {
+  //   if (mongoId) {
+  //     window.sessionStorage.setItem("mongoId", mongoId);
+  //   }
+  // }, [mongoId])
 
 
   const value = {

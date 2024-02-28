@@ -30,8 +30,8 @@ const OrderFormDiaperSize: React.FC<SizeProps> = ({
 
     return (
         <>
-            <Container m="lg" p="lg" bg="var(--mantine-color-blue-light)">
-                <Group m="">
+            <Container fluid my="lg" p="lg" bg="var(--mantine-color-blue-light)">
+                <Group>
                     <Text size="md">{typeName}</Text>
                     <Flex w="6rem" justify="center" align="center">
                         {/*TODO: need to make it look better for mobile */}

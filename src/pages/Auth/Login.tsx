@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { useAuth } from "../../AuthContext";
 import { Title, Text, TextInput, Button, Container, Divider, PasswordInput, Checkbox } from '@mantine/core';
 
+
 interface FormValues {
   email: string;
   password: string;
