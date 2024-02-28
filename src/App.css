@@ -62,6 +62,10 @@
     width: 20em;
   }
 
+.mantine-Checkbox-inner{
+  order: var(--_checkbox-inner-order, 0);
+}
+
 
 /*.container {
   display: flex;

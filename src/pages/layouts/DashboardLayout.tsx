@@ -1,13 +1,17 @@
 import { AppShell, Burger, Group, Skeleton, Image, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation} from 'react-router-dom';
 import Logo from '../../assets/logo-horizontal.png';
 import UserThumb from '../../assets/Images/StaffImages/UserThumb.png';
 import "./DashboardLayout.css"
 
+import { useAuth } from '../../AuthContext';
+
 export default function DashboardLayout() {
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(false);
+
+    const { isStaff } = useAuth(); 
 
     return (
         <AppShell
@@ -35,6 +39,8 @@ export default function DashboardLayout() {
                     <Link className="nav-button" to="/profile">Account</Link>
                     <Link className="nav-button" to="/">Dashboard</Link>
                     <Link className="nav-button" to="/order-info">Orders</Link>
+
+                    {isStaff && <Link className="nav-button" to="/register">Register</Link>}
                 </Stack>
             </AppShell.Navbar>
             <AppShell.Main><Outlet /></AppShell.Main>

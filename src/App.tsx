@@ -26,20 +26,27 @@ const DashboardAccessControl: React.FC = () => {
   return isStaff ? <StaffDashboard /> : <PartnerDashboard />;
 }
 
+const RegisterAccessControl: React.FC = () => {
+  const { isStaff } = useAuth();
+  return isStaff ? <Register /> : <PartnerDashboard />;
+}
+
 const App: React.FC = () => {
   return (
     <AuthProvider>
       <RouterProvider>
         <Routes>
           <Route index path="/login" element={AuthWrapper(<Login />)} />
-          <Route path="/register" element={AuthWrapper(<Register />)} />
+          {/*<Route path="/register" element={AuthWrapper(<Register/>)} />*/}
           <Route path="/forgot-password" element={AuthWrapper(<ForgotPassword />)} />
 
           <Route path="/" element={<DashboardLayout />}>
             <Route index element={<PrivateRoute element={<DashboardAccessControl />} />} />
             <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
 
+            <Route path="/register" element={<Register />} />
             <Route path="/order-info" element={<OrderPartner />} />
+            
           </Route>
         </Routes>
       </RouterProvider>

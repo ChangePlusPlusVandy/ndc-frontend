@@ -59,7 +59,7 @@ const OrderPartner: React.FC = () => {
             setOrders(data);
         }
         getOrders();
-    }, [])
+    }, []);
 
 
     const sortDate = () => {
