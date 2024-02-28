@@ -23,7 +23,6 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/PartnerDash.css";
 import { useAuth } from "../../AuthContext";
 import { IconCheck, IconMailOpened, IconBell } from "@tabler/icons-react";
-
 import OrderForm from "../OrderForm/OrderForm";
 import { string } from "yup";
 
@@ -50,14 +49,81 @@ export const data = [
     },
 ];
 
+// Delete
+import Partner from './PartnerClass';
+
+interface PartnerResponse {
+    numOrdersMonth: number;
+    numOrdersYTD: number;
+    status: string;
+}
+
 function Dashboard() {
+
     const [opened, { open, close }] = useDisclosure(false);
     const navigate = useNavigate();
+    const { mongoId, currentUser } = useAuth();
 
-    const { currentUser } = useAuth();
+    // NEW, GRAPH DATA
+    const [numOrdersMonth, setNumOrdersMonth] = useState<number>(0);
+    const [numOrdersYTD, setNumOrdersYTD] = useState<number>(0);
+
+    // DELEETE, SIDE BAR DATA
+    const [numOpenOrders, setNumOpenOrders] = useState<number>(0);
+    const [numUnreviewedOrders, setNumUnreviewedOrders] = useState<number>(0);
+    const [numClosedOrders, setNumClosedOrders] = useState<number>(0);
+
     useEffect(() => {
+        // Line old
         console.log(currentUser);
-    }, []);
+
+        const getPartnerOrders = async () => {
+            try{
+                const token = await currentUser?.getIdToken();
+                
+                let resPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/partner?id=${mongoId}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                let resOrders = await fetch(`${import.meta.env.VITE_BACKEND_URL}/order?partnerId=${mongoId}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                let dataPartner = await resPartner.json();
+                let numOrdersMonthArr = dataPartner.numOrdersMonth;
+                let numOrdersYTDArr = dataPartner.numOrdersYTD;
+
+                let dataOrders = await resOrders.json();
+                let numOrdersOpen = dataOrders.filter((elem: PartnerResponse) => elem.status === "OPEN").length;
+                let numOrdersUnreviewed = dataOrders.filter((elem: PartnerResponse) => elem.status === "UNREVIEWED").length;
+                let numOrdersClosed = dataOrders.filter((elem: PartnerResponse) => elem.status === "FILLED").length;
+
+                setNumOrdersMonth(numOrdersMonthArr);
+                setNumOrdersYTD(numOrdersYTDArr);
+                setNumOpenOrders(numOrdersOpen);
+                setNumUnreviewedOrders(numOrdersUnreviewed);
+                setNumClosedOrders(numOrdersClosed);
+
+                // TEST
+                console.log('numOrdersMonthArr:', numOrdersMonthArr);
+                console.log('numOrdersYTDArr:', numOrdersYTDArr);
+                console.log('numOrdersClkosed:', numOrdersClosed);
+
+            } catch (err){
+                console.error(err);
+            }
+        };
+        getPartnerOrders();
+    }, []);;
+    
     const handleProfile = () => {
         navigate("./profile");
     };
@@ -147,6 +213,7 @@ function Dashboard() {
         </Table.Tr>
     ));
 
+    
     return (
         <>
             <Flex p="lg" wrap="wrap" justify="space-between" align="center">

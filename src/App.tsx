@@ -27,22 +27,34 @@ const DashboardAccessControl: React.FC = () => {
   return isStaff ? <StaffDashboard /> : <PartnerDashboard />;
 }
 
+const OrderManageControl: React.FC = () => {
+  const { isStaff } = useAuth();
+  return isStaff && <OrderManagement />;
+}
+
+
+
 const App: React.FC = () => {
   return (
     <AuthProvider>
       <RouterProvider>
         <Routes>
           <Route index path="/login" element={AuthWrapper(<Login />)} />
-          <Route path="/register" element={AuthWrapper(<Register />)} />
           <Route path="/forgot-password" element={AuthWrapper(<ForgotPassword />)} />
 
-          <Route path="/" element={<DashboardLayout />}>
-            <Route index element={<PrivateRoute element={<DashboardAccessControl />} />} />
-            <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
-            <Route path="/dashboard" element={<StaffDashboard />} />
+          <Route path="/" element={<PrivateRoute element={<DashboardLayout />} />}>
 
+            <Route index element={<DashboardAccessControl />} />
+            <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
+
+            <Route path="/register" element={<Register />} />
+
+
+            // TODO: make this dynamic. Staff should be able to click on a Partner and view all orders under order-info route
             <Route path="/order-info" element={<OrderPartner />} />
-            <Route path="/order-manage" element={<OrderManagement />} />
+            <Route path="/order-manage" element={<OrderManageControl />} />
+
+
           </Route>
         </Routes>
       </RouterProvider>
