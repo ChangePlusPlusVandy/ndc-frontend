@@ -174,9 +174,9 @@ const StaffDashboard: React.FC = () => {
             <div className="flex flex-col pure-white">
               <h2 className="grey-text margin-order">ORDERS</h2>
               <div className="flex flex-row">
-                <StaffOrderPad text="Open" />
-                <StaffOrderPad text="Unreviewed" />
                 <StaffOrderPad text="Approved" />
+                <StaffOrderPad text="In Progress" />
+                <StaffOrderPad text="Opened" />
               </div>
             </div>
             <div className="flex flex-row">
