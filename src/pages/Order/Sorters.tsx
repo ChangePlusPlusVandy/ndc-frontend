@@ -25,7 +25,7 @@ const Sorter: React.FC<SorterProps> = ({ orders, setOrders, whichSorters, classe
 
     const sortPartnerName = () => {
         let orderCopy: Order[] = orders.slice(); 
-        orderCopy.sort((a, b) => (a.partner < b.partner ? -1 : 1)); 
+        orderCopy.sort((a, b) => (a.partner.toLowerCase() < b.partner.toLowerCase() ? -1 : 1)); 
         setOrders(orderCopy);
     }
 
@@ -44,8 +44,6 @@ const Sorter: React.FC<SorterProps> = ({ orders, setOrders, whichSorters, classe
     const statusSorter = (a: Order, b: Order) => {
         const aRank = statusRank.get(a.status); 
         const bRank = statusRank.get(b.status); 
-
-        console.log(a.status + " " + aRank + " " + b.status + " " + bRank); 
         
         if (!aRank) return -1; 
         if (!bRank) return 1; 

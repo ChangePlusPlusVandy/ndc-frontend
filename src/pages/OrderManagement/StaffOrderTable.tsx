@@ -22,24 +22,26 @@ const StaffOrderTable: React.FC<TableProps> = ({ orders }: TableProps) => {
                             <Text fw={700}>Order Status</Text>
                         </Group>
                     </Container>
-                    {orders?.map((val: Order, index: number) => {
-                        return (
-                            <Container className="OrderPopup-container" w="100%" fluid key={index}>
-                                <OrderPopup order={val}>
-                                    <Group style={{ width: '100%' }} grow gap="xl">
-                                        <Text>{val.partner}</Text>
-                                        <Text>{val.datePlaced.toDateString()}</Text>
-                                        <Text>{val.numDiapers}</Text>
-                                        <Flex direction="row" gap="sm" align={"center"}>
-                                            <StatusImage status={val.status}></StatusImage>
-                                            <Text>{val.status}</Text>
-                                        </Flex>
-                                            
-                                    </Group>
-                                </OrderPopup>
-                            </Container>
-                        )
-                    })}
+                    <div className="scrollable">
+                        {orders?.map((val: Order, index: number) => {
+                            return (
+                                <Container className="OrderPopup-container" w="100%" fluid key={index}>
+                                    <OrderPopup order={val}>
+                                        <Group style={{ width: '100%' }} grow gap="xl">
+                                            <Text>{val.partner}</Text>
+                                            <Text>{val.datePlaced.toDateString()}</Text>
+                                            <Text>{val.numDiapers}</Text>
+                                            <Flex direction="row" gap="sm" align={"center"}>
+                                                <StatusImage status={val.status}></StatusImage>
+                                                <Text>{val.status}</Text>
+                                            </Flex>
+                                                
+                                        </Group>
+                                    </OrderPopup>
+                                </Container>
+                            )
+                        })}
+                    </div>
                 </Stack>
             </div>
 
