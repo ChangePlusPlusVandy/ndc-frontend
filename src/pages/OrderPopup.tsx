@@ -6,10 +6,11 @@ import { Modal, Button, Title, NumberInput, Checkbox } from "@mantine/core";
 import Order from "./Order/OrderClass";
 import { useAuth } from "../AuthContext";
 
-const OrderPopup: React.FC<{ children: React.ReactNode; order: Order }> = ({
-  children,
-  order,
-}) => {
+const OrderPopup: React.FC<{
+  children: React.ReactNode;
+  order: Order;
+  updateOrder: (updatedOrder: Order) => void;
+}> = ({ children, order, updateOrder }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [date, setDate] = useState<Date | null>(null);
   const [value, setValue] = useState<Date | null>(null);
@@ -21,10 +22,26 @@ const OrderPopup: React.FC<{ children: React.ReactNode; order: Order }> = ({
 
   //Mantine Checkbox use
   const initialValues = [
-    { label: "OPEN", checked: order.status === "OPEN", key: randomId() },
-    { label: "FILLED", checked: order.status === "FILLED", key: randomId() },
-    { label: "APPROVED", checked: order.status === "APPROVED", key: randomId() },
+    {
+      label: "Unreviewed",
+      checked: order.status === "PLACED",
+      key: randomId(),
+      backendValue: "PLACED",
+    },
+    {
+      label: "Filled",
+      checked: order.status === "FILLED",
+      key: randomId(),
+      backendValue: "FILLED",
+    },
+    {
+      label: "In Progress",
+      checked: order.status === "APPROVED" || order.status === "OPEN",
+      key: randomId(),
+      backendValue: "OPEN",
+    },
   ];
+
   const [values, handlers] = useListState(initialValues);
 
   const handleCheckboxChange = (index: any) => {
@@ -32,7 +49,7 @@ const OrderPopup: React.FC<{ children: React.ReactNode; order: Order }> = ({
       current.map((value, i) => ({ ...value, checked: i === index }))
     );
 
-    const checkedStatus = values[index]?.label ?? "PLACED";
+    const checkedStatus = values[index]?.backendValue ?? "PLACED";
     setOrderStatus(checkedStatus);
     console.log(checkedStatus);
   };
@@ -77,7 +94,15 @@ const OrderPopup: React.FC<{ children: React.ReactNode; order: Order }> = ({
           body: JSON.stringify(body),
         }
       );
-      console.log(response.json());
+      updateOrder(
+        new Order(
+          order.id,
+          order.datePlaced,
+          order.dateCompleted,
+          orderStatus,
+          ...sizes
+        )
+      );
     } catch (error) {
       console.error("Error: " + error);
     }
@@ -88,7 +113,6 @@ const OrderPopup: React.FC<{ children: React.ReactNode; order: Order }> = ({
       event.preventDefault();
       await editQuantities();
       close();
-      window.location.reload();
     } catch (error) {
       console.error("Error: ", error);
     }
