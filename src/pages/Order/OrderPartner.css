@@ -3,10 +3,6 @@
     margin: 0 2.5%; 
 }
 
-header {
-    background-color: white;
-    margin-bottom: 2.5%;
-}
 
 .modButtons {
     margin-bottom: 2.5%; 
@@ -74,25 +70,8 @@ header {
     background-color: white;
 }
 
-table {
-    margin: 2.5% 0 2.5% 0;
-    border-collapse: collapse; 
-    width: 100%; 
-    text-align: left;
-}
 
-tr {
-    border-style: solid none;  
-    border-color: rgba(0, 0, 0, .05);
-    border-radius: 1rem;
-}
-
-th:nth-child(1) {
-    width: 40%; 
-}
-
-
-// Target specific className
+/* Target specific className */
 .page-container{
     display: flex;
     align-items: center;

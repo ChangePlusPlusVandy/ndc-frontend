@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from "react"; 
-import {Group, Button, Autocomplete} from "@mantine/core"; 
+import React, { useState, useEffect } from "react";
+import { Group, Button, Autocomplete } from "@mantine/core";
 import StaffOrderTable from "./StaffOrderTable";
-import {useAuth} from "../../AuthContext";
+import { useAuth } from "../../AuthContext";
 import { IconSearch, IconArrowsDownUp } from "@tabler/icons-react";
 import Order from "../Order/OrderClass";
 import Filter from "../Order/Filters";
@@ -9,14 +9,14 @@ import Sorter from "../Order/Sorters";
 import "../../styles/OrderManagement.css";
 
 interface PartnerType {
-    _id: string, 
-    firstName: string, 
+    _id: string,
+    firstName: string,
     lastName: string
 }
 
 interface OrderResponse {
     _id: string,
-    partner: PartnerType, 
+    partner: PartnerType,
     dateCompleted: string;
     datePlaced: string;
     numDiapers: number;
@@ -31,10 +31,10 @@ interface OrderResponse {
 }
 
 const OrderManagement: React.FC = () => {
-    const [orders, setOrders] = useState<Order[]>([]); 
-    const [shownOrders, setShownOrders] = useState<Order[]>([]); 
-    const [searchVal, setSearchVal] = useState(""); 
-    const {currentUser} = useAuth(); 
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [shownOrders, setShownOrders] = useState<Order[]>([]);
+    const [searchVal, setSearchVal] = useState("");
+    const { currentUser } = useAuth();
 
     useEffect(() => {
         const getOrders = async () => {
@@ -47,25 +47,25 @@ const OrderManagement: React.FC = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            
+
             let data = (await res.json()).map((elem: OrderResponse) => {
                 return new Order(
                     elem._id,
-                    elem.partner ? (elem.partner.firstName + " " +  elem.partner.lastName) : "Unknown",
-                    new Date(elem.datePlaced), 
+                    elem.partner ? (elem.partner.firstName + " " + elem.partner.lastName) : "Unknown",
+                    new Date(elem.datePlaced),
                     new Date(elem.dateCompleted),
-                    elem.status, 
-                    elem.newborn, 
+                    elem.status,
+                    elem.newborn,
                     elem.size1,
-                    elem.size2, 
+                    elem.size2,
                     elem.size3,
-                    elem.size4, 
+                    elem.size4,
                     elem.size5,
                     elem.size6,
                 )
             });
             setOrders(data);
-            setShownOrders(data); 
+            setShownOrders(data);
         }
 
         getOrders();
@@ -73,25 +73,25 @@ const OrderManagement: React.FC = () => {
 
     const reverse = () => {
         let orderCopy: Order[] = shownOrders.slice();
-        orderCopy.reverse();  
-        setShownOrders(orderCopy); 
+        orderCopy.reverse();
+        setShownOrders(orderCopy);
     }
 
     const searchBar = (value: string) => {
         setSearchVal(value);
 
-        let orderCopy: Order[] = []; 
+        let orderCopy: Order[] = [];
 
         orders.forEach((order: Order) => {
-            if (order.partner.toLowerCase().includes(value.toLowerCase()) ||  
-            order.datePlaced.toDateString().includes(value) || 
-            order.numDiapers.toString().includes(value) || 
-            order.status.includes(value.toUpperCase())) {
-                orderCopy.push(order); 
+            if (order.partner.toLowerCase().includes(value.toLowerCase()) ||
+                order.datePlaced.toDateString().includes(value) ||
+                order.numDiapers.toString().includes(value) ||
+                order.status.includes(value.toUpperCase())) {
+                orderCopy.push(order);
             }
         });
-        
-        setShownOrders(orderCopy); 
+
+        setShownOrders(orderCopy);
     }
 
     return (
@@ -111,8 +111,8 @@ const OrderManagement: React.FC = () => {
             
             <StaffOrderTable orders={shownOrders}></StaffOrderTable>
         </div>
-        
-    ); 
+
+    );
 }
 
 export default OrderManagement; 

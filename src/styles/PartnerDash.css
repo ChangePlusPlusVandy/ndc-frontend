@@ -1,3 +1,34 @@
 button {
     cursor: pointer;
 }
+
+.dashboard-box {
+    background-color: var(--light-color);
+    border-radius: .5rem;
+}
+
+.grid-col {
+    display: flex;
+    align-items: stretch;
+    justify: stretch;
+}
+
+.table-order-status {
+    width: 40%; 
+}
+
+.unreviewed-icon {
+    fill: var(--chart-light-color);
+    color: var(--chart-light-color);
+}
+
+.open-icon {
+    fill: var(--chart-dark-color);
+    color: var(--chart-dark-color);
+}
+
+.approved-icon {
+    fill: var(--chart-primary-color);
+    color: var(--chart-primary-color);
+}
+

@@ -9,3 +9,5 @@ package-lock.json
 
 .env
 vite.config.ts
+
+yarn.lock

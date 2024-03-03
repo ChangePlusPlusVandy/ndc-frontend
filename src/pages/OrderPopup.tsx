@@ -99,6 +99,8 @@ const OrderPopup: React.FC<{ children: React.ReactNode; order: Order }> = ({
         defaultValue={val}
         className={index === 0 ? "modal-input" : "quantity-input"}
         size="md"
+        allowDecimal={false}
+        allowNegative={false}
         onChange={(val) => handleChange(Number(val), index)}
       />
     );

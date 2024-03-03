@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { useAuth } from "../../AuthContext";
 import { Title, Text, TextInput, Button, Container, Divider, PasswordInput, Checkbox } from '@mantine/core';
 
+
 interface FormValues {
   email: string;
   password: string;
@@ -80,9 +81,9 @@ const Login: React.FC = () => {
         </Button>
       </form>
       <Divider size="xs" className="divider" />
-      <Text size="sm">
+      {/*<Text size="sm">
         No account yet? <Link to="/register">Sign Up</Link>
-      </Text>
+      </Text>*/}
     </>
   );
 };

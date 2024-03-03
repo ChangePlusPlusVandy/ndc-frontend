@@ -7,16 +7,14 @@ import {
     Modal,
     ScrollArea,
     CloseButton,
-    Text
+    Text,
 } from "@mantine/core";
 import OrderFormRequest from "./OrderFormRequest";
 import OrderFormDeliveryInfo from "./OrderFormDeliveryInfo";
 import OrderFormReview from "./OrderFormReview";
 import OrderFormConfirmation from "./OrderFormConfirmation";
 import { useAuth } from "../../AuthContext";
-import MakeOrderBtn from "../PartnerDashboard/MakeOrderBtn";
 import { IconSquarePlus } from "@tabler/icons-react";
-
 
 const initialSizes = {
     newborn: 0,
@@ -35,13 +33,18 @@ const initialDeliveryInfo = {
 };
 
 type OrderFormProps = {
-    opened: boolean,
-    open: any,
-    close: any,
-    isDashboardButton: boolean
+    opened: boolean;
+    open: any;
+    close: any;
+    isDashboardButton: boolean;
 };
 
-const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardButton }: OrderFormProps) => {
+const OrderForm: React.FC<OrderFormProps> = ({
+    opened,
+    open,
+    close,
+    isDashboardButton,
+}: OrderFormProps) => {
     const [sizes, setSizes] = useState(initialSizes);
     const [activePage, setActivePage] = useState<string | null>(
         "request-diapers"
@@ -49,7 +52,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardB
     const [deliveryInfo, setDeliveryInfo] = useState(initialDeliveryInfo);
 
     const { mongoId, currentUser } = useAuth();
-    //TODO: 
+    //TODO:
     //set a requirement that at least 1 diaper must be ordered
     // set up validation for the delivery info dates - force user to write something for the required parts
 
@@ -57,8 +60,6 @@ const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardB
         setSizes({ ...initialSizes });
         setDeliveryInfo({ ...initialDeliveryInfo });
     };
-
-
 
     const handleOpen = () => {
         clearForm();
@@ -112,7 +113,6 @@ const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardB
             <Modal
                 size="xl"
                 opened={opened}
-
                 onClose={handleClose}
                 overlayProps={{
                     backgroundOpacity: 0.55,
@@ -133,6 +133,9 @@ const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardB
                                     <Tabs.Tab value="delivery-info">
                                         Delivery Information
                                     </Tabs.Tab>
+                                    <Tabs.Tab value="review-order">
+                                        Review Order
+                                    </Tabs.Tab>
                                 </Tabs.List>
                             </Container>
                             <Tabs.Panel value="request-diapers">
@@ -147,7 +150,9 @@ const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardB
                                     wrap="wrap"
                                 >
                                     <Button
-                                        onClick={() => setActivePage("delivery-info")}
+                                        onClick={() =>
+                                            setActivePage("delivery-info")
+                                        }
                                         variant="filled"
                                         color="blue"
                                         m="lg"
@@ -169,7 +174,9 @@ const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardB
                                     wrap="wrap"
                                 >
                                     <Button
-                                        onClick={() => setActivePage("request-diapers")}
+                                        onClick={() =>
+                                            setActivePage("request-diapers")
+                                        }
                                         variant="outline"
                                         color="grey"
                                         m="lg"
@@ -186,19 +193,34 @@ const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardB
                                     </Button>
                                 </Flex>
                             </Tabs.Panel>
+                            <Tabs.Panel value="review-order">
+                                <OrderFormReview
+                                    sizes={sizes}
+                                    deliveryInfo={deliveryInfo}
+                                    numDiapers={numDiapers()}
+                                />
+                            </Tabs.Panel>
                         </Tabs>
                     </>
                 ) : (
-
                     <OrderFormConfirmation
                         date={deliveryInfo.date}
                         distributionPlace={deliveryInfo.distributionPlace}
                         numDiapers={numDiapers()}
                     />
                 )}
-
             </Modal>
-            {(isDashboardButton) ? <MakeOrderBtn onClick={handleOpen} /> : <Button size="lg" c="white" bg="gray" onClick={handleOpen}><Flex gap="md"><IconSquarePlus size="1.5rem" /><Text>Make Order</Text></Flex></Button>}
+            <Button
+                radius="0.5rem"
+                size="md"
+                color="var(--primary-color)"
+                onClick={handleOpen}
+            >
+                <Flex gap="md">
+                    <IconSquarePlus size="1.5rem" />
+                    <Text c={"var(--light-color)"}>Make an Order</Text>
+                </Flex>
+            </Button>
         </>
     );
 };

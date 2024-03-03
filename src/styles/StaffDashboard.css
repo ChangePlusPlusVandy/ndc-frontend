@@ -36,4 +36,27 @@
     fill: var(--primary-color);
     color: var(--primary-color);
     opacity: 50%;
+}.grid-col {
+    display: flex;
+    align-items: stretch;
+    justify: stretch;
+}
+
+.dashboard-box {
+    background-color: var(--light-color);
+}
+
+.unreviewed-icon {
+    fill: var(--chart-light-color);
+    color: var(--chart-light-color);
+}
+
+.open-icon {
+    fill: var(--chart-dark-color);
+    color: var(--chart-dark-color);
+}
+
+.approved-icon {
+    fill: var(--chart-primary-color);
+    color: var(--chart-primary-color);
 }

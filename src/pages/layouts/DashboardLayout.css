@@ -2,21 +2,29 @@
     height: 50%;
 }
 
-.nav-button{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0.5em 0em;
-    background-color: #f5f5f5;
+
+a{
     text-decoration: none;
-    color: black;
-    font-size: 1em;
 }
 
-.navbar-profile-pic{
-    height: 7em;
-    width: 7em;
-    border-radius: 50%;
-    margin: auto;
-    margin-bottom: 1em;
+.nav-button{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background-color: transparent;
+    color: var(--text-color);
+    border: none;
+    border-radius: 0.5em;
+    padding: 0.8em;
+}
+
+.nav-button > p{
+    font-weight: bold;
+    margin-left: 0.6em;
+    font-size: 11pt;
+}
+
+
+.nav-button:hover{
+    background-color: var(--chart-light-color);
 }
