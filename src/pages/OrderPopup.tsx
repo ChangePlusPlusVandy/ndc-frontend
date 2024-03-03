@@ -6,12 +6,6 @@ import { Modal, Button, Title, NumberInput, Checkbox } from "@mantine/core";
 import Order from "./Order/OrderClass";
 import { useAuth } from "../AuthContext";
 
-const initialValues = [
-  { label: "Approved", checked: false, key: randomId() },
-  { label: "Opened", checked: false, key: randomId() },
-  { label: "Viewed", checked: false, key: randomId() },
-];
-
 const OrderPopup: React.FC<{ children: React.ReactNode; order: Order }> = ({
   children,
   order,
@@ -20,20 +14,30 @@ const OrderPopup: React.FC<{ children: React.ReactNode; order: Order }> = ({
   const [date, setDate] = useState<Date | null>(null);
   const [value, setValue] = useState<Date | null>(null);
   const [numDiapers, setNumDiapers] = useState<number>(order.numDiapers);
-  const [values, handlers] = useListState(initialValues);
-
-  const { logout, getUser, isStaff } = useAuth();
+  const [orderStatus, setOrderStatus] = useState<string>(order.status);
+  const [sizes, setSizes] = useState<number[]>(order.diaperDist);
+  const { getUser, isStaff, currentUser } = useAuth();
   const user = getUser();
+
+  //Mantine Checkbox use
+  const initialValues = [
+    { label: "OPEN", checked: order.status === "OPEN", key: randomId() },
+    { label: "FILLED", checked: order.status === "FILLED", key: randomId() },
+    { label: "APPROVED", checked: order.status === "APPROVED", key: randomId() },
+  ];
+  const [values, handlers] = useListState(initialValues);
 
   const handleCheckboxChange = (index: any) => {
     handlers.setState((current) =>
       current.map((value, i) => ({ ...value, checked: i === index }))
     );
-  };
-  const [sizes, setSizes] = useState<number[]>(order.diaperDist);
-  const { currentUser } = useAuth();
 
-  const handleChange = (val: number, index: number) => {
+    const checkedStatus = values[index]?.label ?? "PLACED";
+    setOrderStatus(checkedStatus);
+    console.log(checkedStatus);
+  };
+
+  const handleQuantityChange = (val: number, index: number) => {
     const newSizes = sizes.map((num, i) => {
       if (index === i) {
         return val;
@@ -50,7 +54,7 @@ const OrderPopup: React.FC<{ children: React.ReactNode; order: Order }> = ({
       const token = await currentUser?.getIdToken();
 
       const body = {
-        status: order.status,
+        status: orderStatus,
         numDiapers: sizes.reduce((partialSum, a) => partialSum + a, 0),
         newborn: sizes[0],
         size1: sizes[1],
@@ -74,7 +78,6 @@ const OrderPopup: React.FC<{ children: React.ReactNode; order: Order }> = ({
         }
       );
       console.log(response.json());
-      // debugger;
     } catch (error) {
       console.error("Error: " + error);
     }
@@ -101,7 +104,7 @@ const OrderPopup: React.FC<{ children: React.ReactNode; order: Order }> = ({
         size="md"
         allowDecimal={false}
         allowNegative={false}
-        onChange={(val) => handleChange(Number(val), index)}
+        onChange={(val) => handleQuantityChange(Number(val), index)}
       />
     );
   });
