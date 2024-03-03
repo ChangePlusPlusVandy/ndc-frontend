@@ -10,20 +10,22 @@
     --dark-color-1: #201a1e;
     --dark-color-2: #4e444b;
     --gray-color: #bab6b9; 
+    --yellow-color: #ffea00; 
 }
 
-.page-wrapper {
-    background-color: var(--primary-color-20);
+.page-wrapper { 
+    background-color: var(--light-color-1);
     padding: 1rem; 
 }
 
-.modifiers {
-    background-color: var(--primary-color-50);
+.modifiers { 
+    background-color: var(--chart-color-2);
+    border-radius: 0.5rem; 
     padding: 0.5rem; 
 }
 
 .mod-button {
-    background-color: var(--primary-color-50); 
+    background-color: var(--chart-color-2); 
     color: black; 
 }
 
@@ -32,8 +34,17 @@
     border-bottom: 0.125rem solid var(--gray-color); 
 }
 
+.scrollable {
+    overflow: auto; 
+    height: 65vh; 
+}
+
+.OrderPopup-container {
+    padding: 0.5rem; 
+}
+
 .OrderPopup-container:hover {
-    background-color: var(--primary-color-50); 
+    background-color: var(--primary-color-20); 
     cursor: pointer; 
 }
 
@@ -49,7 +60,7 @@
 }
 
 .yellow_circle {
-    background-color: yellow; 
+    background-color: var(--yellow-color); 
 }
 
 .light-green_circle {

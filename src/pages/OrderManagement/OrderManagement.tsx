@@ -64,7 +64,6 @@ const OrderManagement: React.FC = () => {
                     elem.size6,
                 )
             });
-            console.log(data); 
             setOrders(data);
             setShownOrders(data); 
         }
@@ -97,16 +96,19 @@ const OrderManagement: React.FC = () => {
 
     return (
         <div className="page-wrapper">
-            <h1>Order Management</h1>
-            <Group justify="space-between" className="modifiers">
-                <div>
-                    <Filter baseOrders={orders} setOrders={setShownOrders} classes="mod-button"></Filter>
-                    <Sorter orders={orders} setOrders={setShownOrders} classes="mod-button" whichSorters={["OrderName", "PartnerName", "Date", "Num", "Status"]}></Sorter>
-                    <Button className="mod-button" onClick={reverse}><IconArrowsDownUp></IconArrowsDownUp></Button>
-                </div>
-                
-                <Autocomplete leftSection={<IconSearch></IconSearch>} data={[]} value={searchVal} onChange={searchBar}></Autocomplete>
-            </Group>
+            <div className="dont-scroll">
+                <h1 className="management-title">Order Management</h1>
+                <Group justify="space-between" className="modifiers">
+                    <div>
+                        <Filter baseOrders={orders} setOrders={setShownOrders} classes="mod-button"></Filter>
+                        <Sorter orders={orders} setOrders={setShownOrders} classes="mod-button" whichSorters={["PartnerName", "Date", "Num", "Status"]}></Sorter>
+                        <Button className="mod-button" onClick={reverse}><IconArrowsDownUp></IconArrowsDownUp></Button>
+                    </div>
+                    
+                    <Autocomplete leftSection={<IconSearch></IconSearch>} radius="md" data={[]} value={searchVal} onChange={searchBar}></Autocomplete>
+                </Group>
+            </div>
+            
             <StaffOrderTable orders={shownOrders}></StaffOrderTable>
         </div>
         
