@@ -24,6 +24,7 @@ const StaffDashboard: React.FC = () => {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}order?partnerId=${mongoId}`,
         {
+          mode: "no-cors", // 'cors' or 'no-cors' or 'same-origin
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -98,24 +99,24 @@ const StaffDashboard: React.FC = () => {
 
   const deliveredData = {
     labels: [
-      "January",
-      "February",
-      "March",
-      "April",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
       "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ],
     datasets: [
       {
         label: "Delivered",
         data: monthlyData,
-        backgroundColor: "grey",
+        backgroundColor: "#744e78",
         hoverOffset: 4,
       },
     ],
@@ -148,59 +149,102 @@ const StaffDashboard: React.FC = () => {
   }, [deliveredData]);
 
   return (
-    <div>
-      <div className="body-m gray-1">
-        <h1>Hello, Staff Name</h1>
-        <div className="flex inner-container flex-row">
-          <div className="flex flex-col m bt">
-            <Link
-              to="../profile"
-              style={{ textDecoration: "none" }}
-              className="white flex flex-col"
-            >
-              <img src={UserThumb} alt="User pic" className="pic-size" />
-              <h2>My Account</h2>
-            </Link>
-            <Link
-              to="/"
-              style={{ textDecoration: "none" }}
-              className="white flex flex-col"
-            >
-              <img src={AdminBook} alt="Admin pic" className="pic-size" />
-              <h2>Admin Page</h2>
-            </Link>
-          </div>
-          <div className="flex flex-col">
-            <div className="flex flex-col pure-white">
-              <h2 className="grey-text margin-order">ORDERS</h2>
-              <div className="flex flex-row">
-                <StaffOrderPad text="Approved" />
-                <StaffOrderPad text="In Progress" />
-                <StaffOrderPad text="Opened" />
-              </div>
-            </div>
-            <div className="flex flex-row">
-              {/* <div className="wr-width pure-white m-r">
-              <h2 className="grey-text center-t">DIAPER WRAPPING</h2>
-              <canvas
-                  ref={chartRef}
-                  id="myChart"
-                  width="400"
-                  height="400"
-                ></canvas>
-              </div> */}
-              <div className="wr-width-2 pure-white m-r">
-                <h2 className="grey-text center-t">DIAPERS DELIVERED</h2>
-                {monthlyData != null ? (
-                  <canvas ref={chartRef2} id="myChart"></canvas>
-                ) : (
-                  <p>Loading...</p>
-                )}
-              </div>
+    <div className="bg-c">
+      <div className="flex flex-row s-b">
+        <h1>Hello, John Smith</h1>
+        <button>Edit inventory</button>
+      </div>
+      <section className="charts">
+        <div className="bar-chart">
+          <div className="flex inner-container flex-col">
+            <div className="wr-width-2 pure-white m-r p-12">
+              <h2 className="center-t">Monthly Deliveries</h2>
+              <canvas ref={chartRef2} id="myChart"></canvas>
+              {/* {monthlyData != null ? (
+                <canvas ref={chartRef2} id="myChart"></canvas>
+              ) : (
+                <p>Loading...</p>
+              )} */}
             </div>
           </div>
         </div>
-      </div>
+        <div className="inventory pdd">
+          <h2>Inventory by size</h2>
+          <div className="bar-chart2">
+            <div className="bar-container">
+              <span className="bar-label">0</span>
+              <div className="bar" style={{ width: "80%" }}></div>
+            </div>
+            <div className="bar-container">
+              <span className="bar-label">1</span>
+              <div className="bar" style={{ width: "70%" }}></div>
+            </div>
+            <div className="bar-container">
+              <span className="bar-label">2</span>
+              <div className="bar" style={{ width: "60%" }}></div>
+            </div>
+            <div className="bar-container">
+              <span className="bar-label">3</span>
+              <div className="bar" style={{ width: "40%" }}></div>
+            </div>
+            <div className="bar-container">
+              <span className="bar-label">4</span>
+              <div className="bar" style={{ width: "30%" }}></div>
+            </div>
+            <div className="bar-container">
+              <span className="bar-label">5</span>
+              <div className="bar" style={{ width: "10%" }}></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="orders">
+        <div className="flex flex-row">
+          <div className="donut-chart mt-2">
+            <h2>Orders</h2>
+            <canvas
+              className="m-w"
+              ref={chartRef}
+              id="myChart"
+              width="400"
+              height="400"
+            ></canvas>
+          </div>
+          <div className="ml-2 mt-2 mb-2 flex flex-col s-b center">
+            <div className="pure-white style-sst">
+              <h3>Open</h3>
+              <h2>100</h2>
+            </div>
+            <div className="pure-white style-sst">
+              <h3>In Progress</h3>
+              <h2>50</h2>
+            </div>
+            <div className="pure-white style-sst">
+              <h3>Fulfilled</h3>
+              <h2>25</h2>
+            </div>
+          </div>
+        </div>
+
+        <div className="order-requests p-or">
+          <h2>Order Requests</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>23923023821</td>
+                <td>01/01/24</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <div className="pure-white"></div>
     </div>
   );
 };

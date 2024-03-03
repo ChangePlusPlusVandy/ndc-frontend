@@ -77,12 +77,16 @@
 }
 
 .m-r{
-    margin-right: 2rem;
+    margin-right: 0.5rem;
+}
+.mt-2{
     margin-top: 2rem;
 }
-
 .wr-width{
     width: 20vw;
+}
+.m-w{
+    max-width: 20vw;
 }
 
 .wr-width-2{
@@ -94,4 +98,157 @@
 
 .bt{
     justify-content: space-between;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  header h1 {
+    margin: 0;
+  }
+  
+  button {
+    padding: 10px;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    background-color: #744e78;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .charts, .orders {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .bar-chart, .inventory, .donut-chart, .order-requests {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    color: #333;
+  }
+  
+  .bg-c{
+    background-color: #e7dee4;
+  }
+
+  .s-b{
+    justify-content: space-between;
+  }
+  .mb-2{
+    margin-bottom: 0.5rem;
+  }
+
+  .ml-2{
+    margin-left: 2rem;
+  }
+
+  .style-sst{
+    border-radius: 10px;
+    width: 18.3vw;
+    justify-content: center;
+    text-align: center;
+  }
+
+
+
+.order-requests h2 {
+    text-align: center;
+    color: #333; /* Assuming a dark color for the heading */
+    margin-bottom: 20px; /* Add some space below the heading */
+}
+
+.order-requests table {
+    width: 100%;
+    border-collapse: collapse;
+
+}
+
+.order-requests th, 
+.order-requests td {
+    text-align: left;
+    padding: 8px; 
+    border-bottom: 1px solid #ddd; 
+}
+
+.order-requests th {
+    background-color: #f2f2f2; 
+    color: #333;
+}
+
+.p-or{
+    padding: 2rem;
+    padding-top: 1rem;
+    margin: 1rem;
+    width: 30vw;
+}
+.order-requests th:nth-child(1) {
+    width: 60%;
+}
+
+.order-requests th:nth-child(2) {
+    width: 30%; 
+}
+
+
+
+.inventory h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.bar-chart2 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Adjust the space between bars */
+}
+
+.bar {
+    background: linear-gradient(to right, #7b4397, #dc2430);
+    height: 20px;
+    border-radius: 5px;
+}
+
+.bar-60{
+    width: 60%;
+}
+
+.bar-80{
+    width: 80%;
+}
+
+/* You can add more specific styles for each bar if needed */
+
+.bar-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust the space between label and bar */
+}
+
+.bar-label {
+    width: 20px; /* Adjust width to fit the label */
+    text-align: right; /* Align the text to the right */
+}
+.pdd{
+    padding: 2.5rem;
+    padding-top: 1rem;
 }
