@@ -1,0 +1,76 @@
+.width-90 {
+    width: 95%;
+    margin: 0 2.5%;
+}
+
+.dashboard-box {
+    background-color: var(--light-color);
+    border-radius: 0.5rem;
+}
+
+.modButtons {
+    margin-bottom: 2.5%;
+}
+
+.tab, .sortButton, .filterButton, .orderPagination {
+    position: relative;
+    border: rem(1px) solid var(--dropdown-border-color);
+    background-color: var(--dropdown-primary-color);
+    color: var(--text-color);
+    font-weight: 400;
+
+    @mixin hover {
+        border: rem(1px) solid var(--dropdown-border-color);
+        background-color: var(--dropdown-border-color);
+    }
+
+    &[data-active] {
+        z-index: 1;
+        border: rem(1px) solid var(--dropdown-border-color);
+        background-color: var(--dropdown-border-color);
+        color: var(--text-color);
+
+        @mixin hover {
+            background-color: var(--dropdown-border-color);
+        }
+    }
+}
+
+.orderTitle {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.tableHeader {
+    font-size: large;
+    font-weight: bold;
+    text-align: left;
+    padding-right: 2rem;
+}
+
+.buttonContain {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.backWhite {
+    background-color: white;
+}
+
+/* Target specific className */
+.page-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.single-order {
+    border-radius: 5px;
+    background-color: var(--background-color);
+    padding: 0.5em;
+}
+.single-order:hover {
+    background-color: var(--mantine-color-gray-4);
+    cursor: pointer;
+}

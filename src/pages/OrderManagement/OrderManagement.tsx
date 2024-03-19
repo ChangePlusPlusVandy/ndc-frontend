@@ -3,9 +3,9 @@ import { Group, Button, Autocomplete } from "@mantine/core";
 import StaffOrderTable from "./StaffOrderTable";
 import { useAuth } from "../../AuthContext";
 import { IconSearch, IconArrowsDownUp } from "@tabler/icons-react";
-import Order from "../Order/OrderClass";
-import Filter from "../Order/Filters";
-import Sorter from "../Order/Sorters";
+import Order from "../OrderTracking/OrderClass";
+import Filter from "../OrderTracking/Filters";
+import Sorter from "../OrderTracking/Sorters";
 import "../../styles/OrderManagement.css";
 
 interface PartnerType {

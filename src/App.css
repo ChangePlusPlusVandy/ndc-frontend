@@ -15,6 +15,8 @@
     --chart-dark-color: #653661;
     --chart-primary-color: #c99bc3;
     --chart-light-color: #ead3e4;
+    --dropdown-primary-color: #f7ebf1;
+    --dropdown-border-color: #d1c2cb;
 }
 
 body {
