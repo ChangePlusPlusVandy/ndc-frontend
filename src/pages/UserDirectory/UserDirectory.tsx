@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from "react";
 import { useAuth } from "../../AuthContext";
+import {Button, Group, Autocomplete} from "@mantine/core";
+import { IconSearch } from "@tabler/icons-react";
 import Partner from "./PartnerClass";
 import PartnerTable from "./PartnerTable";
-import PartnerSorter from "./PartnerSorter"
+import PartnerSorter from "./PartnerSorter"; 
 
 interface PartnerResponse {
     _id: string;
@@ -18,6 +20,8 @@ interface PartnerResponse {
 
 const UserDirectory: React.FC = () => {
     const [partners, setPartners] = useState<Partner[]>([]); 
+    const [shownPartners, setShownPartners] = useState<Partner[]>([]); 
+    const [searchVal, setSearchVal] = useState(""); 
     const { currentUser } = useAuth();
 
     useEffect(() => {
@@ -44,17 +48,37 @@ const UserDirectory: React.FC = () => {
                     elem.address
                 )
             });
-            setPartners(data); 
+            setPartners(data);
+            setShownPartners(data);  
         }
 
         getPartners(); 
     }, [])
 
+    const searchBar = (value: string) => {
+        setSearchVal(value); 
+
+        let partnerCopy: Partner[] = []; 
+        const valueLower = value.toLowerCase(); 
+
+        partners.forEach((partner: Partner) => {
+            if (partner.firstName.toLowerCase().includes(valueLower) || partner.lastName.toLowerCase().includes(valueLower)) {
+                partnerCopy.push(partner); 
+            }
+        })
+
+        setShownPartners(partnerCopy); 
+    }
+
     return (
         <>
             <h1>Partner Directory</h1>
-            <PartnerSorter partners={partners} setPartners={setPartners} whichSorters={["Name", "Reverse"]} classes=""></PartnerSorter>
-            <PartnerTable partners={partners}></PartnerTable>
+            <Group justify="space-between">
+                <PartnerSorter partners={partners} setPartners={setPartners} whichSorters={["Name", "Reverse"]} classes=""></PartnerSorter>
+                <Autocomplete leftSection={<IconSearch></IconSearch>} data={[]} value={searchVal} onChange={searchBar}></Autocomplete>
+            </Group>
+            <PartnerTable partners={shownPartners}></PartnerTable>
+            <Button>Create Partner</Button>
         </>
         
     ); 

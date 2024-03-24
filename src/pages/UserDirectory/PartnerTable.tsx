@@ -1,5 +1,5 @@
 import React from "react"; 
-import {Grid, Text} from "@mantine/core"; 
+import {Grid, Text, Avatar, Flex} from "@mantine/core"; 
 import Partner from "./PartnerClass";
 import PartnerPopup from "./PartnerPopup";
 import "../../styles/UserDirectory.css"
@@ -15,7 +15,14 @@ const PartnerTable: React.FC<TableProps> = ({partners} : TableProps) => {
                 return (
                     <Grid.Col  span={4} key={index}>
                         <PartnerPopup partner={elem} classNames="partnerBox">
-                            <Text>{elem.firstName + " " + elem.lastName}</Text>
+                            <Flex direction={"row"} gap={"lg"}>
+                                <Avatar
+                                    size="7rem"
+                                    src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-1.png"
+                                />
+                                <Text>{elem.firstName + " " + elem.lastName}</Text>
+                            </Flex>
+                                
                         </PartnerPopup>
                     </Grid.Col>
                 )

@@ -16,3 +16,11 @@
     background-color: var(--light-color-1);
     border-radius: .5rem; 
 }
+
+.partnerBox:hover {
+    cursor: pointer; 
+}
+
+.left-align {
+    align-self: flex-start; 
+}
