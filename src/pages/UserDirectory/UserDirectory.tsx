@@ -29,8 +29,8 @@ interface StaffResponse {
 const UserDirectory: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]); 
     const [shownUsers, setShownUsers] = useState<User[]>([]); 
-    const [showPartners, setShowPartners] = useState(false); 
-    const [showStaff, setShowStaff] = useState(false);
+    const [showPartners, setShowPartners] = useState(true); 
+    const [showStaff, setShowStaff] = useState(true);
     const [searchVal, setSearchVal] = useState(""); 
     const { currentUser } = useAuth();
 
@@ -82,10 +82,10 @@ const UserDirectory: React.FC = () => {
         getUsers();  
     }, []); 
 
-    const filterUsers = () => {
+    const filterUsers = (staffCheck: boolean, partnerCheck: boolean) => {
         let userCopy: User[] = []; 
         users.forEach((user: User) => {
-            if ((user instanceof Partner && showPartners) || (user instanceof Staff && showStaff)) {
+            if ((user instanceof Partner && partnerCheck) || (user instanceof Staff && staffCheck)) {
                 userCopy.push(user); 
             }
         })
@@ -95,11 +95,12 @@ const UserDirectory: React.FC = () => {
 
     const toggleShowStaff = () => {
         setShowStaff(!showStaff); 
+        filterUsers(!showStaff, showPartners); 
     }
 
     const toggleShowPartners = () => {
         setShowPartners(!showPartners); 
-        filterUsers(); 
+        filterUsers(showStaff, !showPartners); 
     }
 
     const searchFunc = (value: string) => {
@@ -109,7 +110,8 @@ const UserDirectory: React.FC = () => {
         const valueLower = value.toLowerCase(); 
 
         users.forEach((user: User) => {
-            if (user.firstName.toLowerCase().includes(valueLower) || user.lastName.toLowerCase().includes(valueLower)) {
+            if (((user instanceof Partner && showPartners) || (user instanceof Staff && showStaff)) && 
+            (user.firstName.toLowerCase().includes(valueLower) || user.lastName.toLowerCase().includes(valueLower))) {
                 partnerCopy.push(user); 
             }
         })
