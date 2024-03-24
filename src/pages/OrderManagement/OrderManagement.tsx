@@ -7,6 +7,7 @@ import Order from "../Order/OrderClass";
 import Filter from "../Order/Filters";
 import Sorter from "../Order/Sorters";
 import "../../styles/OrderManagement.css";
+import SearchBar from "../UserDirectory/Searchbar";
 
 interface PartnerType {
     _id: string,
@@ -77,7 +78,7 @@ const OrderManagement: React.FC = () => {
         setShownOrders(orderCopy);
     }
 
-    const searchBar = (value: string) => {
+    const searchFunc = (value: string) => {
         setSearchVal(value);
 
         let orderCopy: Order[] = [];
@@ -104,7 +105,7 @@ const OrderManagement: React.FC = () => {
                     <Button className="mod-button" onClick={reverse}><IconArrowsDownUp></IconArrowsDownUp></Button>
                 </div>
 
-                <Autocomplete leftSection={<IconSearch></IconSearch>} data={[]} value={searchVal} onChange={searchBar}></Autocomplete>
+                <SearchBar searchVal={searchVal} searchFunc={searchFunc}></SearchBar>
             </Group>
             <StaffOrderTable orders={shownOrders}></StaffOrderTable>
         </div>

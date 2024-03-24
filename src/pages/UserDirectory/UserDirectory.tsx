@@ -5,6 +5,7 @@ import { IconSearch } from "@tabler/icons-react";
 import Partner from "./PartnerClass";
 import PartnerTable from "./PartnerTable";
 import PartnerSorter from "./PartnerSorter"; 
+import SearchBar from "./Searchbar";
 
 interface PartnerResponse {
     _id: string;
@@ -55,7 +56,7 @@ const UserDirectory: React.FC = () => {
         getPartners(); 
     }, [])
 
-    const searchBar = (value: string) => {
+    const searchFunc = (value: string) => {
         setSearchVal(value); 
 
         let partnerCopy: Partner[] = []; 
@@ -75,7 +76,7 @@ const UserDirectory: React.FC = () => {
             <h1>Partner Directory</h1>
             <Group justify="space-between">
                 <PartnerSorter partners={partners} setPartners={setPartners} whichSorters={["Name", "Reverse"]} classes=""></PartnerSorter>
-                <Autocomplete leftSection={<IconSearch></IconSearch>} data={[]} value={searchVal} onChange={searchBar}></Autocomplete>
+                <SearchBar searchVal={searchVal} searchFunc={searchFunc}></SearchBar>
             </Group>
             <PartnerTable partners={shownPartners}></PartnerTable>
             <Button>Create Partner</Button>
