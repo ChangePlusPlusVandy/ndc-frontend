@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 
 import { rem, Container, Text, Title, Flex, Grid, Table } from "@mantine/core";
 import { DonutChart, BarChart } from "@mantine/charts";
+import { useAuth } from "../../AuthContext";
 
 import "../../styles/StaffDashboard.css";
 import { IconCircleFilled, IconCircle } from "@tabler/icons-react";
-
 
 export interface InventoryResponse {
   id: number;
@@ -32,7 +32,6 @@ export interface InventoryResponse {
 }
 
 const StaffDashboard: React.FC = () => {
-
   // const chartRef = useRef<HTMLCanvasElement>(null);
   // const chartRef2 = useRef<HTMLCanvasElement>(null);
 
@@ -112,6 +111,75 @@ useEffect(() => {
       diapperDeliveredChart();
   },[deliveredData]);*/
 
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [monthlyData, setMonthlyData] = useState<number[] | null>(null);
+
+  const { mongoId, currentUser } = useAuth();
+
+  const fetchStaffData = async () => {
+    try {
+      const token = await currentUser?.getIdToken();
+
+      // Use "45591986a6c384137500f75d" to replace mongoId for testing.
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }order?partnerId=45591986a6c384137500f75d`,
+        {
+          mode: "no-cors",
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error("Data not fetched. Not ok.");
+      }
+      const data = await response.json();
+      setData(data);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+
+    console.log(data);
+  };
+
+  const processDataByMonth = (data2: any[]) => {
+    const monthlyData = new Array(12).fill(0);
+
+    // For each element,
+    data2.forEach((item) => {
+      // Parse the date...
+      const date = new Date(item.datePlaced);
+      // ...and get the month.
+      const month = date.getMonth();
+      monthlyData[month]++;
+    });
+
+    return monthlyData;
+  };
+
+  useEffect(() => {
+    if (data != null) {
+      const monthlyData = processDataByMonth(data);
+      setMonthlyData(monthlyData);
+    }
+  }, [data != null]);
+
+  useEffect(() => {
+    fetchStaffData();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   const fakeDonutChart = [
     { name: "Unreviewed", value: 400, color: "var(--chart-light-color)" },
@@ -164,10 +232,7 @@ useEffect(() => {
         Hello, Staff Name
       </Title>
       <Grid grow gutter="md" justify="center" align="stretch">
-        <Grid.Col
-          className="grid-col"
-          span={{ base: 12, sm: 6, md: 5 }}
-        >
+        <Grid.Col className="grid-col" span={{ base: 12, sm: 6, md: 5 }}>
           <Flex
             justify="space-between"
             flex="1"
@@ -178,7 +243,6 @@ useEffect(() => {
             <Text>Orders</Text>
             <Flex p="lg" justify="center">
               <DonutChart
-
                 data={fakeDonutChart}
                 withLabelsLine={false}
                 withLabels
@@ -190,24 +254,15 @@ useEffect(() => {
               justify={{ base: "center", xs: "space-evenly" }}
             >
               <Flex justify="center" gap="md" align={"center"}>
-                <IconCircle
-                  className="unreviewed-icon"
-                  size=".75rem"
-                />
+                <IconCircle className="unreviewed-icon" size=".75rem" />
                 <Text>Unreviewed</Text>
               </Flex>
               <Flex justify="center" gap="md" align={"center"}>
-                <IconCircle
-                  className="open-icon"
-                  size=".75rem"
-                />
+                <IconCircle className="open-icon" size=".75rem" />
                 <Text>Open</Text>
               </Flex>
               <Flex justify="center" gap="md" align={"center"}>
-                <IconCircle
-                  className="approved-icon"
-                  size=".75rem"
-                />
+                <IconCircle className="approved-icon" size=".75rem" />
                 <Text>Approved</Text>
               </Flex>
             </Flex>
@@ -257,10 +312,7 @@ useEffect(() => {
             </Flex>
           </Flex>
         </Grid.Col>
-        <Grid.Col
-          className="grid-col"
-          span={{ base: 12, sm: 4, md: 5 }}
-        >
+        <Grid.Col className="grid-col" span={{ base: 12, sm: 4, md: 5 }}>
           <Flex
             justify="flex-start"
             gap="md"
