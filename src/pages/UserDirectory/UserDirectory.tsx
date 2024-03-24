@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from "react";
 import { useAuth } from "../../AuthContext";
-import {Button, Group, Autocomplete} from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
+import {Button, Group} from "@mantine/core";
 import Partner from "./PartnerClass";
-import PartnerTable from "./PartnerTable";
-import PartnerSorter from "./PartnerSorter"; 
+import Staff from "./StaffClass"; 
+import User from "./UserClass"; 
+import UserTable from "./UserTable";
+import UserSorter from "./UserSorter"; 
 import SearchBar from "./Searchbar";
 
 interface PartnerResponse {
-    _id: string;
     firstName: string;
     lastName: string;
     type: string; 
@@ -19,26 +19,34 @@ interface PartnerResponse {
     address: string;  
 }
 
+interface StaffResponse {
+    firstName: string; 
+    lastName: string; 
+    phoneNumber: string; 
+    email: string; 
+}
+
 const UserDirectory: React.FC = () => {
-    const [partners, setPartners] = useState<Partner[]>([]); 
-    const [shownPartners, setShownPartners] = useState<Partner[]>([]); 
+    const [users, setUsers] = useState<User[]>([]); 
+    const [shownUsers, setShownUsers] = useState<User[]>([]); 
+    const [showPartners, setShowPartners] = useState(false); 
+    const [showStaff, setShowStaff] = useState(false);
     const [searchVal, setSearchVal] = useState(""); 
     const { currentUser } = useAuth();
 
     useEffect(() => {
-        const getPartners = async () => {
+        const getUsers = async () => {
             const token = await currentUser?.getIdToken();
 
-            let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/partner`, {
+            let resPartners = await fetch(`${import.meta.env.VITE_BACKEND_URL}/partner`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
             });
-            let data = (await res.json()).map((elem: PartnerResponse) => {
+            let dataPartners = (await resPartners.json()).map((elem: PartnerResponse) => {
                 return new Partner(
-                    elem._id, 
                     elem.firstName, 
                     elem.lastName, 
                     elem.type, 
@@ -49,37 +57,82 @@ const UserDirectory: React.FC = () => {
                     elem.address
                 )
             });
-            setPartners(data);
-            setShownPartners(data);  
+
+            let resStaff = await fetch(`${import.meta.env.VITE_BACKEND_URL}/staff`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            let dataStaff = (await resStaff.json()).map((elem: StaffResponse) => {
+                return new Staff(
+                    elem.firstName, 
+                    elem.lastName, 
+                    elem.phoneNumber, 
+                    elem.email
+                )
+            });
+
+            let dataUsers = dataPartners.concat(dataStaff); 
+            setUsers(dataUsers); 
+            setShownUsers(dataUsers); 
         }
 
-        getPartners(); 
-    }, [])
+        getUsers();  
+    }, []); 
+
+    const filterUsers = () => {
+        let userCopy: User[] = []; 
+        users.forEach((user: User) => {
+            if ((user instanceof Partner && showPartners) || (user instanceof Staff && showStaff)) {
+                userCopy.push(user); 
+            }
+        })
+
+        setShownUsers(userCopy); 
+    }
+
+    const toggleShowStaff = () => {
+        setShowStaff(!showStaff); 
+    }
+
+    const toggleShowPartners = () => {
+        setShowPartners(!showPartners); 
+        filterUsers(); 
+    }
 
     const searchFunc = (value: string) => {
         setSearchVal(value); 
 
-        let partnerCopy: Partner[] = []; 
+        let partnerCopy: User[] = []; 
         const valueLower = value.toLowerCase(); 
 
-        partners.forEach((partner: Partner) => {
-            if (partner.firstName.toLowerCase().includes(valueLower) || partner.lastName.toLowerCase().includes(valueLower)) {
-                partnerCopy.push(partner); 
+        users.forEach((user: User) => {
+            if (user.firstName.toLowerCase().includes(valueLower) || user.lastName.toLowerCase().includes(valueLower)) {
+                partnerCopy.push(user); 
             }
         })
 
-        setShownPartners(partnerCopy); 
+        setShownUsers(partnerCopy); 
     }
 
     return (
         <>
-            <h1>Partner Directory</h1>
             <Group justify="space-between">
-                <PartnerSorter partners={partners} setPartners={setPartners} whichSorters={["Name", "Reverse"]} classes=""></PartnerSorter>
+                <h1>User Directory</h1>
+                <Button className="right-align">Create User</Button>
+            </Group>
+            <Group justify="space-between">
+                <Group>
+                    <UserSorter users={shownUsers} setUsers={setShownUsers} whichSorters={["Name", "Reverse"]} classes=""></UserSorter>
+                    <Button onClick={toggleShowStaff}>Staff</Button>
+                    <Button onClick={toggleShowPartners}>Partners</Button>
+                </Group>
+                
                 <SearchBar searchVal={searchVal} searchFunc={searchFunc}></SearchBar>
             </Group>
-            <PartnerTable partners={shownPartners}></PartnerTable>
-            <Button className="right-align">Create Partner</Button>
+            <UserTable users={shownUsers}></UserTable>
         </>
         
     ); 

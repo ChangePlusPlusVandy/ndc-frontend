@@ -1,20 +1,20 @@
 import React from "react"; 
 import {Grid, Text, Avatar, Flex} from "@mantine/core"; 
-import Partner from "./PartnerClass";
-import PartnerPopup from "./PartnerPopup";
+import User from "./UserClass";
+import UserPopup from "./UserPopup";
 import "../../styles/UserDirectory.css"
 
 interface TableProps {
-    partners: Partner[]; 
+    users: User[]; 
 }
 
-const PartnerTable: React.FC<TableProps> = ({partners} : TableProps) => {
+const UserTable: React.FC<TableProps> = ({users} : TableProps) => {
     return (
         <Grid>
-            {partners?.map((elem: Partner, index: number)=> {
+            {users?.map((elem: User, index: number)=> {
                 return (
                     <Grid.Col  span={4} key={index}>
-                        <PartnerPopup partner={elem} classNames="partnerBox">
+                        <UserPopup user={elem} classNames="partnerBox">
                             <Flex direction={"row"} gap={"lg"}>
                                 <Avatar
                                     size="7rem"
@@ -23,7 +23,7 @@ const PartnerTable: React.FC<TableProps> = ({partners} : TableProps) => {
                                 <Text>{elem.firstName + " " + elem.lastName}</Text>
                             </Flex>
                                 
-                        </PartnerPopup>
+                        </UserPopup>
                     </Grid.Col>
                 )
             })}
@@ -31,4 +31,4 @@ const PartnerTable: React.FC<TableProps> = ({partners} : TableProps) => {
     )
 }
 
-export default PartnerTable; 
+export default UserTable; 

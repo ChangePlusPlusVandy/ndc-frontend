@@ -1,30 +1,30 @@
-import { Menu, Button, Image, rem } from '@mantine/core';
+import { Menu, Button } from '@mantine/core';
 import { IconChevronDown } from '@tabler/icons-react';
-import Partner from './PartnerClass';
+import User from "./UserClass"; 
 
 interface SorterProps {
-    partners: Partner[], 
-    setPartners: React.Dispatch<React.SetStateAction<Partner[]>>
+    users: User[], 
+    setUsers: React.Dispatch<React.SetStateAction<User[]>>
     whichSorters: string[],
     classes: string,
 }
 
-const PartnerSorter: React.FC<SorterProps> = ({ partners, setPartners, whichSorters, classes}: SorterProps) => {
-    const nameSorter = (a: Partner, b: Partner) => {
+const UserSorter: React.FC<SorterProps> = ({ users, setUsers, whichSorters, classes}: SorterProps) => {
+    const nameSorter = (a: User, b: User) => {
         if (a.lastName == b.lastName) return a.firstName < b.firstName ? -1 : 1;
         return a.lastName < b.lastName ? -1 : 1; 
     }
     
     const sortName = () => {
-        let partnerCopy: Partner[] = partners.slice(); 
-        partnerCopy.sort(nameSorter); 
-        setPartners(partnerCopy); 
+        let userCopy: User[] = users.slice(); 
+        userCopy.sort(nameSorter); 
+        setUsers(userCopy); 
     }
 
     const reverse = () => {
-        let partnerCopy: Partner[] = partners.slice(); 
-        partnerCopy.reverse(); 
-        setPartners(partnerCopy); 
+        let userCopy: User[] = users.slice(); 
+        userCopy.reverse(); 
+        setUsers(userCopy); 
     }
     
     return (
@@ -37,7 +37,7 @@ const PartnerSorter: React.FC<SorterProps> = ({ partners, setPartners, whichSort
                 <Menu.Dropdown>
                     {whichSorters.includes("Name") && 
                         <Menu.Item onClick={sortName}>
-                            Sort by Order Name
+                            Sort by User Name
                         </Menu.Item>
                     }
                     {whichSorters.includes("Reverse") && 
@@ -52,4 +52,4 @@ const PartnerSorter: React.FC<SorterProps> = ({ partners, setPartners, whichSort
     )
 }
 
-export default PartnerSorter; 
+export default UserSorter; 
