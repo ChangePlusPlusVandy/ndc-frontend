@@ -79,7 +79,7 @@ const UserDirectory: React.FC = () => {
                 <SearchBar searchVal={searchVal} searchFunc={searchFunc}></SearchBar>
             </Group>
             <PartnerTable partners={shownPartners}></PartnerTable>
-            <Button>Create Partner</Button>
+            <Button className="right-align">Create Partner</Button>
         </>
         
     ); 

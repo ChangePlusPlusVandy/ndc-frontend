@@ -24,3 +24,7 @@
 .left-align {
     align-self: flex-start; 
 }
+
+.right-align {
+    float: right; 
+}
