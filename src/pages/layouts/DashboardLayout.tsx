@@ -39,18 +39,11 @@ export default function DashboardLayout() {
                         </button>
                     </Link>
                     {isStaff ?
-                        <Link to="/order-manage">
-                            <button className='nav-button'>
-                                <IconSettings size={20} />
-                                <Text>Order Management</Text>
-                            </button>
-                        </Link> 
-                        :
-                        <>
-                            <Link to="/order-info">
+                        <> 
+                            <Link to="/order-manage">
                                 <button className='nav-button'>
                                     <IconSettings size={20} />
-                                    <Text>Orders</Text>
+                                    <Text>Order Management</Text>
                                 </button>
                             </Link>
                             <Link to="/user-dir">
@@ -60,6 +53,13 @@ export default function DashboardLayout() {
                                 </button>
                             </Link> 
                         </>
+                        :
+                        <Link to="/order-info">
+                            <button className='nav-button'>
+                                <IconSettings size={20} />
+                                <Text>Orders</Text>
+                            </button>
+                        </Link>
                          }
 
                     <Link to="/profile">
