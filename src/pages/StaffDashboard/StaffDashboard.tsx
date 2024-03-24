@@ -122,10 +122,11 @@ useEffect(() => {
       const token = await currentUser?.getIdToken();
 
       // Use "45591986a6c384137500f75d" to replace mongoId for testing.
+      // "71481986a6c384137500f75e" for smaller data set.
       const response = await fetch(
         `${
           import.meta.env.VITE_BACKEND_URL
-        }order?partnerId=45591986a6c384137500f75d`,
+        }order?partnerId=71481986a6c384137500f75e`,
         {
           mode: "no-cors",
           method: "GET",
@@ -135,7 +136,6 @@ useEffect(() => {
           },
         }
       );
-      console.log(response);
 
       if (!response.ok) {
         throw new Error("Data not fetched. Not ok.");
@@ -147,7 +147,6 @@ useEffect(() => {
     } finally {
       setIsLoading(false);
     }
-
     console.log(data);
   };
 
