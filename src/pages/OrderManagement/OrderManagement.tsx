@@ -64,7 +64,6 @@ const OrderManagement: React.FC = () => {
                     elem.size6,
                 )
             });
-            console.log(data);
             setOrders(data);
             setShownOrders(data);
         }

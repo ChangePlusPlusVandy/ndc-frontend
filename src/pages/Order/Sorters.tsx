@@ -45,8 +45,6 @@ const Sorter: React.FC<SorterProps> = ({ orders, setOrders, whichSorters, classe
         const aRank = statusRank.get(a.status); 
         const bRank = statusRank.get(b.status); 
 
-        console.log(a.status + " " + aRank + " " + b.status + " " + bRank); 
-        
         if (!aRank) return -1; 
         if (!bRank) return 1; 
 
