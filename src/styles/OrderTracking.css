@@ -20,14 +20,14 @@
     font-weight: 400;
 
     @mixin hover {
-        border: rem(1px) solid var(--dropdown-border-color);
+        border: rem(1px) solid var(--input-outline-color);
         background-color: var(--dropdown-border-color);
     }
 
     &[data-active] {
         z-index: 1;
-        border: rem(1px) solid var(--dropdown-border-color);
-        background-color: var(--dropdown-border-color);
+        border: rem(1px) solid var(--input-outline-color);
+        background-color: var(--dropdown-active-color);
         color: var(--text-color);
 
         @mixin hover {

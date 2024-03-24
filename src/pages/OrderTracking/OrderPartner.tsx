@@ -82,18 +82,13 @@ const OrderPartner: React.FC = () => {
         };
         if (currentUser && mongoId) {
             getOrders();
+            console.log("Mongo", mongoId);
         }
     }, []);
 
     return (
         <Tabs variant="pills" defaultValue={"open"}>
-            <Flex
-                p="lg"
-                wrap="wrap"
-                direction="column"
-                align="stretch"
-                gap="lg"
-            >
+            <Flex p="lg" direction="column" align="stretch" gap="lg">
                 <Title c="black" ta={{ base: "center", sm: "left" }}>
                     Order Tracking
                 </Title>
@@ -164,7 +159,7 @@ const OrderPartner: React.FC = () => {
                             orderType={"OPEN"}
                         ></OrderTable>
                     </Tabs.Panel>
-                    <Flex justify="center">
+                    <Flex flex="1" p="md" justify="center">
                         <Pagination
                             total={10}
                             classNames={{ control: "orderPagination" }}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Order from "./OrderClass";
 import "../../styles/OrderTracking.css";
 import OrderPopup from "../OrderPopup";
-import { IconCircle } from "@tabler/icons-react";
+import { IconCircle, IconPencil } from "@tabler/icons-react";
 import {
     Container,
     Flex,
@@ -11,6 +11,8 @@ import {
     Text,
     Table,
     Checkbox,
+    ActionIcon,
+    Badge,
 } from "@mantine/core";
 
 interface TableProps {
@@ -22,7 +24,6 @@ const OrderTable: React.FC<TableProps> = ({
     orders,
     orderType,
 }: TableProps) => {
-    const [selectedRows, setSelectedRows] = useState<number[]>([]);
     /*orders?.map((val: Order, index: number) => (
         <div key={index}>
             <Container
@@ -43,37 +44,29 @@ const OrderTable: React.FC<TableProps> = ({
         </div>
     ))}*/
     const rows = orders?.map((val: Order, index: number) => (
-        <Table.Tr
-            key={index}
-            bg={
-                selectedRows.includes(index)
-                    ? "var(--highlight-color)"
-                    : undefined
-            }
-        >
-            <OrderPopup order={val}>
-                <Table.Td>
-                    <Checkbox
-                        aria-label="Select row"
-                        color="var(--secondary-color)"
-                        checked={selectedRows.includes(index)}
-                        onChange={(event) =>
-                            setSelectedRows(
-                                event.currentTarget.checked
-                                    ? [...selectedRows, index]
-                                    : selectedRows.filter(
-                                          (checkIndex) => checkIndex !== index
-                                      )
-                            )
-                        }
-                    />
-                </Table.Td>
-                <Table.Td ta="center">{index}</Table.Td>
-                {/*<Table.Td ta="center">{element.distributionPlace}</Table.Td>*/}
-                <Table.Td ta="center">{val.datePlaced.toDateString()}</Table.Td>
-                <Table.Td ta="end">{val.numDiapers}</Table.Td>
-                <Table.Td>
-                    <Flex justify="center" gap="md" align={"center"}>
+        <Table.Tr key={index}>
+            <Table.Td>
+                <OrderPopup order={val}>
+                    <ActionIcon
+                        variant="filled"
+                        color="var(--primary-color)"
+                        radius="xl"
+                        aria-label="Edit Order"
+                    >
+                        <IconPencil
+                            style={{ width: "70%", height: "70%" }}
+                            stroke={1.5}
+                        />
+                    </ActionIcon>
+                </OrderPopup>
+            </Table.Td>
+            <Table.Td ta="center">{index}</Table.Td>
+            {/*<Table.Td ta="center">{element.distributionPlace}</Table.Td>*/}
+            <Table.Td ta="center">{val.datePlaced.toDateString()}</Table.Td>
+            <Table.Td ta="end">{val.numDiapers}</Table.Td>
+            <Table.Td>
+                <Flex justify="center" gap="md" align={"center"}>
+                    <Flex bg="blue" justify="center" gap="md" align="center" p="xs">
                         <IconCircle
                             className={
                                 val.status == "Unreviewed"
@@ -86,8 +79,8 @@ const OrderTable: React.FC<TableProps> = ({
                         />
                         <Text>{val.status}</Text>
                     </Flex>
-                </Table.Td>
-            </OrderPopup>
+                </Flex>
+            </Table.Td>
         </Table.Tr>
     ));
     return (
