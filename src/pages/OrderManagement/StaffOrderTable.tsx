@@ -1,7 +1,7 @@
 import React from 'react';
 import OrderPopup from '../OrderPopup';
 import { Container, Group, Stack, Text, Flex } from '@mantine/core';
-import Order from '../Order/OrderClass'; 
+import Order from '../OrderTracking/OrderClass'; 
 import StatusImage from './StatusImage';
 
 

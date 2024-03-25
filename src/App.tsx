@@ -18,7 +18,7 @@ import Login from "./pages/Auth/Login";
 import PrivateRoute from "./pages/Auth/PrivateRoute";
 import Register from "./pages/Auth/Register";
 import Profile from "./pages/Profile/Profile";
-import OrderPartner from "./pages/Order/OrderPartner";
+import OrderPartner from "./pages/OrderTracking/OrderPartner";
 import OrderManagement from "./pages/OrderManagement/OrderManagement";
 import AuthWrapper from "./pages/Auth/AuthWrapper";
 
