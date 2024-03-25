@@ -8,13 +8,13 @@
 }
 
 .open {
-    background-color: var(--status-orange-color-light);
-    color: var(--status-orange-color);
+    background-color: var(--status-blue-color-light);
+    color: var(--status-blue-color);
 }
 
 .open-dot {
-    fill: var(--status-orange-color);
-    color: var(--status-orange-color);
+    fill: var(--status-blue-color);
+    color: var(--status-blue-color);
 }
 
 .approved {
@@ -27,14 +27,14 @@
     color: var(--status-yellow-color);
 }
 
-.placed {
-    background-color: var(--status-blue-color-light);
-    color: var(--status-blue-color);
+.cancelled {
+    background-color: var(--status-orange-color-light);
+    color: var(--status-orange-color);
 }
 
-.placed-dot {
-    fill: var(--status-blue-color);
-    color: var(--status-blue-color);
+.cancelled-dot {
+    fill: var(--status-orange-color);
+    color: var(--status-orange-color);
 }
 
 .filled {

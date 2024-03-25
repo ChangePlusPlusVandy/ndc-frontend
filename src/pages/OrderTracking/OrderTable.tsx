@@ -40,9 +40,12 @@ const OrderTable: React.FC<TableProps> = ({
     let orderCut: Order[] = [];
 
     orders.forEach((elem: Order) => {
-        if (orderType == "" || elem.status == orderType) {
+        if (
+            orderType == "" ||
+            elem.status == orderType ||
+            (orderType == "OPEN" && elem.status == "PLACED")
+        ) {
             if (total <= maxIndex && total >= minIndex) {
-                
                 orderCut.push(elem);
             }
             total++;
@@ -53,6 +56,21 @@ const OrderTable: React.FC<TableProps> = ({
         setMinIndex((val - 1) * amount);
         setMaxIndex((val - 1) * amount + amount - 1);
         setActivePage(val);
+    };
+
+    const handleStatusName = (status: string) => {
+        switch (status) {
+            case "OPEN":
+            case "PLACED":
+                return "Unreviewed";
+                break;
+            case "APPROVED":
+                return "In progress";
+                break;
+            default:
+                return status;
+                break;
+        }
     };
 
     const rows = orderCut?.map((val: Order, index: number) => (
@@ -72,14 +90,19 @@ const OrderTable: React.FC<TableProps> = ({
                     </ActionIcon>
                 </OrderPopup>
             </Table.Td>
-            <Table.Td ta="center">{index}</Table.Td>
-            {/*<Table.Td ta="center">{element.distributionPlace}</Table.Td>*/}
+            <Table.Td ta="center">{index + 1}</Table.Td>
+            <Table.Td ta="center">{val.location}</Table.Td>
             <Table.Td ta="center">{val.datePlaced.toDateString()}</Table.Td>
             <Table.Td ta="end">{val.numDiapers}</Table.Td>
             <Table.Td>
                 <Flex justify="center" gap="sm" align={"center"}>
                     <Flex
-                        className={"status-badge " + val.status.toLowerCase()}
+                        className={
+                            "status-badge " +
+                            (val.status == "PLACED"
+                                ? "open"
+                                : val.status.toLowerCase())
+                        }
                         px="lg"
                         justify="center"
                         gap="md"
@@ -87,10 +110,14 @@ const OrderTable: React.FC<TableProps> = ({
                         p="xs"
                     >
                         <IconCircle
-                            className={val.status.toLowerCase() + "-dot"}
+                            className={
+                                (val.status == "PLACED"
+                                    ? "open"
+                                    : val.status.toLowerCase()) + "-dot"
+                            }
                             size=".75rem"
                         />
-                        {standardCase(val.status)}
+                        {standardCase(handleStatusName(val.status))}
                     </Flex>
                 </Flex>
             </Table.Td>
@@ -103,7 +130,7 @@ const OrderTable: React.FC<TableProps> = ({
                     <Table.Tr>
                         <Table.Th />
                         <Table.Th ta="center">Order #</Table.Th>
-                        {/*<Table.Th ta="center">Distribution Center</Table.Th>*/}
+                        <Table.Th ta="center">Distribution Center</Table.Th>
                         <Table.Th ta="center">Order Date</Table.Th>
                         <Table.Th ta="end">Total Quantity</Table.Th>
                         <Table.Th className="table-order-status" ta={"center"}>

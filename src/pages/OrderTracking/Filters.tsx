@@ -68,7 +68,7 @@ const Filter: React.FC<FilterProps> = ({
     };
 
     const reset = () => {
-        setOrders(baseOrders);
+        setOrders(() => baseOrders);
     };
 
     return (
