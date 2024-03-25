@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Title, Container, Stack } from "@mantine/core";
+import { Title, Flex, Stack } from "@mantine/core";
 
 import OrderFormDiaperSize from "./OrderFormDiaperSize";
 
@@ -18,12 +18,9 @@ const OrderFormRequest: React.FC<RequestProps> = ({
 
     return (
         <>
-            <Container bg="white">
-                <Title ta="center" m="lg">
-                    Request Diapers
-                </Title>
+            <Flex direction="column" flex="1" align="stretch" bg="white">
                 <OrderFormDiaperSize
-                    typeName="Newborn Diapers"
+                    typeName="Newborn"
                     keyName="newborn"
                     updateSize={updateSize}
                     initialSize={sizes.newborn}
@@ -64,7 +61,7 @@ const OrderFormRequest: React.FC<RequestProps> = ({
                     updateSize={updateSize}
                     initialSize={sizes.size6}
                 />
-            </Container>
+            </Flex>
         </>
     );
 };
