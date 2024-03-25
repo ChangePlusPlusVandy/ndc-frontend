@@ -11,9 +11,11 @@ import {
     Container,
     Card,
 } from "@mantine/core";
+import Order from "../OrderTracking/OrderClass";
 import { useDisclosure } from "@mantine/hooks";
 import { LineChart } from "@mantine/charts";
 import { IconCircleFilled, IconCircle } from "@tabler/icons-react";
+import OrderTable from "../OrderTracking/OrderTable";
 
 // Importing dashboard components
 import Greeting from "./Greeting";
@@ -50,7 +52,7 @@ export const data = [
 ];
 
 // Delete
-import Partner from './PartnerClass';
+import Partner from "./PartnerClass";
 
 interface PartnerResponse {
     numOrdersMonth: number;
@@ -58,8 +60,23 @@ interface PartnerResponse {
     status: string;
 }
 
-function Dashboard() {
+interface OrderResponse {
+    _id: string;
+    dateCompleted: string;
+    datePlaced: string;
+    newborn: number;
+    numDiapers: number;
+    partner: string;
+    size1: number;
+    size2: number;
+    size3: number;
+    size4: number;
+    size5: number;
+    size6: number;
+    status: string;
+}
 
+function Dashboard() {
     const [opened, { open, close }] = useDisclosure(false);
     const navigate = useNavigate();
     const { mongoId, currentUser } = useAuth();
@@ -72,39 +89,98 @@ function Dashboard() {
     const [numOpenOrders, setNumOpenOrders] = useState<number>(0);
     const [numUnreviewedOrders, setNumUnreviewedOrders] = useState<number>(0);
     const [numClosedOrders, setNumClosedOrders] = useState<number>(0);
+    const [orders, setOrders] = useState<Order[]>([]);
 
+    useEffect(() => {
+        const getOrders = async () => {
+            const token = await currentUser?.getIdToken();
+
+            console.log("TOKEN", token);
+            console.log("MONGOID", mongoId);
+
+            let res = await fetch(
+                `${
+                    import.meta.env.VITE_BACKEND_URL
+                }/order?partnerId=${mongoId}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+        };
+        if (currentUser && mongoId) {
+            getOrders();
+            console.log("Mongo", mongoId);
+        }
+    }, []);
     useEffect(() => {
         // Line old
         console.log(currentUser);
 
         const getPartnerOrders = async () => {
-            try{
+            try {
                 const token = await currentUser?.getIdToken();
-                
-                let resPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/partner?id=${mongoId}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
 
-                let resOrders = await fetch(`${import.meta.env.VITE_BACKEND_URL}/order?partnerId=${mongoId}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                let resPartner = await fetch(
+                    `${import.meta.env.VITE_BACKEND_URL}/partner?id=${mongoId}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                let resOrders = await fetch(
+                    `${
+                        import.meta.env.VITE_BACKEND_URL
+                    }/order?partnerId=${mongoId}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                let dataOrders = (await resOrders.json()).map(
+                    (elem: OrderResponse) => {
+                        return new Order(
+                            elem._id,
+                            elem.partner,
+                            new Date(elem.datePlaced),
+                            new Date(elem.dateCompleted) || new Date(),
+                            elem.status,
+                            elem.newborn,
+                            elem.size1,
+                            elem.size2,
+                            elem.size3,
+                            elem.size4,
+                            elem.size5,
+                            elem.size6
+                        );
+                    }
+                );
+                setOrders(dataOrders);
 
                 let dataPartner = await resPartner.json();
                 let numOrdersMonthArr = dataPartner.numOrdersMonth;
                 let numOrdersYTDArr = dataPartner.numOrdersYTD;
 
-                let dataOrders = await resOrders.json();
-                let numOrdersOpen = dataOrders.filter((elem: PartnerResponse) => elem.status === "OPEN").length;
-                let numOrdersUnreviewed = dataOrders.filter((elem: PartnerResponse) => elem.status === "UNREVIEWED").length;
-                let numOrdersClosed = dataOrders.filter((elem: PartnerResponse) => elem.status === "FILLED").length;
+                let numOrdersOpen = dataOrders.filter(
+                    (elem: PartnerResponse) => elem.status === "OPEN"
+                ).length;
+                let numOrdersUnreviewed = dataOrders.filter(
+                    (elem: PartnerResponse) => elem.status === "UNREVIEWED"
+                ).length;
+                let numOrdersClosed = dataOrders.filter(
+                    (elem: PartnerResponse) => elem.status === "FILLED"
+                ).length;
 
                 setNumOrdersMonth(numOrdersMonthArr);
                 setNumOrdersYTD(numOrdersYTDArr);
@@ -113,17 +189,16 @@ function Dashboard() {
                 setNumClosedOrders(numOrdersClosed);
 
                 // TEST
-                console.log('numOrdersMonthArr:', numOrdersMonthArr);
-                console.log('numOrdersYTDArr:', numOrdersYTDArr);
-                console.log('numOrdersClkosed:', numOrdersClosed);
-
-            } catch (err){
+                console.log("numOrdersMonthArr:", numOrdersMonthArr);
+                console.log("numOrdersYTDArr:", numOrdersYTDArr);
+                console.log("numOrdersClkosed:", numOrdersClosed);
+            } catch (err) {
                 console.error(err);
             }
         };
         getPartnerOrders();
-    }, []);;
-    
+    }, []);
+
     const handleProfile = () => {
         navigate("./profile");
     };
@@ -204,7 +279,13 @@ function Dashboard() {
             <Table.Td>
                 <Flex justify="center" gap="md" align={"center"}>
                     <IconCircle
-                        className={element.orderStatus == "Unreviewed" ? "unreviewed-icon" : element.orderStatus == "Open" ? "open-icon" : "approved-icon"}
+                        className={
+                            element.orderStatus == "Unreviewed"
+                                ? "unreviewed-icon"
+                                : element.orderStatus == "Open"
+                                ? "open-icon"
+                                : "approved-icon"
+                        }
                         size=".75rem"
                     />
                     <Text>{element.orderStatus}</Text>
@@ -213,7 +294,6 @@ function Dashboard() {
         </Table.Tr>
     ));
 
-    
     return (
         <>
             <Flex p="lg" wrap="wrap" justify="space-between" align="center">
@@ -320,31 +400,19 @@ function Dashboard() {
                             align="center"
                             direction="row"
                         >
-                            <Text className="mantine-Subtitle-root">Recent Orders</Text>
-                            <Button variant="subtle" size="sm" color="#653661">
+                            <Text className="mantine-Subtitle-root">
+                                Recent Orders
+                            </Text>
+                            <Button
+                                variant="subtle"
+                                size="sm"
+                                color="var(--primary-color)"
+                                onClick={handleOrderInfo}
+                            >
                                 View All
                             </Button>
                         </Flex>
-                        <Table>
-                            <Table.Thead>
-                                <Table.Tr>
-                                    <Table.Th />
-                                    <Table.Th ta="center">Order #</Table.Th>
-                                    <Table.Th ta="center">
-                                        Distribution Center
-                                    </Table.Th>
-                                    <Table.Th ta="center">Order Date</Table.Th>
-                                    <Table.Th ta="end">Total Quantity</Table.Th>
-                                    <Table.Th
-                                        className="table-order-status"
-                                        ta={"center"}
-                                    >
-                                        Order Status
-                                    </Table.Th>
-                                </Table.Tr>
-                            </Table.Thead>
-                            <Table.Tbody>{rows}</Table.Tbody>
-                        </Table>
+                        <OrderTable orders={orders} orderType="" amount={5} showPagination={false}/>
                     </Flex>
                 </Grid.Col>
             </Grid>

@@ -39,8 +39,6 @@ interface OrderResponse {
 
 const OrderPartner: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
-    const [opened, { open, close }] = useDisclosure(false);
-    const [targetSizes, setTargetSizes] = useState<number[]>([]);
     const { mongoId, currentUser } = useAuth();
 
     useEffect(() => {
@@ -87,7 +85,7 @@ const OrderPartner: React.FC = () => {
     }, []);
 
     return (
-        <Tabs variant="pills" defaultValue={"open"}>
+        <Tabs variant="pills" defaultValue={"all"}>
             <Flex p="lg" direction="column" align="stretch" gap="lg">
                 <Title c="black" ta={{ base: "center", sm: "left" }}>
                     Order Tracking
@@ -106,17 +104,20 @@ const OrderPartner: React.FC = () => {
                             size="xs"
                         ></TextInput>
                         <Tabs.List grow>
-                            <Tabs.Tab value="unapproved" className="tab">
-                                Unapproved
-                            </Tabs.Tab>
-                            <Tabs.Tab value="review" className="tab">
-                                Unreviewed
+                            <Tabs.Tab value="all" className="tab">
+                                All
                             </Tabs.Tab>
                             <Tabs.Tab value="open" className="tab">
-                                Opened
+                                Open
                             </Tabs.Tab>
                             <Tabs.Tab value="approved" className="tab">
-                                Delivered
+                                Approved
+                            </Tabs.Tab>
+                            <Tabs.Tab value="placed" className="tab">
+                                Placed
+                            </Tabs.Tab>
+                            <Tabs.Tab value="filled" className="tab">
+                                Filled
                             </Tabs.Tab>
                         </Tabs.List>
                     </Group>
@@ -130,7 +131,7 @@ const OrderPartner: React.FC = () => {
                             orders={orders}
                             setOrders={setOrders}
                             whichSorters={["Date", "Num"]}
-                            classes={"whiteButton"}
+                            classes={""}
                         ></Sorter>
                     </Group>
                 </Flex>
@@ -141,30 +142,46 @@ const OrderPartner: React.FC = () => {
                     p="md"
                     direction="column"
                 >
+                    <Tabs.Panel value="all">
+                        <OrderTable
+                            orders={orders}
+                            amount={10}
+                            showPagination={true}
+                            orderType={""}
+                        />
+                    </Tabs.Panel>
                     <Tabs.Panel value="open">
                         <OrderTable
                             orders={orders}
+                            amount={10}
+                            showPagination={true}
                             orderType={"OPEN"}
-                        ></OrderTable>
-                    </Tabs.Panel>
-                    <Tabs.Panel value="review">
-                        <OrderTable
-                            orders={orders}
-                            orderType={"PLACED"}
                         ></OrderTable>
                     </Tabs.Panel>
                     <Tabs.Panel value="approved">
                         <OrderTable
                             orders={orders}
-                            orderType={"OPEN"}
+                            amount={10}
+                            showPagination={true}
+                            orderType={"APPROVED"}
                         ></OrderTable>
                     </Tabs.Panel>
-                    <Flex flex="1" p="md" justify="center">
-                        <Pagination
-                            total={10}
-                            classNames={{ control: "orderPagination" }}
-                        />
-                    </Flex>
+                    <Tabs.Panel value="placed">
+                        <OrderTable
+                            orders={orders}
+                            amount={10}
+                            showPagination={true}
+                            orderType={"PLACED"}
+                        ></OrderTable>
+                    </Tabs.Panel>
+                    <Tabs.Panel value="filled">
+                        <OrderTable
+                            orders={orders}
+                            amount={10}
+                            showPagination={true}
+                            orderType={"FILLED"}
+                        ></OrderTable>
+                    </Tabs.Panel>
                 </Flex>
             </Flex>
         </Tabs>

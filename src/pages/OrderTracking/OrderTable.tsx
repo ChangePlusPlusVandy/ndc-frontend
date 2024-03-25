@@ -13,37 +13,49 @@ import {
     Checkbox,
     ActionIcon,
     Badge,
+    Pagination,
 } from "@mantine/core";
 
 interface TableProps {
     orders: Order[];
     orderType: string;
+    amount: number;
+    showPagination: boolean;
 }
 
 const OrderTable: React.FC<TableProps> = ({
     orders,
     orderType,
+    amount,
+    showPagination,
 }: TableProps) => {
-    /*orders?.map((val: Order, index: number) => (
-        <div key={index}>
-            <Container
-                className="single-order"
-                w="100%"
-                fluid
-                key={index}
-            >
-                <OrderPopup order={val}>
-                    <Group style={{ width: "100%" }} grow gap="xl">
-                        <Text>#{index}</Text>
-                        <Text>{val.datePlaced.toDateString()}</Text>
-                        <Text>{val.numDiapers}</Text>
-                        <Text>{val.status}</Text>
-                    </Group>
-                </OrderPopup>
-            </Container>
-        </div>
-    ))}*/
-    const rows = orders?.map((val: Order, index: number) => (
+    const [activePage, setActivePage] = useState(1);
+
+    const standardCase = (s: string) => {
+        return s[0]?.toUpperCase() + s.substring(1).toLowerCase();
+    };
+    const [minIndex, setMinIndex] = useState(0);
+    const [maxIndex, setMaxIndex] = useState(minIndex + amount - 1);
+    let total = 0;
+    let orderCut: Order[] = [];
+
+    orders.forEach((elem: Order) => {
+        if (orderType == "" || elem.status == orderType) {
+            if (total <= maxIndex && total >= minIndex) {
+                
+                orderCut.push(elem);
+            }
+            total++;
+        }
+    });
+
+    const handlePageChange = (val: number) => {
+        setMinIndex((val - 1) * amount);
+        setMaxIndex((val - 1) * amount + amount - 1);
+        setActivePage(val);
+    };
+
+    const rows = orderCut?.map((val: Order, index: number) => (
         <Table.Tr key={index}>
             <Table.Td>
                 <OrderPopup order={val}>
@@ -65,19 +77,20 @@ const OrderTable: React.FC<TableProps> = ({
             <Table.Td ta="center">{val.datePlaced.toDateString()}</Table.Td>
             <Table.Td ta="end">{val.numDiapers}</Table.Td>
             <Table.Td>
-                <Flex justify="center" gap="md" align={"center"}>
-                    <Flex bg="blue" justify="center" gap="md" align="center" p="xs">
+                <Flex justify="center" gap="sm" align={"center"}>
+                    <Flex
+                        className={"status-badge " + val.status.toLowerCase()}
+                        px="lg"
+                        justify="center"
+                        gap="md"
+                        align="center"
+                        p="xs"
+                    >
                         <IconCircle
-                            className={
-                                val.status == "Unreviewed"
-                                    ? "unreviewed-icon"
-                                    : val.status == "Open"
-                                    ? "open-icon"
-                                    : "approved-icon"
-                            }
+                            className={val.status.toLowerCase() + "-dot"}
                             size=".75rem"
                         />
-                        <Text>{val.status}</Text>
+                        {standardCase(val.status)}
                     </Flex>
                 </Flex>
             </Table.Td>
@@ -100,6 +113,16 @@ const OrderTable: React.FC<TableProps> = ({
                 </Table.Thead>
                 <Table.Tbody>{rows}</Table.Tbody>
             </Table>
+            {showPagination && (
+                <Flex flex="1" p="md" justify="center">
+                    <Pagination
+                        total={Math.ceil(total / amount)}
+                        value={activePage}
+                        onChange={handlePageChange}
+                        classNames={{ control: "orderPagination" }}
+                    />
+                </Flex>
+            )}
         </>
     );
 };

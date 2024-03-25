@@ -3,6 +3,50 @@
     margin: 0 2.5%;
 }
 
+.status-badge {
+    border-radius: 3rem;
+}
+
+.open {
+    background-color: var(--status-orange-color-light);
+    color: var(--status-orange-color);
+}
+
+.open-dot {
+    fill: var(--status-orange-color);
+    color: var(--status-orange-color);
+}
+
+.approved {
+    background-color: var(--status-yellow-color-light);
+    color: var(--status-yellow-color);
+}
+
+.approved-dot {
+    fill: var(--status-yellow-color);
+    color: var(--status-yellow-color);
+}
+
+.placed {
+    background-color: var(--status-blue-color-light);
+    color: var(--status-blue-color);
+}
+
+.placed-dot {
+    fill: var(--status-blue-color);
+    color: var(--status-blue-color);
+}
+
+.filled {
+    background-color: var(--status-green-color-light);
+    color: var(--status-green-color);
+}
+
+.filled-dot {
+    fill: var(--status-green-color);
+    color: var(--status-green-color);
+}
+
 .dashboard-box {
     background-color: var(--light-color);
     border-radius: 0.5rem;
