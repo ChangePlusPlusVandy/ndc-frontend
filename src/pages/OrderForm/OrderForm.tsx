@@ -129,27 +129,28 @@ const OrderForm: React.FC<OrderFormProps> = ({
 
     // Allow the user to freely go back and forth between visited steps.
     const shouldAllowSelectStep = (step: number) =>
-        highestStepVisited >= step && active !== step;
+        highestStepVisited >= step && active !== step && highestStepVisited < 3;
 
     return (
         <>
-            <Modal
+        <Modal
                 size="xl"
                 opened={opened}
                 onClose={handleClose}
                 overlayProps={{
+                
                     backgroundOpacity: 0.55,
                     blur: 3,
                 }}
                 withCloseButton={false}
                 bg="var(--light-color)"
-                scrollAreaComponent={ScrollArea.Autosize}
                 radius="lg"
+                scrollAreaComponent={ScrollArea.Autosize}
             >
                 <Flex px="lg" justify="end">
                     <CloseButton onClick={handleClose} />
                 </Flex>
-                <Flex p="lg" direction="column">
+                <Flex px="xl" direction="column">
                     <Stepper
                         size="sm"
                         px="lg"
@@ -248,6 +249,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                     </Stepper>
                 </Flex>
             </Modal>
+            
             <Button
                 radius="0.5rem"
                 size="md"

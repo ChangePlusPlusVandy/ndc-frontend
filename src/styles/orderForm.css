@@ -23,3 +23,8 @@
     border: 1.5px solid var(--input-outline-color);
     border-radius: 1.5rem;
 }
+
+.mantine-ScrollArea-root {
+    margin: 1rem .25rem;
+
+}

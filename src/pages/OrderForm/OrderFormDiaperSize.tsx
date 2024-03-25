@@ -30,19 +30,13 @@ const OrderFormDiaperSize: React.FC<SizeProps> = ({
 
     return (
         <>
-            <Flex
-                direction="column"
-                flex="1"
-                align="stretch"
-                p="xs"
-            >
-                <Group gap="lg">
-                    <Text size="md">{typeName}</Text>
+            <Flex direction="column" flex="1" align="stretch" p="xs">
+                <Group flex="1" gap="lg">
+                    <Text size="sm">{typeName}</Text>
                     <Flex justify="center" align="center">
                         <NumberInput
                             className="number-input"
                             variant="unstyled"
-                            
                             value={value}
                             onChange={handleChange}
                             size="xs"
@@ -60,23 +54,24 @@ const OrderFormDiaperSize: React.FC<SizeProps> = ({
                         />
                     </Flex>
                 </Group>
-
-                <Slider
-                    value={Number(value)}
-                    className="slider"
-                    onChange={handleChange}
-                    color="var(--primary-color)"
-                    showLabelOnHover={false}
-                    marks={[
-                        { value: 0, label: "0" },
-                        { value: 1000, label: "1000" },
-                    ]}
-                    size="xs"
-                    thumbSize={15}
-                    min={0}
-                    max={1000}
-                    m="xs"
-                />
+                <Group flex="1" align="center" justify="space-between">
+                    <Text size="xs">0</Text>
+                    <Slider
+                    flex={1}
+                        value={Number(value)}
+                        className="slider"
+                        onChange={handleChange}
+                        color="var(--primary-color)"
+                        showLabelOnHover={false}
+                      
+                        size="xs"
+                        thumbSize={15}
+                        min={0}
+                        max={1000}
+                        m="xs"
+                    />
+                    <Text size="xs">1000</Text>
+                </Group>
             </Flex>
         </>
     );
