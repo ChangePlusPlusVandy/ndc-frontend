@@ -22,7 +22,7 @@ const OrderFormDiaperSize: React.FC<SizeProps> = ({
     initialSize,
 }: SizeProps) => {
     const [value, setValue] = useState<string | number>(initialSize);
-
+    const [showControls, setShowControls] = useState<boolean>(false);
     const handleChange = (e: string | number) => {
         setValue(e);
         updateSize(keyName, e);
@@ -30,16 +30,22 @@ const OrderFormDiaperSize: React.FC<SizeProps> = ({
 
     return (
         <>
-            <Container fluid my="lg" p="lg" bg="var(--mantine-color-blue-light)">
-                <Group>
+            <Flex
+                direction="column"
+                flex="1"
+                align="stretch"
+                p="xs"
+            >
+                <Group gap="lg">
                     <Text size="md">{typeName}</Text>
-                    <Flex w="6rem" justify="center" align="center">
-                        {/*TODO: need to make it look better for mobile */}
+                    <Flex justify="center" align="center">
                         <NumberInput
-                            ta="center"
+                            className="number-input"
+                            variant="unstyled"
+                            
                             value={value}
                             onChange={handleChange}
-                            size="sm"
+                            size="xs"
                             placeholder="0 - 1000"
                             clampBehavior="strict"
                             allowDecimal={false}
@@ -48,6 +54,7 @@ const OrderFormDiaperSize: React.FC<SizeProps> = ({
                             stepHoldInterval={(t) =>
                                 Math.max(1000 / t ** 2, 25)
                             }
+                            hideControls
                             min={0}
                             max={1000}
                         />
@@ -56,18 +63,21 @@ const OrderFormDiaperSize: React.FC<SizeProps> = ({
 
                 <Slider
                     value={Number(value)}
+                    className="slider"
                     onChange={handleChange}
-                    color="blue"
+                    color="var(--primary-color)"
                     showLabelOnHover={false}
                     marks={[
                         { value: 0, label: "0" },
                         { value: 1000, label: "1000" },
                     ]}
+                    size="xs"
+                    thumbSize={15}
                     min={0}
                     max={1000}
                     m="xs"
                 />
-            </Container>
+            </Flex>
         </>
     );
 };
