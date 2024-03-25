@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { useAuth } from "../../AuthContext";
 import {Stack, Button, Group} from "@mantine/core";
+import { IconPlus, IconX } from "@tabler/icons-react";
 import Partner from "./PartnerClass";
 import Staff from "./StaffClass"; 
 import User from "./UserClass"; 
@@ -123,16 +124,26 @@ const UserDirectory: React.FC = () => {
         <Stack className="width-90">
             <Group justify="space-between">
                 <h1>User Directory</h1>
-                <Button className="right-align">Create User</Button>
+                <Button leftSection={<IconPlus></IconPlus>} className="right-align button-dark">
+                    <h3>Create User</h3>
+                </Button>
             </Group>
-            <Group justify="space-between">
+            <Group className="background-bubble-light-1" justify="space-between">
                 <Group>
-                    <SearchBar searchVal={searchVal} searchFunc={searchFunc}></SearchBar>
-                    <Button onClick={toggleShowStaff}>Staff</Button>
-                    <Button onClick={toggleShowPartners}>Partners</Button>
+                    <SearchBar searchVal={searchVal} searchFunc={searchFunc} classes="background-light"></SearchBar>
+                    <Button 
+                        onClick={toggleShowStaff} 
+                        className={showStaff ? "button-chosen" : "button-not-chosen"}
+                        rightSection={showStaff && <IconX height={"1rem"}></IconX>}
+                        >Staff</Button>
+                    <Button 
+                        onClick={toggleShowPartners}
+                        className={showPartners ? "button-chosen" : "button-not-chosen"}
+                        rightSection={showPartners && <IconX height={"1rem"}></IconX>}
+                        >Partners</Button>
                 </Group>
                 
-                <UserSorter users={shownUsers} setUsers={setShownUsers} whichSorters={["Name", "Reverse"]} classes=""></UserSorter>
+                <UserSorter users={shownUsers} setUsers={setShownUsers} whichSorters={["Name", "Reverse"]} wrapperClasses="background-light" classes="button-transparent"></UserSorter>
             </Group>
             <UserTable users={shownUsers}></UserTable>
         </Stack>

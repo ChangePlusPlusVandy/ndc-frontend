@@ -105,7 +105,7 @@ const OrderManagement: React.FC = () => {
                     <Button className="mod-button" onClick={reverse}><IconArrowsDownUp></IconArrowsDownUp></Button>
                 </div>
 
-                <SearchBar searchVal={searchVal} searchFunc={searchFunc}></SearchBar>
+                <SearchBar searchVal={searchVal} searchFunc={searchFunc} classes=""></SearchBar>
             </Group>
             <StaffOrderTable orders={shownOrders}></StaffOrderTable>
         </div>

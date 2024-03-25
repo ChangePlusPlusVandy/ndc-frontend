@@ -11,7 +11,7 @@ interface TableProps {
 
 const UserTable: React.FC<TableProps> = ({users} : TableProps) => {
     return (
-        <Grid className="user-table">
+        <Grid className="user-table background-bubble-light-1">
             {users?.map((elem: User, index: number)=> {
                 return (
                     <Grid.Col  span={4} key={index}>

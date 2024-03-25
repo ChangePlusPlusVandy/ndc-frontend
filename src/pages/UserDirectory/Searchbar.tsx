@@ -4,12 +4,21 @@ import { IconSearch } from "@tabler/icons-react";
 
 interface SearchProps {
     searchVal: string; 
-    searchFunc: (event: any) => void; 
+    searchFunc: (event: any) => void;
+    classes: string;  
 }
 
-const SearchBar:React.FC<SearchProps> = ({searchVal, searchFunc}: SearchProps) => {
+const SearchBar:React.FC<SearchProps> = ({searchVal, searchFunc, classes}: SearchProps) => {
     return (
-        <Autocomplete leftSection={<IconSearch></IconSearch>} data={[]} value={searchVal} onChange={searchFunc}></Autocomplete>
+        <Autocomplete 
+            variant="unstyled"
+            leftSection={<IconSearch></IconSearch>} 
+            placeholder="Search"
+            data={[]} 
+            value={searchVal} 
+            onChange={searchFunc}
+            className={classes}
+            />
     )
 }
 
