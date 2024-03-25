@@ -5,19 +5,24 @@
     --darker-primary-color: #653661;
     --light-color-1: #FFF7F9;
     --light-color-2: #fdf0f7; 
-    --chart-color-1: #804d7a;
-    --chart-color-2: #eedee7;
     --dark-color-1: #201a1e;
     --dark-color-2: #4e444b;
 }
 
-.partnerBox {
-    border: .25rem solid var(--light-color-1);
+.user-table {
     background-color: var(--light-color-1);
-    border-radius: .5rem; 
+    border: .25rem solid var(--light-color-1); 
+    border-radius: 1rem; 
+    padding: 2rem 1rem; 
 }
 
-.partnerBox:hover {
+.user-box {
+    border: .125rem solid var(--primary-color-20);
+    border-radius: 1rem; 
+    padding: 1rem; 
+}
+
+.user-box:hover {
     cursor: pointer; 
 }
 

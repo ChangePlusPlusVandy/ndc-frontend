@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { useAuth } from "../../AuthContext";
-import {Button, Group} from "@mantine/core";
+import {Stack, Button, Group} from "@mantine/core";
 import Partner from "./PartnerClass";
 import Staff from "./StaffClass"; 
 import User from "./UserClass"; 
@@ -120,22 +120,22 @@ const UserDirectory: React.FC = () => {
     }
 
     return (
-        <>
+        <Stack className="width-90">
             <Group justify="space-between">
                 <h1>User Directory</h1>
                 <Button className="right-align">Create User</Button>
             </Group>
             <Group justify="space-between">
                 <Group>
-                    <UserSorter users={shownUsers} setUsers={setShownUsers} whichSorters={["Name", "Reverse"]} classes=""></UserSorter>
+                    <SearchBar searchVal={searchVal} searchFunc={searchFunc}></SearchBar>
                     <Button onClick={toggleShowStaff}>Staff</Button>
                     <Button onClick={toggleShowPartners}>Partners</Button>
                 </Group>
                 
-                <SearchBar searchVal={searchVal} searchFunc={searchFunc}></SearchBar>
+                <UserSorter users={shownUsers} setUsers={setShownUsers} whichSorters={["Name", "Reverse"]} classes=""></UserSorter>
             </Group>
             <UserTable users={shownUsers}></UserTable>
-        </>
+        </Stack>
         
     ); 
 }
