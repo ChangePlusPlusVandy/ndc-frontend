@@ -24,7 +24,7 @@ const UserTable: React.FC<TableProps> = ({users} : TableProps) => {
                                 <Text>{elem.firstName + " " + elem.lastName}</Text>
                                 <Text>{elem.email}</Text>
 
-                                <Text>{elem instanceof Partner ? "Partner" : "Staff"}</Text>
+                                <Text className="type-indicator">{elem instanceof Partner ? "Partner" : "Staff"}</Text>
                             </Flex>
                                 
                         </UserPopup>
