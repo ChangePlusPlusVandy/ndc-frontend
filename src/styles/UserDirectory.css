@@ -1,0 +1,79 @@
+:root {
+    --primary-color: #94408F;
+    --primary-color-20: #ead3e4;
+    --primary-color-50: #c99bc3;
+    --darker-primary-color: #653661;
+    --light-color-1: #FFF7F9;
+    --light-color-2: #fdf0f7; 
+    --dark-color-1: #201a1e;
+    --dark-color-2: #4e444b;
+}
+
+.background-bubble-light-1 {
+    background-color: var(--light-color-1); 
+    border: .25rem solid var(--light-color-1); 
+    border-radius: 1rem; 
+    padding: .5rem; 
+}
+
+.user-table {
+    padding: 2rem 1rem; 
+}
+
+.user-box {
+    border: .125rem solid var(--primary-color-50);
+    border-radius: 1rem; 
+    padding: 1rem; 
+}
+
+.user-box:hover {
+    cursor: pointer; 
+}
+
+.left-align {
+    align-self: flex-start; 
+}
+
+.right-align {
+    float: right; 
+}
+
+.background-light {
+    background-color: var(--primary-color-20); 
+    border: .125rem solid var(--primary-color-50);
+    border-radius: .25rem; 
+    color: var(--dark-color-2); 
+}
+
+.button-dark {
+    background-color: var(--primary-color); 
+    color: white; 
+    border-radius: 2rem; 
+    height: 3rem; 
+}
+
+.button-transparent {
+    background-color: var(--primary-color-20); 
+    color: black; 
+    padding: 0rem; 
+}
+
+.button-chosen {
+    background-color: var(--primary-color-20); 
+    border-color: var(--primary-color-50); 
+    color: black; 
+}
+
+.button-not-chosen {
+    background-color: var(--light-color-1); 
+    border-color: var(--primary-color-20); 
+    color: var(--dark-color-2);
+}
+
+.type-indicator {
+    background-color: var(--primary-color-20); 
+    color: var(--primary-color-50);
+    border: .125rem solid var(--primary-color-20); 
+    border-radius: 1.5rem; 
+    padding: .25rem 1rem; 
+}

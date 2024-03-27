@@ -1,7 +1,7 @@
 import { AppShell, Burger, Button, Group, Image, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { IconStarFilled, IconSettings, IconUserCircle, IconUsers } from '@tabler/icons-react';
+import { IconStarFilled, IconSettings, IconUserCircle, IconUsers, IconPointFilled } from '@tabler/icons-react';
 import Logo from '../../assets/logo-horizontal.png';
 import UserThumb from '../../assets/Images/StaffImages/UserThumb.png';
 import "./DashboardLayout.css"
@@ -44,13 +44,15 @@ export default function DashboardLayout() {
                                 <IconSettings size={20} />
                                 <Text>Order Management</Text>
                             </button>
-                        </Link> :
+                        </Link> 
+                        :
                         <Link to="/order-info">
                             <button className='nav-button'>
                                 <IconSettings size={20} />
                                 <Text>Orders</Text>
                             </button>
-                        </Link>}
+                        </Link>
+                         }
 
                     <Link to="/profile">
                         <button className='nav-button'>
@@ -66,6 +68,13 @@ export default function DashboardLayout() {
                                 <IconUsers size={20} />
                                 <Text>Manage Staff</Text>
                             </button></Link>
+                        && 
+                        <Link to="/user-dir">
+                            <button className='nav-button'>
+                                <IconPointFilled size={20} />
+                                <Text>User Directory</Text>
+                            </button>
+                        </Link>
                     }
                 </Stack>
             </AppShell.Navbar>
