@@ -126,7 +126,7 @@ useEffect(() => {
       const response = await fetch(
         `${
           import.meta.env.VITE_BACKEND_URL
-        }order?partnerId=71481986a6c384137500f75e`,
+        }order?partnerId=45591986a6c384137500f75d`,
         {
           mode: "no-cors",
           method: "GET",

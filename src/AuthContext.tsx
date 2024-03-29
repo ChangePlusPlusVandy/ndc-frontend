@@ -260,12 +260,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    // This effect ensures that mongoId is immediately saved to sessionStorage when it's updated
-    if (mongoId) {
-      window.sessionStorage.setItem("mongoId", mongoId);
-    }
-  }, [mongoId]);
+  // useEffect(() => {
+  //   // This effect ensures that mongoId is immediately saved to sessionStorage when it's updated
+  //   if (mongoId) {
+  //     window.sessionStorage.setItem("mongoId", mongoId);
+  //   }
+  // }, [mongoId]);
 
   const setToken = async () => {
     const userToken = await currentUser?.getIdToken();
