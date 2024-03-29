@@ -128,7 +128,6 @@ useEffect(() => {
           import.meta.env.VITE_BACKEND_URL
         }order?partnerId=45591986a6c384137500f75d`,
         {
-          // mode: "navigate",
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -142,12 +141,12 @@ useEffect(() => {
       }
       const data = await response.json();
       setData(data);
+      console.log(data);
     } catch (e) {
       console.error(e);
     } finally {
       setIsLoading(false);
     }
-    console.log(data);
   };
 
   const processDataByMonth = (data2: any[]) => {
