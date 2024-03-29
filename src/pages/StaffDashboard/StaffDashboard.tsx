@@ -128,7 +128,7 @@ useEffect(() => {
           import.meta.env.VITE_BACKEND_URL
         }order?partnerId=45591986a6c384137500f75d`,
         {
-          mode: "no-cors",
+          // mode: "navigate",
           method: "GET",
           headers: {
             "Content-Type": "application/json",
