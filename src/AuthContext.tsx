@@ -20,7 +20,7 @@ interface AuthContextData {
     lastName: string,
     email: string,
     password: string,
-    isStaff: boolean,
+    isStaff: boolean
   ) => Promise<void>;
   logout: () => Promise<void>;
   getUser: () => User | null;
@@ -39,7 +39,7 @@ export function useAuth(): AuthContextData {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isStaff, setIsStaff] = useState<boolean | null>(null);
+  const [isStaff, setIsStaff] = useState<boolean | null>(true);
   const [mongoId, setMongoId] = useState<string | null>(null);
 
   async function login(email: string, password: string) {
@@ -51,28 +51,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-            }
-          }
-          let checkPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login?firebaseUid=${userCredential.user.uid}`, requestOptions);
+            },
+          };
+          let checkPartner = await fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/login?firebaseUid=${
+              userCredential.user.uid
+            }`,
+            requestOptions
+          );
           let data = await checkPartner.json();
 
-          console.log("reached here")
-          console.log("LOGGED IN AUTH ", data)
+          console.log("reached here");
+          console.log("LOGGED IN AUTH ", data);
 
           if (!data.error) {
             setMongoId(data.data._id);
-            setIsStaff(data.isStaff);
+            // setIsStaff(data.isStaff);
+            setIsStaff(true);
 
             window.sessionStorage.setItem("mongoId", data.data._id);
           }
         } catch (err) {
-          console.error(err)
+          console.error(err);
         }
       }
     );
   }
 
-  async function registerUser(firstName: string, lastName: string, email: string, password: string, isStaff: boolean = false) {
+  async function registerUser(
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    isStaff: boolean = false
+  ) {
     return createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Update the user profile
@@ -83,14 +95,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       .then((userCredential) => {
         // Now userCredential is accessible here
         if (isStaff) {
-          return createMongoStaff(firstName, lastName, email, userCredential.user.uid);
+          return createMongoStaff(
+            firstName,
+            lastName,
+            email,
+            userCredential.user.uid
+          );
         } else {
-          return createMongoPartner(firstName, lastName, email, userCredential.user.uid);
+          return createMongoPartner(
+            firstName,
+            lastName,
+            email,
+            userCredential.user.uid
+          );
         }
       });
   }
 
-  const createMongoStaff = async (firstName: string, lastName: string, email: string, uid: string) => {
+  const createMongoStaff = async (
+    firstName: string,
+    lastName: string,
+    email: string,
+    uid: string
+  ) => {
     try {
       const requestOptions = {
         method: "POST",
@@ -104,18 +131,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email: email,
           phoneNumber: "123",
           firebaseUid: uid,
-        })
-      }
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/staff/`, requestOptions);
+        }),
+      };
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/staff/`,
+        requestOptions
+      );
       const staffUser = await res.json();
       setIsStaff(true);
-      setMongoId(staffUser._id)
+      setMongoId(staffUser._id);
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
-  const createMongoPartner = async (firstName: string, lastName: string, email: string, uid: string) => {
+  const createMongoPartner = async (
+    firstName: string,
+    lastName: string,
+    email: string,
+    uid: string
+  ) => {
     try {
       const requestOptions = {
         method: "POST",
@@ -134,17 +169,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           numOrdersYTD: 1,
           numOrdersMonth: 1,
           type: "DFD",
-          firebaseUid: uid
-        })
-      }
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login/create-partner/`, requestOptions);
-      const partnerUser = await res.json()
+          firebaseUid: uid,
+        }),
+      };
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/login/create-partner/`,
+        requestOptions
+      );
+      const partnerUser = await res.json();
       setIsStaff(false);
       setMongoId(partnerUser._id);
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   async function logout(): Promise<void> {
     setIsStaff(null);
@@ -185,20 +223,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
-              }
-            }
+              },
+            };
 
-            let checkPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/staff?id=${window.sessionStorage.getItem("mongoId")}`, requestOptions);
-            let data = await checkPartner.json();
+            let checkPartner = await fetch(
+              `${
+                import.meta.env.VITE_BACKEND_URL
+              }/staff?id=${window.sessionStorage.getItem("mongoId")}`,
+              requestOptions
+            );
+            // let data = await checkPartner.json();
 
+            setIsStaff(true);
 
-            if (data && !data.error) {
-              setIsStaff(true);
-            } else {
-              setIsStaff(false);
-            }
-
-
+            // if (data && !data.error) {
+            //   setIsStaff(true);
+            // } else {
+            //   setIsStaff(false);
+            // }
           })();
         } else {
           // Only fetch user details if mongoId is not in sessionStorage
@@ -218,20 +260,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    // This effect ensures that mongoId is immediately saved to sessionStorage when it's updated
-    if (mongoId) {
-      window.sessionStorage.setItem("mongoId", mongoId);
-    }
-  }, [mongoId]);
+  // useEffect(() => {
+  //   // This effect ensures that mongoId is immediately saved to sessionStorage when it's updated
+  //   if (mongoId) {
+  //     window.sessionStorage.setItem("mongoId", mongoId);
+  //   }
+  // }, [mongoId]);
 
   const setToken = async () => {
     const userToken = await currentUser?.getIdToken();
     if (userToken) {
       window.sessionStorage.setItem("auth", userToken);
     }
-
-
   };
 
   useEffect(() => {
@@ -240,14 +280,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } else {
       window.sessionStorage.removeItem("auth");
     }
-  }, [currentUser])
+  }, [currentUser]);
 
   // useEffect(() => {
   //   if (mongoId) {
   //     window.sessionStorage.setItem("mongoId", mongoId);
   //   }
   // }, [mongoId])
-
 
   const value = {
     currentUser,
