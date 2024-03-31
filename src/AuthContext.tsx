@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.log("usr credential: ", userCredential)
 
           let checkPartner = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login?firebaseUid=${userCredential.user.uid}`, requestOptions);
-          
+
           let data = await checkPartner.json();
 
           console.log("reached here")
@@ -64,9 +64,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           if (!data.error) {
             setMongoId(data.data._id);
-            setIsStaff(true);
+            setIsStaff(data.isStaff);
+            console.log("is Staff ", data.isStaff)
 
-            console.log("MongoDB ID at login", data._id)
+            console.log("MongoDB ID at login", data.data._id)
 
             window.sessionStorage.setItem("mongoId", data.data._id);
           }

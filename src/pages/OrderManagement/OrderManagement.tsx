@@ -34,7 +34,7 @@ const OrderManagement: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [shownOrders, setShownOrders] = useState<Order[]>([]);
     const [searchVal, setSearchVal] = useState("");
-    const { currentUser } = useAuth();
+    const { currentUser, mongoId } = useAuth();
 
     useEffect(() => {
         const getOrders = async () => {
@@ -47,6 +47,7 @@ const OrderManagement: React.FC = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
+            console.log("RES, ", res)
 
             let data = (await res.json()).map((elem: OrderResponse) => {
                 return new Order(
@@ -68,8 +69,11 @@ const OrderManagement: React.FC = () => {
             setOrders(data);
             setShownOrders(data);
         }
+        if (currentUser && mongoId) {
+            getOrders();
+            console.log("Mongo", mongoId);
+        }
 
-        getOrders();
     }, [])
 
     const reverse = () => {

@@ -49,8 +49,7 @@ const OrderPartner: React.FC = () => {
             console.log("MONGOID", mongoId);
 
             let res = await fetch(
-                `${
-                    import.meta.env.VITE_BACKEND_URL
+                `${import.meta.env.VITE_BACKEND_URL
                 }/order?partnerId=${mongoId}`,
                 {
                     method: "GET",
@@ -74,9 +73,11 @@ const OrderPartner: React.FC = () => {
                     elem.size4,
                     elem.size5,
                     elem.size6,
-                    
+
                 );
             });
+
+            console.log("DATA", data)
             setOrders(data);
         };
         if (currentUser && mongoId) {
@@ -86,7 +87,7 @@ const OrderPartner: React.FC = () => {
     }, []);
 
     return (
-        <Tabs variant="pills"  defaultValue={"all"}>
+        <Tabs variant="pills" defaultValue={"all"}>
             <Flex p="lg" direction="column" align="stretch" gap="lg">
                 <Title c="black" ta={{ base: "center", sm: "left" }}>
                     Order Tracking
@@ -105,10 +106,10 @@ const OrderPartner: React.FC = () => {
                             size="xs"
                         ></TextInput>
                         <Tabs.List >
-                            <Tabs.Tab  size="xs" value="all" className="tab">
+                            <Tabs.Tab size="xs" value="all" className="tab">
                                 All
                             </Tabs.Tab>
-                            <Tabs.Tab  size="xs" value="open" className="tab">
+                            <Tabs.Tab size="xs" value="open" className="tab">
                                 Unreviewed
                             </Tabs.Tab>
                             <Tabs.Tab size="xs" value="approved" className="tab">
