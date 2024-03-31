@@ -3,7 +3,7 @@ import "@mantine/dates/styles.css";
 import "./OrderPopup.css";
 import { randomId, useDisclosure, useListState } from "@mantine/hooks";
 import { Modal, Button, Title, NumberInput, Checkbox } from "@mantine/core";
-import Order from "./Order/OrderClass";
+import Order from "./OrderTracking/OrderClass";
 import { useAuth } from "../AuthContext";
 
 const initialValues = [
