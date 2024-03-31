@@ -128,6 +128,12 @@ useEffect(() => {
     filled: 0;
   };
 
+  type SizeItem = {
+    month: string;
+    Reserved: any;
+    Available: number;
+  };
+
   // Use this type in the useState hook
   const [monthlyData, setMonthlyData] = useState<MonthlyDataItem[] | null>(
     null
@@ -139,6 +145,11 @@ useEffect(() => {
     unreviewed: 0,
     inProgress: 0,
     filled: 0,
+  });
+  const [sizeItem, setSizes] = useState<SizeItem | null>({
+    month: "size 0",
+    Reserved: 0,
+    Available: 0,
   });
 
   const { mongoId, currentUser } = useAuth();
@@ -239,11 +250,40 @@ useEffect(() => {
     return newCounts;
   };
 
+  const processSizes = (data2: any[]) => {
+    const sizes = data2.reduce(
+      (acc, item) => {
+        acc.size0 += item.newborn;
+        acc.size1 += item.size1;
+        acc.size2 += item.size2;
+        acc.size3 += item.size3;
+        acc.size4 += item.size4;
+        acc.size5 += item.size5;
+        acc.size6 += item.size6;
+        return acc;
+      },
+      { size0: 0, size1: 0, size2: 0, size3: 0, size4: 0, size5: 0, size6: 0 }
+    );
+
+    const barChartData = [
+      { month: "size 0", Reserved: sizes.size0, Available: sizes.size0 - 200 },
+      { month: "size 1", Reserved: sizes.size1, Available: sizes.size1 - 200 },
+      { month: "size 2", Reserved: sizes.size2, Available: sizes.size2 - 500 },
+      { month: "size 3", Reserved: sizes.size3, Available: sizes.size3 - 1000 },
+      { month: "size 4", Reserved: sizes.size4, Available: sizes.size4 - 200 },
+      { month: "size 5", Reserved: sizes.size5, Available: sizes.size5 - 1400 },
+      { month: "size 6", Reserved: sizes.size6, Available: sizes.size6 - 600 },
+    ];
+
+    return barChartData;
+  };
+
   useEffect(() => {
     if (data) {
       setMonthlyData(processDataByMonth(data));
       setOrders(processOrders(data));
       setCategorizeOrders(processCategorizeOrders(data));
+      setSizes(processSizes(data));
     }
   }, [data]); // Just use data here
 
@@ -290,12 +330,13 @@ useEffect(() => {
   ));
 
   const fakeBarChartVertical = [
-    { month: "0", Yes: 1200, No: 200 },
-    { month: "1", Yes: 700, No: 500 },
-    { month: "2", Yes: 400, No: 1000 },
-    { month: "3", Yes: 1000, No: 200 },
-    { month: "4", Yes: 800, No: 1400 },
-    { month: "5", Yes: 750, No: 600 },
+    { month: "size 0", Reserved: 700, Avaliable: 200 },
+    { month: "size 1", Reserved: 1200, Avaliable: 200 },
+    { month: "size 2", Reserved: 700, Avaliable: 500 },
+    { month: "size 3", Reserved: 400, Avaliable: 1000 },
+    { month: "size 4", Reserved: 1000, Avaliable: 200 },
+    { month: "size 5", Reserved: 800, Avaliable: 1400 },
+    { month: "size 6", Reserved: 750, Avaliable: 600 },
   ];
 
   // const fakeBarChartHorizontal = [
@@ -315,6 +356,7 @@ useEffect(() => {
 
   return (
     <>
+      {console.log(data)}
       <Title ta={{ base: "center", sm: "left" }} p="md">
         Hello, Staff Name
       </Title>
@@ -438,8 +480,8 @@ useEffect(() => {
               type="stacked"
               orientation="vertical"
               series={[
-                { name: "Yes", color: "var(--chart-dark-color)" },
-                { name: "No", color: "var(--chart-light-color)" },
+                { name: "Reserved", color: "var(--chart-dark-color)" },
+                { name: "Avaliable", color: "var(--chart-light-color)" },
               ]}
             />
           </Flex>
