@@ -3,10 +3,11 @@ import { Group, Button, Autocomplete } from "@mantine/core";
 import StaffOrderTable from "./StaffOrderTable";
 import { useAuth } from "../../AuthContext";
 import { IconSearch, IconArrowsDownUp } from "@tabler/icons-react";
-import Order from "../Order/OrderClass";
-import Filter from "../Order/Filters";
-import Sorter from "../Order/Sorters";
+import Order from "../OrderTracking/OrderClass";
+import Filter from "../OrderTracking/Filters";
+import Sorter from "../OrderTracking/Sorters";
 import "../../styles/OrderManagement.css";
+import SearchBar from "../UserDirectory/Searchbar";
 
 interface PartnerType {
     _id: string,
@@ -34,7 +35,7 @@ const OrderManagement: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [shownOrders, setShownOrders] = useState<Order[]>([]);
     const [searchVal, setSearchVal] = useState("");
-    const { currentUser } = useAuth();
+    const { currentUser, mongoId } = useAuth();
 
     useEffect(() => {
         const getOrders = async () => {
@@ -47,6 +48,7 @@ const OrderManagement: React.FC = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
+            console.log("RES, ", res)
 
             let data = (await res.json()).map((elem: OrderResponse) => {
                 return new Order(
@@ -64,12 +66,14 @@ const OrderManagement: React.FC = () => {
                     elem.size6,
                 )
             });
-            console.log(data);
             setOrders(data);
             setShownOrders(data);
         }
+        if (currentUser && mongoId) {
+            getOrders();
+            console.log("Mongo", mongoId);
+        }
 
-        getOrders();
     }, [])
 
     const reverse = () => {
@@ -78,7 +82,7 @@ const OrderManagement: React.FC = () => {
         setShownOrders(orderCopy);
     }
 
-    const searchBar = (value: string) => {
+    const searchFunc = (value: string) => {
         setSearchVal(value);
 
         let orderCopy: Order[] = [];
@@ -105,7 +109,7 @@ const OrderManagement: React.FC = () => {
                     <Button className="mod-button" onClick={reverse}><IconArrowsDownUp></IconArrowsDownUp></Button>
                 </div>
 
-                <Autocomplete leftSection={<IconSearch></IconSearch>} data={[]} value={searchVal} onChange={searchBar}></Autocomplete>
+                <SearchBar searchVal={searchVal} searchFunc={searchFunc} classes=""></SearchBar>
             </Group>
             <StaffOrderTable orders={shownOrders}></StaffOrderTable>
         </div>

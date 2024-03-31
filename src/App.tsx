@@ -18,9 +18,10 @@ import Login from "./pages/Auth/Login";
 import PrivateRoute from "./pages/Auth/PrivateRoute";
 import Register from "./pages/Auth/Register";
 import Profile from "./pages/Profile/Profile";
-import OrderPartner from "./pages/Order/OrderPartner";
+import OrderPartner from "./pages/OrderTracking/OrderPartner";
 import OrderManagement from "./pages/OrderManagement/OrderManagement";
 import AuthWrapper from "./pages/Auth/AuthWrapper";
+import UserDirectory from "./pages/UserDirectory/UserDirectory";
 
 const DashboardAccessControl: React.FC = () => {
   const { isStaff } = useAuth();
@@ -53,7 +54,7 @@ const App: React.FC = () => {
             // TODO: make this dynamic. Staff should be able to click on a Partner and view all orders under order-info route
             <Route path="/order-info" element={<OrderPartner />} />
             <Route path="/order-manage" element={<OrderManageControl />} />
-
+            <Route path="/user-dir" element={<PrivateRoute element={<UserDirectory />} />} />
 
           </Route>
         </Routes>
