@@ -81,9 +81,9 @@ const Login: React.FC = () => {
         </Button>
       </form>
       <Divider size="xs" className="divider" />
-      <Text size="sm">
+      {/*<Text size="sm">
         No account yet? <Link to="/register">Sign Up</Link>
-      </Text>
+      </Text>*/}
     </>
   );
 };

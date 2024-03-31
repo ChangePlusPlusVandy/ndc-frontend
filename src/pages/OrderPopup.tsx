@@ -3,14 +3,13 @@ import "@mantine/dates/styles.css";
 import "./OrderPopup.css";
 import { randomId, useDisclosure, useListState } from "@mantine/hooks";
 import { Modal, Button, Title, NumberInput, Checkbox } from "@mantine/core";
-import Order from "./Order/OrderClass";
+import Order from "./OrderTracking/OrderClass";
 import { useAuth } from "../AuthContext";
 
 const OrderPopup: React.FC<{
   children: React.ReactNode;
   order: Order;
-  updateOrder: (updatedOrder: Order) => void;
-}> = ({ children, order, updateOrder }) => {
+}> = ({ children, order }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [date, setDate] = useState<Date | null>(null);
   const [value, setValue] = useState<Date | null>(null);
@@ -94,15 +93,7 @@ const OrderPopup: React.FC<{
           body: JSON.stringify(body),
         }
       );
-      updateOrder(
-        new Order(
-          order.id,
-          order.datePlaced,
-          order.dateCompleted,
-          orderStatus,
-          ...sizes
-        )
-      );
+
     } catch (error) {
       console.error("Error: " + error);
     }
@@ -113,6 +104,7 @@ const OrderPopup: React.FC<{
       event.preventDefault();
       await editQuantities();
       close();
+      window.location.reload()
     } catch (error) {
       console.error("Error: ", error);
     }

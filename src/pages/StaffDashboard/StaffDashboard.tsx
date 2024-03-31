@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./StaffDashboard.css";
-import UserThumb from "../../assets/Images/StaffImages/UserThumb.png";
-import AdminBook from "../../assets/Images/StaffImages/AdminBook.png";
-import StaffOrderPad from "./StaffOrderPad";
 import { Link } from "react-router-dom";
-import Chart from "chart.js/auto";
-import EditInventoryModal from "./EditInventoryModal";
-import { useAuth } from "../../AuthContext";
-import { defaultDateFormatter } from "@mantine/dates/lib/utils/get-formatted-date";
+//import Chart from 'chart.js/auto';
+
+import { rem, Container, Text, Title, Flex, Grid, Table } from "@mantine/core";
+import { DonutChart, BarChart } from "@mantine/charts";
+
+import "../../styles/StaffDashboard.css";
+import { IconCircleFilled, IconCircle } from "@tabler/icons-react";
+
 
 export interface InventoryResponse {
-  _id: number;
+  id: number;
   wrapped: {
-    [key: string]: number;
     newborn: number;
     size1: number;
     size2: number;
@@ -22,7 +21,6 @@ export interface InventoryResponse {
     size6: number;
   };
   unwrapped: {
-    [key: string]: number;
     newborn: number;
     size1: number;
     size2: number;
@@ -33,178 +31,298 @@ export interface InventoryResponse {
   };
 }
 
-const defaultInventoryResponse: InventoryResponse = {
-  _id: 0,
-  wrapped: {
-    newborn: 0,
-    size1: 0,
-    size2: 0,
-    size3: 0,
-    size4: 0,
-    size5: 0,
-    size6: 0,
-  },
-  unwrapped: {
-    newborn: 0,
-    size1: 0,
-    size2: 0,
-    size3: 0,
-    size4: 0,
-    size5: 0,
-    size6: 0,
-  },
+const StaffDashboard: React.FC = () => {
+
+  // const chartRef = useRef<HTMLCanvasElement>(null);
+  // const chartRef2 = useRef<HTMLCanvasElement>(null);
+
+  /*const diapperWrappingChart = async () => {
+      if(chartRef.current != null){
+          const ctx = chartRef.current.getContext('2d');
+          if (ctx) {
+              const chart = new Chart(ctx, {
+                  type: 'pie',
+                  data: Wrappeddata,
+              });
+              return () => chart.destroy();
+          }
+      }
+  }*/
+
+  // const deliveredData = {
+  //   labels: [
+  //     "January",
+  //     "February",
+  //     "March",
+  //     "April",
+  //     "May",
+  //     "June",
+  //     "July",
+  //     "August",
+  //     "September",
+  //     "October",
+  //     "November",
+  //     "December",
+  //   ],
+  //   datasets: [
+  //     {
+  //       label: "Delivered",
+  //       data: [65, 59, 80, 81, 56, 55, 40, 50, 60, 70, 80, 90],
+  //       backgroundColor: "grey",
+  //       hoverOffset: 4,
+  //     },
+  //   ],
+  // };
+
+  // const getInventory = async () => {
+  //   const token = await currentUser?.getIdToken();
+
+  //   let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/inventory`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+
+  //   const data: InventoryResponse = await res.json();
+  //   setInventory(data);
+  //   console.log(inventory);
+  // };
+
+  /*const diapperDeliveredChart = async () => {
+      if(chartRef2.current != null){
+          const ctx = chartRef2.current.getContext('2d');
+          if (ctx) {
+              const chart = new Chart(ctx, {
+                  type: 'bar',
+                  data: deliveredData,
+              });
+
+      return () => chart.destroy();
+    }
+  }
 };
 
-const StaffDashboard: React.FC = () => {
-  const chartRef = useRef<HTMLCanvasElement>(null);
-  const chartRef2 = useRef<HTMLCanvasElement>(null);
-  const [inventory, setInventory] = useState<InventoryResponse>(defaultInventoryResponse);
-  const { mongoId, currentUser } = useAuth();
-
-  const Wrappeddata = {
-    labels: ["Wrapped", "Unwrapped"],
-    datasets: [
-      {
-        label: "My First Dataset",
-        data: [300, 50],
-        backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
-        hoverOffset: 4,
-      },
-    ],
-  };
-
-  const diapperWrappingChart = async () => {
-    if (chartRef.current != null) {
-      const ctx = chartRef.current.getContext("2d");
-      if (ctx) {
-        const chart = new Chart(ctx, {
-          type: "pie",
-          data: Wrappeddata,
-        });
-        return () => chart.destroy();
-      }
-    }
-  };
-
-  const deliveredData = {
-    labels: [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ],
-    datasets: [
-      {
-        label: "Delivered",
-        data: [65, 59, 80, 81, 56, 55, 40, 50, 60, 70, 80, 90],
-        backgroundColor: "grey",
-        hoverOffset: 4,
-      },
-    ],
-  };
-
-  const getInventory = async () => {
-    const token = await currentUser?.getIdToken();
-
-    let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/inventory`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const data: InventoryResponse = await res.json();
-    setInventory(data);
-    console.log(inventory);
-  };
-
-  const diapperDeliveredChart = async () => {
-    if (chartRef2.current != null) {
-      const ctx = chartRef2.current.getContext("2d");
-      if (ctx) {
-        const chart = new Chart(ctx, {
-          type: "bar",
-          data: deliveredData,
-        });
-
-        return () => chart.destroy();
-      }
-    }
-  };
+useEffect(() => {
+  diapperWrappingChart();
+}, [Wrappeddata]);
 
   useEffect(() => {
-    diapperWrappingChart();
-  }, [Wrappeddata]);
+      diapperDeliveredChart();
+  },[deliveredData]);*/
 
-  useEffect(() => {
-    diapperDeliveredChart();
-  }, [deliveredData]);
 
-  useEffect(() => {
-    getInventory();
-  }, []);
+  const fakeDonutChart = [
+    { name: "Unreviewed", value: 400, color: "var(--chart-light-color)" },
+    { name: "Open", value: 300, color: "var(--chart-dark-color)" },
+    { name: "Approved", value: 300, color: "var(--chart-primary-color)" },
+  ];
+
+  const fakeTable = [
+    { orderNumber: 2309840293840, date: "01/01/24" },
+    { orderNumber: 2309840293841, date: "01/02/24" },
+    { orderNumber: 2309840293842, date: "01/03/24" },
+    { orderNumber: 2309840293843, date: "01/04/24" },
+    { orderNumber: 2309840293844, date: "01/05/24" },
+  ];
+
+  const rows = fakeTable.map((element) => (
+    <Table.Tr key={element.orderNumber}>
+      <Table.Td>{element.orderNumber}</Table.Td>
+      <Table.Td ta="right">{element.date}</Table.Td>
+    </Table.Tr>
+  ));
+
+  const fakeBarChartVertical = [
+    { month: "0", Yes: 1200, No: 200 },
+    { month: "1", Yes: 700, No: 500 },
+    { month: "2", Yes: 400, No: 1000 },
+    { month: "3", Yes: 1000, No: 200 },
+    { month: "4", Yes: 800, No: 1400 },
+    { month: "5", Yes: 750, No: 600 },
+  ];
+
+  const fakeBarChartHorizontal = [
+    { month: "Jan.", Maybe: 1200 },
+    { month: "Feb.", Maybe: 1900 },
+    { month: "Mar.", Maybe: 400 },
+    { month: "Apr.", Maybe: 1000 },
+    { month: "May", Maybe: 800 },
+    { month: "Jun.", Maybe: 750 },
+    { month: "Jul.", Maybe: 500 },
+    { month: "Aug.", Maybe: 300 },
+    { month: "Sep.", Maybe: 750 },
+    { month: "Oct.", Maybe: 400 },
+    { month: "Nov.", Maybe: 750 },
+    { month: "Dec.", Maybe: 750 },
+  ];
 
   return (
-    <div>
-      <div className="body-m gray-1">
-        <h1>Hello, Staff Name</h1>
-        <div className="flex inner-container flex-row">
-          <div className="flex flex-col m bt">
-            <Link
-              to="../profile"
-              style={{ textDecoration: "none" }}
-              className="white flex flex-col"
+    <>
+      <Title ta={{ base: "center", sm: "left" }} p="md">
+        Hello, Staff Name
+      </Title>
+      <Grid grow gutter="md" justify="center" align="stretch">
+        <Grid.Col
+          className="grid-col"
+          span={{ base: 12, sm: 6, md: 5 }}
+        >
+          <Flex
+            justify="space-between"
+            flex="1"
+            className="dashboard-box"
+            p="md"
+            direction="column"
+          >
+            <Text>Orders</Text>
+            <Flex p="lg" justify="center">
+              <DonutChart
+
+                data={fakeDonutChart}
+                withLabelsLine={false}
+                withLabels
+                tooltipDataSource="segment"
+              />
+            </Flex>
+            <Flex
+              direction={{ base: "column", xs: "row" }}
+              justify={{ base: "center", xs: "space-evenly" }}
             >
-              <img src={UserThumb} alt="User pic" className="pic-size" />
-              <h2>My Account</h2>
-            </Link>
-            <Link
-              to="/"
-              style={{ textDecoration: "none" }}
-              className="white flex flex-col"
+              <Flex justify="center" gap="md" align={"center"}>
+                <IconCircle
+                  className="unreviewed-icon"
+                  size=".75rem"
+                />
+                <Text>Unreviewed</Text>
+              </Flex>
+              <Flex justify="center" gap="md" align={"center"}>
+                <IconCircle
+                  className="open-icon"
+                  size=".75rem"
+                />
+                <Text>Open</Text>
+              </Flex>
+              <Flex justify="center" gap="md" align={"center"}>
+                <IconCircle
+                  className="approved-icon"
+                  size=".75rem"
+                />
+                <Text>Approved</Text>
+              </Flex>
+            </Flex>
+          </Flex>
+        </Grid.Col>
+        <Grid.Col className="grid-col" span={{ base: 12, sm: 2 }}>
+          <Flex
+            justify="stretch"
+            gap="md"
+            p="0"
+            flex="1"
+            direction={{ base: "column", xs: "row", sm: "column" }}
+            align="stretch"
+          >
+            <Flex
+              flex="1"
+              justify="center"
+              ta="center"
+              p="md"
+              direction="column"
+              className="dashboard-box"
             >
-              <img src={AdminBook} alt="Admin pic" className="pic-size" />
-              <h2>Admin Page</h2>
-            </Link>
-          </div>
-          <div className="flex flex-col">
-            <div className="flex flex-col pure-white">
-              <h2 className="grey-text margin-order">ORDERS</h2>
-              <div className="flex flex-row">
-                <StaffOrderPad text="Open" />
-                <StaffOrderPad text="Unreviewed" />
-                <StaffOrderPad text="Approved" />
-              </div>
-            </div>
-            <div className="flex flex-row">
-              <div className="wr-width pure-white m-r">
-                <h2 className="grey-text center-t">DIAPER WRAPPING</h2>
-                {/* <img src={PieChart} alt="pie chart" className="wr-width" /> */}
-                <canvas
-                  ref={chartRef}
-                  id="myWrappingChart"
-                  width="400"
-                  height="400"
-                ></canvas>
-              </div>
-              <div className="wr-width-2 pure-white m-r">
-                <h2 className="grey-text center-t">DIAPERS DELIVERED</h2>
-                <canvas ref={chartRef2} id="myDelivieriesChart"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+              <Text>Open</Text>
+              <Title>100</Title>
+            </Flex>
+            <Flex
+              flex="1"
+              justify="center"
+              ta="center"
+              p="md"
+              direction="column"
+              className="dashboard-box"
+            >
+              <Text>Unreviewed</Text>
+              <Title>50</Title>
+            </Flex>
+            <Flex
+              flex="1"
+              justify="center"
+              ta="center"
+              p="md"
+              direction="column"
+              className="dashboard-box"
+            >
+              <Text>Approved</Text>
+              <Title>25</Title>
+            </Flex>
+          </Flex>
+        </Grid.Col>
+        <Grid.Col
+          className="grid-col"
+          span={{ base: 12, sm: 4, md: 5 }}
+        >
+          <Flex
+            justify="flex-start"
+            gap="md"
+            flex="1"
+            className="dashboard-box"
+            p="md"
+            direction="column"
+          >
+            <Text>Order Requests</Text>
+            <Table>
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Th>Order #</Table.Th>
+                  <Table.Th ta={"right"}>Date</Table.Th>
+                </Table.Tr>
+              </Table.Thead>
+              <Table.Tbody>{rows}</Table.Tbody>
+            </Table>
+          </Flex>
+        </Grid.Col>
+        <Grid.Col className="grid-col" span={{ base: 12, sm: 6 }}>
+          <Flex
+            className="dashboard-box"
+            gap="md"
+            flex="1"
+            p="md"
+            direction="column"
+          >
+            <Text>Inventory by Size</Text>
+            <BarChart
+              h={250}
+              data={fakeBarChartVertical}
+              dataKey="month"
+              type="stacked"
+              orientation="vertical"
+              series={[
+                { name: "Yes", color: "var(--chart-dark-color)" },
+                { name: "No", color: "var(--chart-light-color)" },
+              ]}
+            />
+          </Flex>
+        </Grid.Col>
+        <Grid.Col className="grid-col" span={{ base: 12, sm: 6 }}>
+          <Flex
+            p="md"
+            gap="md"
+            className="dashboard-box"
+            flex="1"
+            direction="column"
+          >
+            <Text>Monthly Deliveries</Text>
+            <BarChart
+              h={250}
+              data={fakeBarChartHorizontal}
+              dataKey="month"
+              series={[{ name: "Maybe", color: "var(--chart-dark-color)" }]}
+              tickLine="y"
+            />
+          </Flex>
+        </Grid.Col>
+      </Grid>
+    </>
   );
 };
 

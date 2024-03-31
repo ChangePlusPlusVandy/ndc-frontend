@@ -23,7 +23,8 @@ const EditInventoryModal: React.FC<{
 
   const sizeInputs = Object.keys(inventory.unwrapped).map((size, index) => {
     let lineTotal =
-      (inventory.wrapped?.[size] ?? 0) + (inventory.unwrapped?.[size] ?? 0);
+      (inventory.wrapped?.[size as keyof typeof inventory.wrapped] ?? 0) +
+      (inventory.unwrapped?.[size as keyof typeof inventory.unwrapped] ?? 0);
     const sizeLabels = [
       "Newborn",
       "Size 1",
@@ -40,13 +41,13 @@ const EditInventoryModal: React.FC<{
           <NumberInput
             className="table-element"
             placeholder="Enter Quantity"
-            defaultValue={inventory.unwrapped[size]}
+            defaultValue={inventory.unwrapped[size as keyof typeof inventory.unwrapped]}
             onChange={(val) => handleChange(Number(val), size, false)}
           />
           <NumberInput
             className="table-element"
             placeholder="Enter Quantity"
-            defaultValue={inventory.wrapped[size]}
+            defaultValue={inventory.wrapped[size as keyof typeof inventory.wrapped]}
             onChange={(val) => handleChange(Number(val), size, true)}
           />
 
@@ -61,9 +62,9 @@ const EditInventoryModal: React.FC<{
     const newInventory = { ...inventory };
 
     if (isWrapped) {
-      newInventory.wrapped[size] = input;
+      newInventory.wrapped[size as keyof typeof newInventory.wrapped] = input;
     } else {
-      newInventory.unwrapped[size] = input;
+      newInventory.unwrapped[size as keyof typeof newInventory.unwrapped] = input;
     }
 
     console.log(newInventory);

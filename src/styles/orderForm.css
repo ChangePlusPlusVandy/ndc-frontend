@@ -1,3 +1,30 @@
 .break-word {
     overflow-wrap: anywhere;
 }
+
+.number-input {
+    border-bottom: 1.5px solid var(--input-outline-color);
+    width: 4rem;
+}
+
+.number-input input {
+    text-align:center;
+}
+
+.slider .mantine-Slider-thumb {
+    background-color: var(--primary-color);
+}
+
+.round-button {
+    border-radius: 5rem;
+}
+
+.round-outline {
+    border: 1.5px solid var(--input-outline-color);
+    border-radius: 1.5rem;
+}
+
+.mantine-ScrollArea-root {
+    margin: 1rem .25rem;
+
+}

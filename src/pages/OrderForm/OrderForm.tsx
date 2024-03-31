@@ -7,16 +7,20 @@ import {
     Modal,
     ScrollArea,
     CloseButton,
-    Text
+    Text,
+    Stepper,
+    Group,
 } from "@mantine/core";
 import OrderFormRequest from "./OrderFormRequest";
 import OrderFormDeliveryInfo from "./OrderFormDeliveryInfo";
 import OrderFormReview from "./OrderFormReview";
 import OrderFormConfirmation from "./OrderFormConfirmation";
 import { useAuth } from "../../AuthContext";
-import MakeOrderBtn from "../PartnerDashboard/MakeOrderBtn";
-import { IconSquarePlus } from "@tabler/icons-react";
-
+import {
+    IconSquarePlus,
+    IconArrowNarrowLeft,
+    IconArrowNarrowRight,
+} from "@tabler/icons-react";
 
 const initialSizes = {
     newborn: 0,
@@ -35,21 +39,38 @@ const initialDeliveryInfo = {
 };
 
 type OrderFormProps = {
-    opened: boolean,
-    open: any,
-    close: any,
-    isDashboardButton: boolean
+    opened: boolean;
+    open: any;
+    close: any;
+    isDashboardButton: boolean;
 };
 
-const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardButton }: OrderFormProps) => {
+const OrderForm: React.FC<OrderFormProps> = ({
+    opened,
+    open,
+    close,
+    isDashboardButton,
+}: OrderFormProps) => {
     const [sizes, setSizes] = useState(initialSizes);
-    const [activePage, setActivePage] = useState<string | null>(
-        "request-diapers"
-    );
+
+    const [active, setActive] = useState(1);
+    const [highestStepVisited, setHighestStepVisited] = useState(active);
+
+    const handleStepChange = (nextStep: number) => {
+        const isOutOfBounds = nextStep > 3 || nextStep < 0;
+
+        if (isOutOfBounds) {
+            return;
+        }
+
+        setActive(nextStep);
+        setHighestStepVisited((hSC) => Math.max(hSC, nextStep));
+    };
+
     const [deliveryInfo, setDeliveryInfo] = useState(initialDeliveryInfo);
 
     const { mongoId, currentUser } = useAuth();
-    //TODO: 
+    //TODO:
     //set a requirement that at least 1 diaper must be ordered
     // set up validation for the delivery info dates - force user to write something for the required parts
 
@@ -58,12 +79,11 @@ const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardB
         setDeliveryInfo({ ...initialDeliveryInfo });
     };
 
-
-
     const handleOpen = () => {
         clearForm();
         open();
-        setActivePage("request-diapers");
+        setActive(0);
+        setHighestStepVisited(0);
     };
 
     const handleClose = () => {
@@ -79,7 +99,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardB
     };
 
     const handleSubmit = async () => {
-        setActivePage("confirmation");
+        handleStepChange(active + 1);
         const token = await currentUser?.getIdToken();
         const response = await fetch(
             `${import.meta.env.VITE_BACKEND_URL}/order`,
@@ -107,98 +127,140 @@ const OrderForm: React.FC<OrderFormProps> = ({ opened, open, close, isDashboardB
         );
     };
 
+    // Allow the user to freely go back and forth between visited steps.
+    const shouldAllowSelectStep = (step: number) =>
+        highestStepVisited >= step && active !== step && highestStepVisited < 3;
+
     return (
         <>
-            <Modal
+        <Modal
                 size="xl"
                 opened={opened}
-
                 onClose={handleClose}
                 overlayProps={{
+                
                     backgroundOpacity: 0.55,
                     blur: 3,
                 }}
                 withCloseButton={false}
+                bg="var(--light-color)"
+                radius="lg"
                 scrollAreaComponent={ScrollArea.Autosize}
             >
-                <CloseButton onClick={handleClose} />
-                {!(activePage == "confirmation") ? (
-                    <>
-                        <Tabs value={activePage} onChange={setActivePage}>
-                            <Container m="md">
-                                <Tabs.List grow justify="center">
-                                    <Tabs.Tab value="request-diapers">
-                                        Request Diapers
-                                    </Tabs.Tab>
-                                    <Tabs.Tab value="delivery-info">
-                                        Delivery Information
-                                    </Tabs.Tab>
-                                </Tabs.List>
-                            </Container>
-                            <Tabs.Panel value="request-diapers">
-                                <OrderFormRequest
-                                    sizes={sizes}
-                                    setSizes={setSizes}
-                                />
-                                <Flex
-                                    gap="md"
-                                    justify="flex-end"
-                                    direction="row"
-                                    wrap="wrap"
+                <Flex px="lg" justify="end">
+                    <CloseButton onClick={handleClose} />
+                </Flex>
+                <Flex px="xl" direction="column">
+                    <Stepper
+                        size="sm"
+                        px="lg"
+                        color="var(--primary-color)"
+                        active={active}
+                        onStepClick={setActive}
+                    >
+                        <Stepper.Step
+                            label="Request Diapers"
+                            allowStepSelect={shouldAllowSelectStep(0)}
+                        >
+                            <OrderFormRequest
+                                sizes={sizes}
+                                setSizes={setSizes}
+                            />
+                            <Flex justify="center">
+                                <Button
+                                    className="round-button"
+                                    size="sm"
+                                    rightSection={<IconArrowNarrowRight />}
+                                    color="var(--primary-color)"
+                                    onClick={() => handleStepChange(active + 1)}
                                 >
-                                    <Button
-                                        onClick={() => setActivePage("delivery-info")}
-                                        variant="filled"
-                                        color="blue"
-                                        m="lg"
-                                    >
-                                        Next
-                                    </Button>
-                                </Flex>
-                            </Tabs.Panel>
-                            <Tabs.Panel value="delivery-info">
-                                <OrderFormDeliveryInfo
-                                    deliveryInfo={deliveryInfo}
-                                    setDeliveryInfo={setDeliveryInfo}
-                                    initialDeliveryInfo={initialDeliveryInfo}
-                                />
-                                <Flex
-                                    gap="md"
-                                    justify="flex-end"
-                                    direction="row"
-                                    wrap="wrap"
+                                    Delivery Instructions
+                                </Button>
+                            </Flex>
+                        </Stepper.Step>
+                        <Stepper.Step
+                            label="Delivery Information"
+                            allowStepSelect={shouldAllowSelectStep(1)}
+                        >
+                            <OrderFormDeliveryInfo
+                                deliveryInfo={deliveryInfo}
+                                setDeliveryInfo={setDeliveryInfo}
+                                initialDeliveryInfo={initialDeliveryInfo}
+                            />
+                            <Group justify="center" mt="xl">
+                                <Button
+                                    leftSection={<IconArrowNarrowLeft />}
+                                    color="var(--primary-color)"
+                                    variant="default"
+                                    className="round-button"
+                                    onClick={() => handleStepChange(active - 1)}
                                 >
-                                    <Button
-                                        onClick={() => setActivePage("request-diapers")}
-                                        variant="outline"
-                                        color="grey"
-                                        m="lg"
-                                    >
-                                        Back
-                                    </Button>
-                                    <Button
-                                        onClick={handleSubmit}
-                                        variant="filled"
-                                        color="blue"
-                                        m="lg"
-                                    >
-                                        Submit
-                                    </Button>
-                                </Flex>
-                            </Tabs.Panel>
-                        </Tabs>
-                    </>
-                ) : (
+                                    Request Diapers
+                                </Button>
+                                <Button
+                                    rightSection={<IconArrowNarrowRight />}
+                                    color="var(--primary-color)"
+                                    className="round-button"
+                                    onClick={() => handleStepChange(active + 1)}
+                                >
+                                    Review Order
+                                </Button>
+                            </Group>
+                        </Stepper.Step>
+                        <Stepper.Step
+                            label="Review Order"
+                            allowStepSelect={shouldAllowSelectStep(2)}
+                        >
+                            <OrderFormReview
+                                sizes={sizes}
+                                deliveryInfo={deliveryInfo}
+                                numDiapers={numDiapers()}
+                            />
+                            <Group justify="center" mt="xl">
+                                <Button
+                                    leftSection={<IconArrowNarrowLeft />}
+                                    color="var(--primary-color)"
+                                    variant="default"
+                                    className="round-button"
+                                    onClick={() => handleStepChange(active - 1)}
+                                >
+                                    Delivery Instructions
+                                </Button>
+                                <Button
+                                    color="var(--primary-color)"
+                                    className="round-button"
+                                    onClick={() => handleSubmit()}
+                                >
+                                    Submit Order
+                                </Button>
+                            </Group>
+                        </Stepper.Step>
 
-                    <OrderFormConfirmation
-                        date={deliveryInfo.date}
-                        distributionPlace={deliveryInfo.distributionPlace}
-                        numDiapers={numDiapers()}
-                    />
-                )}
-
+                        <Stepper.Completed>
+                            <OrderFormConfirmation
+                                date={deliveryInfo.date}
+                                distributionPlace={
+                                    deliveryInfo.distributionPlace
+                                }
+                                numDiapers={numDiapers()}
+                                sizes={sizes}
+                            />
+                        </Stepper.Completed>
+                    </Stepper>
+                </Flex>
             </Modal>
-            {(isDashboardButton) ? <MakeOrderBtn onClick={handleOpen} /> : <Button size="lg" c="white" bg="gray" onClick={handleOpen}><Flex gap="md"><IconSquarePlus size="1.5rem" /><Text>Make Order</Text></Flex></Button>}
+            
+            <Button
+                radius="0.5rem"
+                size="md"
+                color="var(--primary-color)"
+                onClick={handleOpen}
+            >
+                <Flex gap="md">
+                    <IconSquarePlus size="1.5rem" />
+                    <Text c={"var(--light-color)"}>Make an Order</Text>
+                </Flex>
+            </Button>
         </>
     );
 };
