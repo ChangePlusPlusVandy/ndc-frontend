@@ -3,9 +3,9 @@ import { Group, Button, Autocomplete } from "@mantine/core";
 import StaffOrderTable from "./StaffOrderTable";
 import { useAuth } from "../../AuthContext";
 import { IconSearch, IconArrowsDownUp } from "@tabler/icons-react";
-import Order from "../Order/OrderClass";
-import Filter from "../Order/Filters";
-import Sorter from "../Order/Sorters";
+import Order from "../OrderTracking/OrderClass";
+import Filter from "../OrderTracking/Filters";
+import Sorter from "../OrderTracking/Sorters";
 import "../../styles/OrderManagement.css";
 
 interface PartnerType {
@@ -34,7 +34,7 @@ const OrderManagement: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const [shownOrders, setShownOrders] = useState<Order[]>([]);
     const [searchVal, setSearchVal] = useState("");
-    const { currentUser } = useAuth();
+    const { currentUser, mongoId } = useAuth();
 
     useEffect(() => {
         const getOrders = async () => {
@@ -47,6 +47,7 @@ const OrderManagement: React.FC = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
+            console.log("RES, ", res)
 
             let data = (await res.json()).map((elem: OrderResponse) => {
                 return new Order(
@@ -68,8 +69,11 @@ const OrderManagement: React.FC = () => {
             setOrders(data);
             setShownOrders(data);
         }
+        if (currentUser && mongoId) {
+            getOrders();
+            console.log("Mongo", mongoId);
+        }
 
-        getOrders();
     }, [])
 
     const reverse = () => {

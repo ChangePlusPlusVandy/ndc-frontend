@@ -15,6 +15,17 @@
     --chart-dark-color: #653661;
     --chart-primary-color: #c99bc3;
     --chart-light-color: #ead3e4;
+    --dropdown-primary-color: #f7ebf1;
+    --dropdown-border-color: #d1c2cb;
+    --dropdown-active-color: #eedee7;
+    --status-blue-color: #228be6;
+    --status-blue-color-light: #e7f5ff;
+    --status-green-color: #40c057;
+    --status-green-color-light: #ebfbee;
+    --status-orange-color: #fd7e14;
+    --status-orange-color-light: #fff4e6;
+    --status-yellow-color: #fcc419;
+    --status-yellow-color-light: #fff9db;
 }
 
 body {
