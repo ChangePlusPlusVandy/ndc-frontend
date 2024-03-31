@@ -1,0 +1,70 @@
+.modal {
+    padding: 16px 40px 16px 40px;
+    background: var(--light-color);
+
+}
+.headings {
+    padding: 24px 0px 24px 0px;
+    gap: 8px;
+    border-bottom: 1px solid rgba(209, 194, 203, 1)
+}
+.title {
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 40px;
+    text-align: center;
+    margin: 0;
+    color: black
+}
+.subtitle {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    text-align: center;
+    color: black
+}
+.user-info-container {
+    padding: 16px 0px 16px 0px;
+}
+.user-info-text {
+    display: flex;
+    justify-content: space-between;
+    height: em(32px);
+}
+.field-name-text {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+    color: var(--secondary-color);
+}
+.field-values {
+    font-size: em(16px);
+    font-weight: 400;
+    line-height: 24px;
+    text-align: left;
+}
+.button-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 25px 0px 24px 0px;
+}
+.button {
+    border-radius: 100px;
+    padding: 10px 24px 10px 24px;
+    gap: 8px;
+    height: em(48px);
+    font-size: 16px;
+    font-weight: 400;
+    width: em(158px);
+
+}
+.button-light {
+    background-color: var(--light-color);
+    border: 1px solid var(--input-outline-color);
+    color: var(--primary-color);
+}
+.button-dark {
+    background-color: var(--primary-color);
+}
