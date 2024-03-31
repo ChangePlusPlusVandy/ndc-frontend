@@ -111,9 +111,35 @@ useEffect(() => {
       diapperDeliveredChart();
   },[deliveredData]);*/
 
+  // Define the type for each object in the array
+  type MonthlyDataItem = {
+    Month: string;
+    Data: number;
+  };
+
+  type OrderItem = {
+    OrderId: string;
+    datePlaced: string;
+  };
+
+  type CategorizedOrders = {
+    unreviewed: 0;
+    inProgress: 0;
+    filled: 0;
+  };
+
+  // Use this type in the useState hook
+  const [monthlyData, setMonthlyData] = useState<MonthlyDataItem[] | null>(
+    null
+  );
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [monthlyData, setMonthlyData] = useState<number[] | null>(null);
+  const [orders, setOrders] = useState<OrderItem[] | null>(null);
+  const [categorizedOrders, setCategorizeOrders] = useState<CategorizedOrders>({
+    unreviewed: 0,
+    inProgress: 0,
+    filled: 0,
+  });
 
   const { mongoId, currentUser } = useAuth();
 
@@ -141,7 +167,6 @@ useEffect(() => {
       }
       const data = await response.json();
       setData(data);
-      console.log(data);
     } catch (e) {
       console.error(e);
     } finally {
@@ -151,6 +176,20 @@ useEffect(() => {
 
   const processDataByMonth = (data2: any[]) => {
     const monthlyData = new Array(12).fill(0);
+    const months = [
+      "Jan.",
+      "Feb.",
+      "Mar.",
+      "Apr.",
+      "May",
+      "Jun.",
+      "Jul.",
+      "Aug.",
+      "Sep.",
+      "Oct.",
+      "Nov.",
+      "Dec.",
+    ];
 
     // For each element,
     data2.forEach((item) => {
@@ -161,15 +200,52 @@ useEffect(() => {
       monthlyData[month]++;
     });
 
-    return monthlyData;
+    // Convert monthlyData into [{ Month: months[i], Maybe: monthlyData[i] }]
+    const formattedMonthlyData = months.map((month, index) => {
+      return { Month: month, Data: monthlyData[index] };
+    });
+
+    // If you need to return or work with formattedMonthlyData, you can do so here.
+    return formattedMonthlyData;
+  };
+
+  const processOrders = (data2: any[]) => {
+    const orders = data2.map((item) => {
+      return { OrderId: item._id, datePlaced: item.datePlaced };
+    });
+
+    return orders;
+  };
+
+  const processCategorizeOrders = (data2: any[]) => {
+    const newCounts: CategorizedOrders = {
+      unreviewed: 0,
+      inProgress: 0,
+      filled: 0,
+    };
+
+    data2.forEach((item) => {
+      if (item.status === "CANCELLED") {
+        // do nothing
+      } else if (item.status === "OPEN" || item.status === "PLACED") {
+        newCounts.unreviewed++;
+      } else if (item.status === "APPROVED") {
+        newCounts.inProgress++;
+      } else if (item.status === "FILLED") {
+        newCounts.filled++;
+      }
+    });
+
+    return newCounts;
   };
 
   useEffect(() => {
-    if (data != null) {
-      const monthlyData = processDataByMonth(data);
-      setMonthlyData(monthlyData);
+    if (data) {
+      setMonthlyData(processDataByMonth(data));
+      setOrders(processOrders(data));
+      setCategorizeOrders(processCategorizeOrders(data));
     }
-  }, [data != null]);
+  }, [data]); // Just use data here
 
   useEffect(() => {
     fetchStaffData();
@@ -179,24 +255,37 @@ useEffect(() => {
     return <div>Loading...</div>;
   }
 
-  const fakeDonutChart = [
-    { name: "Unreviewed", value: 400, color: "var(--chart-light-color)" },
-    { name: "Open", value: 300, color: "var(--chart-dark-color)" },
-    { name: "Approved", value: 300, color: "var(--chart-primary-color)" },
+  // Assuming `categorizedOrders` is your state containing the real counts
+  const categorizedOrdersChartData = [
+    {
+      name: "Unreviewed",
+      value: categorizedOrders?.unreviewed ?? 0, // Use real data or fallback to 0
+      color: "var(--chart-light-color)",
+    },
+    {
+      name: "In Progress",
+      value: categorizedOrders?.inProgress ?? 0, // Use real data or fallback to 0
+      color: "var(--chart-dark-color)",
+    },
+    {
+      name: "Filled",
+      value: categorizedOrders?.filled ?? 0, // Use real data or fallback to 0
+      color: "var(--chart-primary-color)",
+    },
   ];
 
-  const fakeTable = [
-    { orderNumber: 2309840293840, date: "01/01/24" },
-    { orderNumber: 2309840293841, date: "01/02/24" },
-    { orderNumber: 2309840293842, date: "01/03/24" },
-    { orderNumber: 2309840293843, date: "01/04/24" },
-    { orderNumber: 2309840293844, date: "01/05/24" },
-  ];
+  // const fakeTable = [
+  //   { orderNumber: 2309840293840, date: "01/01/24" },
+  //   { orderNumber: 2309840293841, date: "01/02/24" },
+  //   { orderNumber: 2309840293842, date: "01/03/24" },
+  //   { orderNumber: 2309840293843, date: "01/04/24" },
+  //   { orderNumber: 2309840293844, date: "01/05/24" },
+  // ];
 
-  const rows = fakeTable.map((element) => (
-    <Table.Tr key={element.orderNumber}>
-      <Table.Td>{element.orderNumber}</Table.Td>
-      <Table.Td ta="right">{element.date}</Table.Td>
+  const rows = orders?.map((element) => (
+    <Table.Tr key={element.OrderId}>
+      <Table.Td>{element.OrderId}</Table.Td>
+      <Table.Td ta="right">{element.datePlaced}</Table.Td>
     </Table.Tr>
   ));
 
@@ -209,20 +298,20 @@ useEffect(() => {
     { month: "5", Yes: 750, No: 600 },
   ];
 
-  const fakeBarChartHorizontal = [
-    { month: "Jan.", Maybe: 1200 },
-    { month: "Feb.", Maybe: 1900 },
-    { month: "Mar.", Maybe: 400 },
-    { month: "Apr.", Maybe: 1000 },
-    { month: "May", Maybe: 800 },
-    { month: "Jun.", Maybe: 750 },
-    { month: "Jul.", Maybe: 500 },
-    { month: "Aug.", Maybe: 300 },
-    { month: "Sep.", Maybe: 750 },
-    { month: "Oct.", Maybe: 400 },
-    { month: "Nov.", Maybe: 750 },
-    { month: "Dec.", Maybe: 750 },
-  ];
+  // const fakeBarChartHorizontal = [
+  //   { month: "Jan.", Data: 1200 },
+  //   { month: "Feb.", Data: 1900 },
+  //   { month: "Mar.", Data: 400 },
+  //   { month: "Apr.", Data: 1000 },
+  //   { month: "May", Data: 800 },
+  //   { month: "Jun.", Data: 750 },
+  //   { month: "Jul.", Data: 500 },
+  //   { month: "Aug.", Data: 300 },
+  //   { month: "Sep.", Data: 750 },
+  //   { month: "Oct.", Data: 400 },
+  //   { month: "Nov.", Data: 750 },
+  //   { month: "Dec.", Data: 750 },
+  // ];
 
   return (
     <>
@@ -241,7 +330,7 @@ useEffect(() => {
             <Text>Orders</Text>
             <Flex p="lg" justify="center">
               <DonutChart
-                data={fakeDonutChart}
+                data={categorizedOrdersChartData}
                 withLabelsLine={false}
                 withLabels
                 tooltipDataSource="segment"
@@ -257,11 +346,11 @@ useEffect(() => {
               </Flex>
               <Flex justify="center" gap="md" align={"center"}>
                 <IconCircle className="open-icon" size=".75rem" />
-                <Text>Open</Text>
+                <Text>In Progress</Text>
               </Flex>
               <Flex justify="center" gap="md" align={"center"}>
                 <IconCircle className="approved-icon" size=".75rem" />
-                <Text>Approved</Text>
+                <Text>Filled</Text>
               </Flex>
             </Flex>
           </Flex>
@@ -283,19 +372,8 @@ useEffect(() => {
               direction="column"
               className="dashboard-box"
             >
-              <Text>Open</Text>
-              <Title>100</Title>
-            </Flex>
-            <Flex
-              flex="1"
-              justify="center"
-              ta="center"
-              p="md"
-              direction="column"
-              className="dashboard-box"
-            >
               <Text>Unreviewed</Text>
-              <Title>50</Title>
+              <Title>{categorizedOrders?.unreviewed}</Title>
             </Flex>
             <Flex
               flex="1"
@@ -305,8 +383,19 @@ useEffect(() => {
               direction="column"
               className="dashboard-box"
             >
-              <Text>Approved</Text>
-              <Title>25</Title>
+              <Text>In Progress</Text>
+              <Title>{categorizedOrders?.inProgress}</Title>
+            </Flex>
+            <Flex
+              flex="1"
+              justify="center"
+              ta="center"
+              p="md"
+              direction="column"
+              className="dashboard-box"
+            >
+              <Text>Filled</Text>
+              <Title>{categorizedOrders?.filled}</Title>
             </Flex>
           </Flex>
         </Grid.Col>
@@ -320,15 +409,17 @@ useEffect(() => {
             direction="column"
           >
             <Text>Order Requests</Text>
-            <Table>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>Order #</Table.Th>
-                  <Table.Th ta={"right"}>Date</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>{rows}</Table.Tbody>
-            </Table>
+            <Table.ScrollContainer minWidth={100} style={{ maxHeight: "40vh" }}>
+              <Table>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Order #</Table.Th>
+                    <Table.Th ta={"right"}>Date</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>{rows}</Table.Tbody>
+              </Table>
+            </Table.ScrollContainer>
           </Flex>
         </Grid.Col>
         <Grid.Col className="grid-col" span={{ base: 12, sm: 6 }}>
@@ -364,9 +455,9 @@ useEffect(() => {
             <Text>Monthly Deliveries</Text>
             <BarChart
               h={250}
-              data={fakeBarChartHorizontal}
-              dataKey="month"
-              series={[{ name: "Maybe", color: "var(--chart-dark-color)" }]}
+              data={monthlyData ?? []}
+              dataKey="Month"
+              series={[{ name: "Data", color: "var(--chart-dark-color)" }]}
               tickLine="y"
             />
           </Flex>
