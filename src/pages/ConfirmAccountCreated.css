@@ -60,11 +60,6 @@
     width: em(158px);
 
 }
-.button-light {
-    background-color: var(--light-color);
-    border: 1px solid var(--input-outline-color);
-    color: var(--primary-color);
-}
 .button-dark {
     background-color: var(--primary-color);
 }

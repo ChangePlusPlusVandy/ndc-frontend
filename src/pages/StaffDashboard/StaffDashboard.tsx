@@ -8,6 +8,8 @@ import { DonutChart, BarChart } from "@mantine/charts";
 import "../../styles/StaffDashboard.css";
 import { IconCircleFilled, IconCircle } from "@tabler/icons-react";
 
+import ConfirmAccountCreated from "../ConfirmAccountCreated";
+
 
 export interface InventoryResponse {
   id: number;
@@ -111,7 +113,7 @@ useEffect(() => {
   useEffect(() => {
       diapperDeliveredChart();
   },[deliveredData]);*/
-
+  const [isOpen, setIsOpen] = useState(false);
 
   const fakeDonutChart = [
     { name: "Unreviewed", value: 400, color: "var(--chart-light-color)" },
@@ -322,6 +324,8 @@ useEffect(() => {
           </Flex>
         </Grid.Col>
       </Grid>
+      <ConfirmAccountCreated isOpen={isOpen} setIsOpen={setIsOpen} newUser={{fullName:"HFGJ", userType:"Partner", email:"DFGHJ@gmail.com"}} />
+      <button onClick={() => setIsOpen(true)}/>
     </>
   );
 };
