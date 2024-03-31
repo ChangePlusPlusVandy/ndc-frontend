@@ -46,7 +46,6 @@ const ConfirmAccountCreated: React.FC<ConfirmAccountCreatedProps> = ({
   const handleReturnToDashboard = () => {
     navigate("/");
     setIsOpen(false);
-    console.log("success");
     close();
   };
 
