@@ -39,13 +39,15 @@ body {
 }
 
 .mantine-TextInput-input {
-    outline: 2px solid var(--input-outline-color);
+    outline: 2px solid var(--button-outline-color);
     outline-offset: -2px;
 }
 
-.mantine-TextInput-input:focus {
-    outline: 2px solid var(--highlight-color);
-}
+
+
+
+
+
 
 .mantine-Checkbox-icon {
     margin: auto;
@@ -114,6 +116,7 @@ header {
 .mantine-Checkbox-inner{
   order: var(--_checkbox-inner-order, 0);
 }
+
 
 
 /*.container {

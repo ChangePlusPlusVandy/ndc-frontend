@@ -24,7 +24,7 @@ import AuthWrapper from "./pages/Auth/AuthWrapper";
 
 const DashboardAccessControl: React.FC = () => {
   const { isStaff } = useAuth();
-  return isStaff ? <StaffDashboard /> : <PartnerDashboard />;
+  return isStaff ? <StaffDashboard /> : <StaffDashboard /> ;
 }
 
 const RegisterAccessControl: React.FC = () => {

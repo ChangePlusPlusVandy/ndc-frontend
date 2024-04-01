@@ -17,9 +17,11 @@ import {
   Group,
   Stack,
   NumberInput,
+  Modal,
 } from "@mantine/core";
 import FormError from "./FormError";
-
+import { IconCircleDashed, IconCircleFilled } from "@tabler/icons-react";
+import "../../styles/Register.css";
 interface FormValues {
   firstName: string;
   lastName: string;
@@ -50,8 +52,31 @@ const Register: React.FC = () => {
   const { registerUser, currentUser } = useAuth();
   const navigate = useNavigate();
 
+  // modal states
+  const [openManageStaffModal, setOpenManageStaffModal] = useState(false);
   //
   const [showPartnerFields, setShowPartnerFields] = useState(false);
+
+  const handlePartnerClick = () => {
+    if (!staffChecked) {
+      setPartnerChecked(!partnerChecked);
+      setShowPartnerFields(!partnerChecked);
+    } else {
+      setStaffChecked(false);
+      setPartnerChecked(!partnerChecked);
+      setShowPartnerFields(!partnerChecked);
+    }
+  };
+
+  const handleStaffClick = () => {
+    if (!partnerChecked) {
+      setStaffChecked(!staffChecked);
+    } else {
+      setPartnerChecked(false);
+      setShowPartnerFields(false);
+      setStaffChecked(!staffChecked);
+    }
+  };
 
   // useEffect(() => {
   //   if (currentUser) {
@@ -89,9 +114,294 @@ const Register: React.FC = () => {
 
   return (
     <>
-      {/* Make max-width a certain size and put in middle*/}
-      <Container>
-        <Title order={1}>Register</Title>
+      <Button onClick={() => setOpenManageStaffModal(true)}>
+        <Text>Open modal</Text>
+      </Button>
+      <Modal.Root
+        opened={openManageStaffModal}
+        onClose={() => setOpenManageStaffModal(false)}
+        size="70%"
+        style={{ alignItems: "center" }}
+      >
+        <Modal.Overlay />
+        <Modal.Content>
+          <Modal.Header
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Modal.Title
+              style={{
+                fontSize: "20px",
+                fontWeight: "bold",
+                textAlign: "center",
+                width: "100%",
+              }}
+            >
+              Create User
+            </Modal.Title>
+            <Modal.CloseButton />
+          </Modal.Header>
+          <Modal.Body>
+            <Container mt="1rem" className="dashboard-box">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Text className="header-size">User Type</Text>
+                <Divider my="sm" />
+
+                <Group mt="1rem" className="auth-input" align="center">
+                  <Group gap={7} align="center">
+                    <Button
+                      onClick={handlePartnerClick}
+                      style={{
+                        borderColor: partnerChecked
+                          ? "var(--primary-color)"
+                          : "var(--button-outline-color)",
+                        backgroundColor: "transparent",
+                      }}
+
+                      // variant={partnerChecked ? "filled" : "light"}
+                      // color={partnerChecked ? "violet" : "gray"}
+                    >
+                      {partnerChecked ? (
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{
+                            position: "absolute",
+                            left: "8px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                          }}
+                          onClick={handlePartnerClick}
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="7"
+                            fill="var(--primary-color)"
+                            stroke="var(--primary-color)"
+                            strokeWidth="2"
+                          />
+                        </svg>
+                      ) : (
+                        <IconCircleDashed
+                          size={16}
+                          color="var(--button-outline-color)"
+                          style={{
+                            position: "absolute",
+                            left: "8px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                          }}
+                          onClick={handlePartnerClick}
+                        />
+                      )}
+                      <Text style={{ marginLeft: "32px", fontWeight: 700 }}>
+                        Partner
+                      </Text>
+                    </Button>
+                    <Button
+                      onClick={handleStaffClick}
+                      style={{
+                        borderColor: staffChecked
+                          ? "var(--primary-color)"
+                          : "var(--button-outline-color)",
+                        backgroundColor: "transparent",
+                      }}
+                      // variant={staffChecked ? "filled" : "light"}
+                      // color={staffChecked ? "violet" : "gray"}
+                    >
+                      {staffChecked ? (
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{
+                            position: "absolute",
+                            left: "8px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                          }}
+                          onClick={handleStaffClick}
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="7"
+                            fill="var(--primary-color)"
+                            stroke="var(--primary-color)"
+                            strokeWidth="2"
+                          />
+                        </svg>
+                      ) : (
+                        <IconCircleDashed
+                          size={16}
+                          color="var(--button-outline-color)"
+                          style={{
+                            position: "absolute",
+                            left: "8px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                          }}
+                          onClick={handleStaffClick}
+                        />
+                      )}
+                      <Text style={{ marginLeft: "32px", fontWeight: 700 }}>
+                        Staff
+                      </Text>
+                    </Button>
+                    {showPartnerFields && (
+                      <>
+                        <NumberInput
+                          w="10rem"
+                          // className="auth-input"
+                          clampBehavior="strict"
+                          max={300}
+                          placeholder="ex. 300"
+                          allowDecimal={false}
+                          allowNegative={false}
+                          decimalSeparator=","
+                          onChange={(value) => {
+                            register("maxDiapers").onChange({
+                              target: {
+                                value: value,
+                                type: "number",
+                              },
+                            });
+                          }}
+                          error={errors.maxDiapers && errors.maxDiapers.message}
+                        />
+                        <Text ml="0.7rem">Maximum Diapers / Month</Text>
+                      </>
+                    )}
+                    {/* <Checkbox
+                      labelPosition="right"
+                      style={{ 
+                        borderRadius: '9999px',
+                        order: "var(--_checkbox-inner-order, 0)"
+                      }}
+                      radius="xs"
+                      checked={partnerChecked}
+                      color="var(--primary-color)"
+                      onChange={(event) => {
+                        if (!staffChecked) {
+                          setPartnerChecked(event.currentTarget.checked);
+                          setShowPartnerFields(event.currentTarget.checked);
+                        } else {
+                          setStaffChecked(false);
+                          setPartnerChecked(event.currentTarget.checked);
+                          setShowPartnerFields(event.currentTarget.checked);
+                        }
+                      }}
+                    
+                    />
+
+                    <Text>Partner</Text>
+                  </Group>
+                  <Group gap={7} align="center">
+                    <Checkbox
+                      labelPosition="right"
+                      style={{ order: "var(--_checkbox-inner-order, 0)" }}
+                      radius="xs"
+                      checked={staffChecked}
+                      color="var(--primary-color)"
+                      onChange={(event) => {
+                        if (!partnerChecked) {
+                          setStaffChecked(event.currentTarget.checked);
+                        } else {
+                          setPartnerChecked(false);
+                          setShowPartnerFields(false);
+                          setStaffChecked(event.currentTarget.checked);
+                        }
+                      }}
+                    /> 
+                    <Text>Staff</Text>*/}
+                  </Group>
+                </Group>
+
+                <Text className="header-size" mt="2rem">
+                  Personal Information
+                </Text>
+                <Divider my="sm" />
+                <Group grow justify="space-between">
+                  <TextInput
+                    label="First Name"
+                    className="auth-input"
+                    {...register("firstName")}
+                    error={errors.firstName != null && errors.firstName.message}
+                  />
+                  <TextInput
+                    label="Last Name"
+                    className="auth-input"
+                    {...register("lastName")}
+                    error={errors.lastName != null && errors.lastName.message}
+                  />
+                </Group>
+
+                <TextInput
+                  label="Email Address"
+                  className="auth-input"
+                  {...register("email")}
+                  error={errors.email != null && errors.email.message}
+                />
+                <Text className="header-size" mt="2rem">
+                  Login
+                </Text>
+                <Divider my="sm" />
+                <Group grow justify="space-between">
+                  <PasswordInput
+                    className="auth-input"
+                    label="Password"
+                    
+                    {...register("password")}
+                    error={errors.password != null && errors.password.message}
+                  />
+                  <PasswordInput
+                    className="auth-input"
+                    label="Confirm Password"
+                    {...register("confirmPassword")}
+                    error={
+                      errors.confirmPassword != null &&
+                      errors.confirmPassword.message
+                    }
+                  />
+                </Group>
+
+                {error && <FormError>{error}</FormError>}
+              </form>
+            </Container>
+            <Group style={{ justifyContent: "center" }}>
+              <Button
+                radius="xl"
+                disabled={isSubmitting}
+                type="submit"
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  width: "10rem",
+                  // width: "calc(100% - 20px)", // Adjust according to your desired margin width
+                  // marginLeft: "10px", // Left margin
+                  // marginRight: "10px", // Right margin
+                  marginTop: "10px",
+                }}
+              >
+                {isSubmitting ? "Submitting" : "Create User"}
+              </Button>
+            </Group>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal.Root>
+      {/* <Stack m={40}>
+        <Title c="black" ta={{base: "center", sm: "left"}} order={1}> Create User</Title>
+      </Stack> */}
+
+      {/* Commented */}
+      {/* <Container mt="lg" className="dashboard-box">
         <form onSubmit={handleSubmit(onSubmit)}>
           <Group grow justify="space-between">
             <TextInput
@@ -198,15 +508,18 @@ const Register: React.FC = () => {
           )}
 
           {error && <FormError>{error}</FormError>}
-          <Button fullWidth disabled={isSubmitting} type="submit">
-            {isSubmitting ? "Submitting" : "Register"}
-          </Button>
         </form>
         <Divider size="xs" className="divider" />
-        {/* <Text size="sm">
-          Already have an account? <Link to="/login">Login</Link>
-        </Text> */}
       </Container>
+      <Button
+        fullWidth
+        radius="xl"
+        disabled={isSubmitting}
+        type="submit"
+        style={{ backgroundColor: "#804d7a" }}
+      >
+        {isSubmitting ? "Submitting" : "Create User"}
+      </Button> */}
     </>
   );
 };

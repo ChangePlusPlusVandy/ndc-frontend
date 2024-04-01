@@ -9,6 +9,7 @@ import { useAuth } from '../../AuthContext';
 
 export default function DashboardLayout() {
     const { isStaff } = useAuth();
+    // console.log("Hi: " + isStaff);
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(false);
 
@@ -50,7 +51,8 @@ export default function DashboardLayout() {
                                 <IconSettings size={20} />
                                 <Text>Orders</Text>
                             </button>
-                        </Link>}
+                        </Link>
+                    }
 
                     <Link to="/profile">
                         <button className='nav-button'>
@@ -58,13 +60,17 @@ export default function DashboardLayout() {
                             <Text>Profile</Text>
                         </button>
                     </Link>
-                    <Link to="/register">
-                        <button className='nav-button'>
-                            <IconNewSection size={20} />
-                            <Text>Register</Text>
-                        </button>
-                        
-                    </Link>
+
+                    {/* {isStaff &&  */}
+                        <Link to="/register">
+                            <button className='nav-button'>
+                                <IconNewSection size={20} />
+                                <Text>Register</Text>
+                            </button>
+                        </Link>
+                    {/* } */}
+                    
+                    
 
                 </Stack>
             </AppShell.Navbar>

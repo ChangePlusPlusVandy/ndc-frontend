@@ -1,0 +1,86 @@
+:root {
+    --button-outline-color: #ced4da; 
+}
+
+.submit-button {
+    background-color: var(--primary-color);
+    border-radius: .5rem;
+}
+
+.checkbox {
+    background-color: var(--primary-color);
+}
+
+.text {
+    font-weight: "bold";
+}
+
+.mantine-PasswordInput-input {
+    outline: 2px solid var(--button-outline-color);
+    outline-offset: -2px;
+    /* outline: var(--button-outline-color); */
+}
+
+.mantine-PasswordInput-input:focus {
+    --_input-bd-focus: var(--primary-color);
+    outline: 2px solid var(--primary-color);
+}
+
+.mantine-PasswordInput-label {
+    font-weight: bold;
+}
+
+.mantine-Text-root {
+    font-size: var(--input-label-size, var(--mantine-font-size-sm));
+    font-weight: bold;
+}
+
+/* .mantine-NumberInput-label {
+    font-weight: bold;
+
+}*/
+
+/* .mantine-NumberInput-input {
+    --_input-placeholder-color: var(--input-outline-color);
+}  */
+
+.dashboard-box {
+    background-color: white;
+    border-radius: .5rem;
+}
+
+.mantine-Modal-title {
+    font-weight: bold;
+    font-size: 700;
+    justify-content: center;
+}
+
+.mantine-Modal-body {
+    padding-bottom: var(--mantine-spacing-md);
+}
+
+/* .mantine-NumberInput-input {
+    outline: 2px solid var(--input-outline-color);
+    outline-offset: -2px;
+}*/
+
+.mantine-NumberInput-control {
+    outline: var(--input-outline-color);
+
+} 
+
+.mantine-Button-root {
+    margin-right: 10px;
+}
+
+.header-size {
+    font-size: 16px;
+}
+
+/* .mantine-TextInput-input {
+    outline: var(--button-outline-color);
+}
+
+.mantine-TextInput-input:focus {
+    outline: var(--button-outline-color);
+} */

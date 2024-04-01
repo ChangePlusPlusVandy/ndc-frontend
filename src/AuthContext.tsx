@@ -62,6 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           if (!data.error) {
             setMongoId(data.data._id);
             setIsStaff(data.isStaff);
+            // setIsStaff(true);
 
             window.sessionStorage.setItem("mongoId", data.data._id);
           }
