@@ -14,12 +14,12 @@ const OrderFormDeliveryInfo: React.FC<DeliveryProps> = ({
     initialDeliveryInfo,
 }: DeliveryProps) => {
     const [distributionPlace, setDistributionPlace] = useState<string | number>(
-        initialDeliveryInfo.distributionPlace
+        deliveryInfo.distributionPlace
     );
-    const [date, setDate] = useState<Date | null>(initialDeliveryInfo.date);
+    const [date, setDate] = useState<Date | null>(deliveryInfo.date);
     const [additionalInstructions, setAdditionalInstructions] = useState<
         string | number
-    >(initialDeliveryInfo.additionalInstructions);
+    >(deliveryInfo.additionalInstructions);
 
     const updateDeliveryInfo = (field: string, value: any) => {
         setDeliveryInfo((prevDeliveryInfo: any) => ({
@@ -47,20 +47,10 @@ const OrderFormDeliveryInfo: React.FC<DeliveryProps> = ({
     return (
         <>
             <Container bg="white">
-                <Title ta="center" m="lg">
-                    Delivery Instructions
-                </Title>
-
                 <Container m="lg">
-                    <Text size="sm">
-                        Distribution Place
-                        <Text component="span" c="red">
-                            {" "}
-                            *
-                        </Text>
-                    </Text>
-
                     <TextInput
+                        required
+                        label="Distribution Place"
                         placeholder="Name of Distribution Place"
                         value={distributionPlace}
                         onChange={(e: any) =>
@@ -82,22 +72,17 @@ const OrderFormDeliveryInfo: React.FC<DeliveryProps> = ({
                     />
                 </Container>
                 <Container m="lg">
-                    <Text size="sm">
-                        Date
-                        <Text component="span" c="red">
-                            {" "}
-                            *
-                        </Text>
-                    </Text>
                     <DateInput
+                        required
+                        label="Date"
                         value={date}
                         onChange={handleDate}
-                        placeholder="Date input"
+                        placeholder={"January 1, 2024"}
                     />
                 </Container>
                 <Container m="lg">
-                    <Text size="sm">Additional Instructions</Text>
                     <Textarea
+                        label="Additional Instructions"
                         value={additionalInstructions}
                         autosize
                         minRows={4}

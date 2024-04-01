@@ -18,19 +18,22 @@ import Login from "./pages/Auth/Login";
 import PrivateRoute from "./pages/Auth/PrivateRoute";
 import Register from "./pages/Auth/Register";
 import Profile from "./pages/Profile/Profile";
-import OrderPartner from "./pages/Order/OrderPartner";
+import OrderPartner from "./pages/OrderTracking/OrderPartner";
 import OrderManagement from "./pages/OrderManagement/OrderManagement";
 import AuthWrapper from "./pages/Auth/AuthWrapper";
+import UserDirectory from "./pages/UserDirectory/UserDirectory";
 
 const DashboardAccessControl: React.FC = () => {
   const { isStaff } = useAuth();
   return isStaff ? <StaffDashboard /> : <StaffDashboard /> ;
 }
 
-const RegisterAccessControl: React.FC = () => {
+const OrderManageControl: React.FC = () => {
   const { isStaff } = useAuth();
-  return isStaff ? <Register /> : <PartnerDashboard />;
+  return isStaff && <OrderManagement />;
 }
+
+
 
 const App: React.FC = () => {
   return (
@@ -38,18 +41,21 @@ const App: React.FC = () => {
       <RouterProvider>
         <Routes>
           <Route index path="/login" element={AuthWrapper(<Login />)} />
-          {/*<Route path="/register" element={AuthWrapper(<Register/>)} />*/}
           <Route path="/forgot-password" element={AuthWrapper(<ForgotPassword />)} />
 
-          <Route path="/" element={<DashboardLayout />}>
-            <Route index element={<PrivateRoute element={<DashboardAccessControl />} />} />
+          <Route path="/" element={<PrivateRoute element={<DashboardLayout />} />}>
+
+            <Route index element={<DashboardAccessControl />} />
             <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
-            <Route path="/dashboard" element={<StaffDashboard />} />
 
             <Route path="/register" element={<Register />} />
+
+
+            // TODO: make this dynamic. Staff should be able to click on a Partner and view all orders under order-info route
             <Route path="/order-info" element={<OrderPartner />} />
-            <Route path="/order-manage" element={<OrderManagement />} />
-            
+            <Route path="/order-manage" element={<OrderManageControl />} />
+            <Route path="/user-dir" element={<PrivateRoute element={<UserDirectory />} />} />
+
           </Route>
         </Routes>
       </RouterProvider>
