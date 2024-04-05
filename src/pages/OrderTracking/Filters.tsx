@@ -1,8 +1,23 @@
-import { Menu, Button, Image, rem, Modal, MultiSelect } from "@mantine/core";
+import {
+    Menu,
+    Button,
+    Group,
+    Image,
+    rem,
+    Modal,
+    MultiSelect,
+    Flex,
+    Popover,
+    Text,
+    Badge,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
     IconChevronDown,
     IconAdjustmentsHorizontal,
+    IconCircleDotFilled,
+    IconCircle,
+    IconX,
 } from "@tabler/icons-react";
 import { useState } from "react";
 import Order from "./OrderClass";
@@ -18,7 +33,11 @@ const Filter: React.FC<FilterProps> = ({
     setOrders,
     classes,
 }: FilterProps) => {
-    const [targetSizes, setTargetSizes] = useState<number[]>([]);
+    const [value, setValue] = useState<string | undefined>("Newest - Oldest");
+
+    const [targetSizes, setTargetSizes] = useState<number[]>(
+        Array.from(Array(7).keys())
+    );
     const [opened, { open, close }] = useDisclosure(false);
 
     const filterMonth = () => {
@@ -44,19 +63,19 @@ const Filter: React.FC<FilterProps> = ({
         setOrders(orderCopy);
     };
 
-    const addTarget = (value: String) => {
+    const changeTarget = (value: String) => {
         const valueNum = value != "newborn" ? parseInt(value.slice(-1)) : 0;
 
         let temp: number[] = targetSizes.slice();
         if (!targetSizes.includes(valueNum)) {
             temp.push(valueNum);
-            setTargetSizes(temp);
+        } else {
+            temp.splice(temp.indexOf(valueNum), 1);
         }
+        setTargetSizes(temp);
     };
 
     const filterSize = () => {
-        close();
-
         let orderCopy: Order[] = [];
         baseOrders.forEach((elem: Order) => {
             targetSizes.forEach((target: number) => {
@@ -67,55 +86,281 @@ const Filter: React.FC<FilterProps> = ({
         setOrders(orderCopy);
     };
 
+    const selectAll = () => {
+        setTargetSizes(() => Array.from(Array(7).keys()));
+    };
+
     const reset = () => {
+        setTargetSizes(() => []);
         setOrders(() => baseOrders);
     };
 
     return (
         <>
-            <Menu offset={0}>
-                <Menu.Target>
+            <Popover width="target" offset={1} position="bottom" shadow="md">
+                <Popover.Target>
                     <Button
+                        justify="space-between"
+                        w={"11rem"}
                         className="filterButton"
-                        leftSection={<IconAdjustmentsHorizontal size="1rem"/>}
+                        leftSection={<IconAdjustmentsHorizontal size="1rem" />}
                         rightSection={<IconChevronDown size="1rem" />}
-                        size="sm"
+                        size="xs"
                     >
-                        Filters
+                        Filter by Sizes ({targetSizes.length})
                     </Button>
-                </Menu.Target>
-
-                <Menu.Dropdown>
-                    <Menu.Item onClick={filterMonth}>Filter by month</Menu.Item>
-                    <Menu.Item onClick={filterQuarter}>
-                        Filter by quarter
-                    </Menu.Item>
-                    <Menu.Item onClick={open}>Filter by sizing</Menu.Item>
-                    <Menu.Item onClick={reset}>Remove filters</Menu.Item>
-                </Menu.Dropdown>
-            </Menu>
-
-            <Modal opened={opened} onClose={close} title="Select Filter Size">
-                <MultiSelect
-                    label="Filter sizes"
-                    placeholder="Pick value"
-                    data={[
-                        "newborn",
-                        "size 1",
-                        "size 2",
-                        "size 3",
-                        "size 4",
-                        "size 5",
-                        "size 6",
-                    ]}
-                    clearable
-                    onOptionSubmit={addTarget}
-                />
-
-                <Button className="filterButton" onClick={filterSize}>
-                    Filter!
-                </Button>
-            </Modal>
+                </Popover.Target>
+                <Popover.Dropdown flex={1}>
+                    <Flex direction="column" gap="xs">
+                        <Flex align="center" justify="space-between">
+                            <Text>Sizes</Text>
+                            <Badge circle color="var(--primary-color)">
+                                {targetSizes.length}
+                            </Badge>
+                        </Flex>
+                        <Group gap="xs" align="center">
+                            <Button
+                                className={
+                                    "primary-button" +
+                                    (targetSizes.length == 7
+                                        ? " is-disabled"
+                                        : "")
+                                }
+                                p="0"
+                                variant="transparent"
+                                size="compact-xs"
+                                onClick={selectAll}
+                                disabled={targetSizes.length == 7}
+                            >
+                                Select All
+                            </Button>
+                            <Text fw="bold" p="0" size="xs">
+                                |
+                            </Text>
+                            <Button
+                                className={
+                                    "primary-button" +
+                                    (targetSizes.length == 0
+                                        ? " is-disabled"
+                                        : "")
+                                }
+                                p="0"
+                                variant="transparent"
+                                size="compact-xs"
+                                onClick={reset}
+                                disabled={targetSizes.length == 0}
+                            >
+                                Reset
+                            </Button>
+                        </Group>
+                        <Flex direction="column" gap="2">
+                            <Button
+                                fullWidth
+                                p="0"
+                                justify="stretch"
+                                display="block"
+                                className={
+                                    "stretch-button filter-item" +
+                                    (targetSizes.includes(0)
+                                        ? " primary-button filters-item-selected"
+                                        : "")
+                                }
+                                variant="transparent"
+                                ta="start"
+                                onClick={() => changeTarget("newborn")}
+                            >
+                                <Flex
+                                    flex="1"
+                                    gap="sm"
+                                    align="center"
+                                    justify={"stretch"}
+                                >
+                                    Newborn
+                                    <Flex flex="1" justify={"end"}>
+                                        {targetSizes.includes(0) && (
+                                            <IconX size="1rem" />
+                                        )}
+                                    </Flex>
+                                </Flex>
+                            </Button>
+                            <Button
+                                fullWidth
+                                p="0"
+                                justify="stretch"
+                                display="block"
+                                className={
+                                    "stretch-button filter-item" +
+                                    (targetSizes.includes(1)
+                                        ? " primary-button filters-item-selected"
+                                        : "")
+                                }
+                                variant="transparent"
+                                ta="start"
+                                onClick={() => changeTarget("size 1")}
+                            >
+                                <Flex
+                                    flex="1"
+                                    gap="sm"
+                                    align="center"
+                                    justify={"stretch"}
+                                >
+                                    Size 1
+                                    <Flex flex="1" justify={"end"}>
+                                        {targetSizes.includes(1) && (
+                                            <IconX size="1rem" />
+                                        )}
+                                    </Flex>
+                                </Flex>
+                            </Button>
+                            <Button
+                                fullWidth
+                                p="0"
+                                justify="stretch"
+                                display="block"
+                                className={
+                                    "stretch-button filter-item" +
+                                    (targetSizes.includes(2)
+                                        ? " primary-button filters-item-selected"
+                                        : "")
+                                }
+                                variant="transparent"
+                                ta="start"
+                                onClick={() => changeTarget("size 2")}
+                            >
+                                <Flex
+                                    flex="1"
+                                    gap="sm"
+                                    align="center"
+                                    justify={"stretch"}
+                                >
+                                    Size 2
+                                    <Flex flex="1" justify={"end"}>
+                                        {targetSizes.includes(2) && (
+                                            <IconX size="1rem" />
+                                        )}
+                                    </Flex>
+                                </Flex>
+                            </Button>
+                            <Button
+                                fullWidth
+                                p="0"
+                                justify="stretch"
+                                display="block"
+                                className={
+                                    "stretch-button filter-item" +
+                                    (targetSizes.includes(3)
+                                        ? " primary-button filters-item-selected"
+                                        : "")
+                                }
+                                variant="transparent"
+                                ta="start"
+                                onClick={() => changeTarget("size 3")}
+                            >
+                                <Flex
+                                    flex="1"
+                                    gap="sm"
+                                    align="center"
+                                    justify={"stretch"}
+                                >
+                                    Size 3
+                                    <Flex flex="1" justify={"end"}>
+                                        {targetSizes.includes(3) && (
+                                            <IconX size="1rem" />
+                                        )}
+                                    </Flex>
+                                </Flex>
+                            </Button>
+                            <Button
+                                fullWidth
+                                p="0"
+                                justify="stretch"
+                                display="block"
+                                className={
+                                    "stretch-button filter-item" +
+                                    (targetSizes.includes(4)
+                                        ? " primary-button filters-item-selected"
+                                        : "")
+                                }
+                                variant="transparent"
+                                ta="start"
+                                onClick={() => changeTarget("size 4")}
+                            >
+                                <Flex
+                                    flex="1"
+                                    gap="sm"
+                                    align="center"
+                                    justify={"stretch"}
+                                >
+                                    Size 4
+                                    <Flex flex="1" justify={"end"}>
+                                        {targetSizes.includes(4) && (
+                                            <IconX size="1rem" />
+                                        )}
+                                    </Flex>
+                                </Flex>
+                            </Button>
+                            <Button
+                                fullWidth
+                                p="0"
+                                justify="stretch"
+                                display="block"
+                                className={
+                                    "stretch-button filter-item" +
+                                    (targetSizes.includes(5)
+                                        ? " primary-button filters-item-selected"
+                                        : "")
+                                }
+                                variant="transparent"
+                                ta="start"
+                                onClick={() => changeTarget("size 5")}
+                            >
+                                <Flex
+                                    flex="1"
+                                    gap="sm"
+                                    align="center"
+                                    justify={"stretch"}
+                                >
+                                    Size 5
+                                    <Flex flex="1" justify={"end"}>
+                                        {targetSizes.includes(5) && (
+                                            <IconX size="1rem" />
+                                        )}
+                                    </Flex>
+                                </Flex>
+                            </Button>
+                            <Button
+                                fullWidth
+                                p="0"
+                                justify="stretch"
+                                display="block"
+                                className={
+                                    "stretch-button filter-item" +
+                                    (targetSizes.includes(6)
+                                        ? " primary-button filters-item-selected"
+                                        : "")
+                                }
+                                variant="transparent"
+                                ta="start"
+                                onClick={() => changeTarget("size 6")}
+                            >
+                                <Flex
+                                    flex="1"
+                                    gap="sm"
+                                    align="center"
+                                    justify={"stretch"}
+                                >
+                                    Size 6
+                                    <Flex flex="1" justify={"end"}>
+                                        {targetSizes.includes(6) && (
+                                            <IconX size="1rem" />
+                                        )}
+                                    </Flex>
+                                </Flex>
+                            </Button>
+                        </Flex>
+                    </Flex>
+                </Popover.Dropdown>
+            </Popover>
         </>
     );
 };

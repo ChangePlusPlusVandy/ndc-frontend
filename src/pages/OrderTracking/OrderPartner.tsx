@@ -73,10 +73,11 @@ const OrderPartner: React.FC = () => {
                     elem.size3,
                     elem.size4,
                     elem.size5,
-                    elem.size6,
-                    
+                    elem.size6
                 );
             });
+
+            console.log("DATA", data);
             setOrders(data);
         };
         if (currentUser && mongoId) {
@@ -86,7 +87,7 @@ const OrderPartner: React.FC = () => {
     }, []);
 
     return (
-        <Tabs variant="pills"  defaultValue={"all"}>
+        <Tabs variant="pills" defaultValue={"all"}>
             <Flex p="lg" direction="column" align="stretch" gap="lg">
                 <Title c="black" ta={{ base: "center", sm: "left" }}>
                     Order Tracking
@@ -97,24 +98,32 @@ const OrderPartner: React.FC = () => {
                     p="md"
                     direction="row"
                 >
-                    <Group>
+                    <Group align="center">
                         <TextInput
                             className="searchInput"
                             placeholder="Search"
                             leftSection={<IconSearch size="1rem" />}
                             size="xs"
                         ></TextInput>
-                        <Tabs.List >
-                            <Tabs.Tab  size="xs" value="all" className="tab">
+                        <Tabs.List>
+                            {/**<Tabs.Tab size="xs" value="all" className="tab">
                                 All
-                            </Tabs.Tab>
-                            <Tabs.Tab  size="xs" value="open" className="tab">
+    </Tabs.Tab>*/}
+                            <Tabs.Tab size="xs" value="open" className="tab">
                                 Unreviewed
                             </Tabs.Tab>
-                            <Tabs.Tab size="xs" value="approved" className="tab">
+                            <Tabs.Tab
+                                size="xs"
+                                value="approved"
+                                className="tab"
+                            >
                                 In progress
                             </Tabs.Tab>
-                            <Tabs.Tab size="xs" value="cancelled" className="tab">
+                            <Tabs.Tab
+                                size="xs"
+                                value="cancelled"
+                                className="tab"
+                            >
                                 Cancelled
                             </Tabs.Tab>
                             <Tabs.Tab size="xs" value="filled" className="tab">
@@ -122,7 +131,7 @@ const OrderPartner: React.FC = () => {
                             </Tabs.Tab>
                         </Tabs.List>
                     </Group>
-                    <Group>
+                    <Group flex="1" gap="xs" justify="end">
                         <Filter
                             baseOrders={orders}
                             setOrders={setOrders}
