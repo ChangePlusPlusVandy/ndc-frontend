@@ -1,5 +1,22 @@
-import { Menu, Button, Image, rem } from "@mantine/core";
-import { IconChevronDown, IconArrowsDownUp } from "@tabler/icons-react";
+import { useState } from "react";
+import {
+    Menu,
+    Button,
+    Image,
+    rem,
+    Popover,
+    Text,
+    Radio,
+    ComboboxItem,
+    Flex,
+    Group,
+} from "@mantine/core";
+import {
+    IconChevronDown,
+    IconArrowsDownUp,
+    IconCircleDotFilled,
+    IconCircle,
+} from "@tabler/icons-react";
 import Order from "./OrderClass";
 
 interface SorterProps {
@@ -15,6 +32,8 @@ const Sorter: React.FC<SorterProps> = ({
     whichSorters,
     classes,
 }: SorterProps) => {
+    const [value, setValue] = useState<string | undefined>("Newest - Oldest");
+
     const statusRank: Map<string, number> = new Map([
         ["CANCELLED", 0],
         ["PLACED", 1],
@@ -23,24 +42,42 @@ const Sorter: React.FC<SorterProps> = ({
     ]);
 
     const sortOrderName = () => {
+        setValue("OrderName");
         let orderCopy: Order[] = orders.slice();
         orderCopy.sort((a, b) => (a.id < b.id ? -1 : 1));
         setOrders(orderCopy);
     };
 
     const sortPartnerName = () => {
+        setValue("PartnerName");
         let orderCopy: Order[] = orders.slice();
         orderCopy.sort((a, b) => (a.partner < b.partner ? -1 : 1));
         setOrders(orderCopy);
     };
 
-    const sortDate = () => {
+    const sortDateAscending = () => {
         let orderCopy: Order[] = orders.slice();
         orderCopy.sort((a, b) => (a.datePlaced < b.datePlaced ? -1 : 1));
         setOrders(orderCopy);
     };
 
+    const sortDateDescending = () => {
+        let orderCopy: Order[] = orders.slice();
+        orderCopy.sort((a, b) => (a.datePlaced > b.datePlaced ? -1 : 1));
+        setOrders(orderCopy);
+    };
+
+    const handleChange = (e: string | undefined) => {
+        setValue(e);
+        if (e == "Newest - Oldest") {
+            sortDateDescending();
+        } else if (e == "Oldest - Newest") {
+            sortDateAscending();
+        }
+    };
+
     const sortNum = () => {
+        setValue("Num");
         let orderCopy: Order[] = orders.slice();
         orderCopy.sort((a, b) => (a.numDiapers < b.numDiapers ? -1 : 1));
         setOrders(orderCopy);
@@ -66,44 +103,85 @@ const Sorter: React.FC<SorterProps> = ({
 
     return (
         <>
-            <Menu offset={0}>
-                <Menu.Target>
+            <Popover width="target" offset={1} position="bottom" shadow="md">
+                <Popover.Target>
                     <Button
+                        justify="space-between"
+                        size="xs"
+                        w="11rem"
                         className="sortButton"
                         leftSection={<IconArrowsDownUp size="1rem" />}
                         rightSection={<IconChevronDown size="1rem" />}
-                        size="sm"
                     >
-                        Sort By
+                        {value}
                     </Button>
-                </Menu.Target>
-
-                <Menu.Dropdown>
-                    {whichSorters.includes("OrderName") && (
-                        <Menu.Item onClick={sortOrderName}>
-                            Sort by Order Name
-                        </Menu.Item>
-                    )}
-                    {whichSorters.includes("PartnerName") && (
-                        <Menu.Item onClick={sortPartnerName}>
-                            Sort by Partner Name
-                        </Menu.Item>
-                    )}
-                    {whichSorters.includes("Date") && (
-                        <Menu.Item onClick={sortDate}>Sort by date</Menu.Item>
-                    )}
-                    {whichSorters.includes("Num") && (
-                        <Menu.Item onClick={sortNum}>
-                            Sort by # of diapers
-                        </Menu.Item>
-                    )}
-                    {whichSorters.includes("Status") && (
-                        <Menu.Item onClick={sortStatus}>
-                            Sort by Status
-                        </Menu.Item>
-                    )}
-                </Menu.Dropdown>
-            </Menu>
+                </Popover.Target>
+                <Popover.Dropdown flex={1}>
+                    <Flex direction="column" gap="sm">
+                        <Text>Sorting</Text>
+                        <Flex direction="column" gap="2">
+                            <Button
+                                fullWidth
+                                p="0"
+                                justify="stretch"
+                                display="block"
+                                className={
+                                    "stretch-button filter-item" +
+                                    (value == "Newest - Oldest"
+                                        ? " primary-button filters-item-selected"
+                                        : "")
+                                }
+                                variant="transparent"
+                                ta="start"
+                                onClick={() => setValue("Newest - Oldest")}
+                            >
+                                <Flex
+                                    flex="1"
+                                    gap="sm"
+                                    align="center"
+                                    justify={"stretch"}
+                                >
+                                    {value == "Newest - Oldest" ? (
+                                        <IconCircleDotFilled size="1rem" />
+                                    ) : (
+                                        <IconCircle size="1rem" />
+                                    )}
+                                    Newest - Oldest
+                                </Flex>
+                            </Button>
+                            <Button
+                                fullWidth
+                                p="0"
+                                justify="stretch"
+                                display="block"
+                                className={
+                                    "stretch-button filter-item" +
+                                    (value == "Oldest - Newest"
+                                        ? " primary-button filters-item-selected"
+                                        : "")
+                                }
+                                variant="transparent"
+                                ta="start"
+                                onClick={() => setValue("Oldest - Newest")}
+                            >
+                                <Flex
+                                    flex="1"
+                                    gap="sm"
+                                    align="center"
+                                    justify={"stretch"}
+                                >
+                                    {value == "Oldest - Newest" ? (
+                                        <IconCircleDotFilled size="1rem" />
+                                    ) : (
+                                        <IconCircle size="1rem" />
+                                    )}
+                                    Oldest - Newest
+                                </Flex>
+                            </Button>
+                        </Flex>
+                    </Flex>
+                </Popover.Dropdown>
+            </Popover>
         </>
     );
 };

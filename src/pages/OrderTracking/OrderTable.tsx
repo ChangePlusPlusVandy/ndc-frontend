@@ -18,14 +18,14 @@ import {
 
 interface TableProps {
     orders: Order[];
-    orderType: string;
+    orderTypes: string[];
     amount: number;
     showPagination: boolean;
 }
 
 const OrderTable: React.FC<TableProps> = ({
     orders,
-    orderType,
+    orderTypes,
     amount,
     showPagination,
 }: TableProps) => {
@@ -40,11 +40,7 @@ const OrderTable: React.FC<TableProps> = ({
     let orderCut: Order[] = [];
 
     orders.forEach((elem: Order) => {
-        if (
-            orderType == "" ||
-            elem.status == orderType ||
-            (orderType == "OPEN" && elem.status == "PLACED")
-        ) {
+        if (orderTypes.includes(elem.status)) {
             if (total <= maxIndex && total >= minIndex) {
                 orderCut.push(elem);
             }
@@ -138,7 +134,19 @@ const OrderTable: React.FC<TableProps> = ({
                         </Table.Th>
                     </Table.Tr>
                 </Table.Thead>
-                <Table.Tbody>{rows}</Table.Tbody>
+                <Table.Tbody>
+                    {rows.length > 0 ? (
+                        rows
+                    ) : (
+                        <Table.Tr>
+                            <Table.Td colSpan={6}>
+                                <Text py="lg" ta={"center"}>
+                                    No orders found.
+                                </Text>
+                            </Table.Td>
+                        </Table.Tr>
+                    )}
+                </Table.Tbody>
             </Table>
             {showPagination && (
                 <Flex flex="1" p="md" justify="center">
