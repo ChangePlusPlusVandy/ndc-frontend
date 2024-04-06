@@ -156,7 +156,7 @@ const Filter: React.FC<FilterProps> = ({
                         <Flex direction="column" gap="2">
                             <Button
                                 fullWidth
-                                p="0"
+                                py="0"
                                 justify="stretch"
                                 display="block"
                                 className={
@@ -185,7 +185,7 @@ const Filter: React.FC<FilterProps> = ({
                             </Button>
                             <Button
                                 fullWidth
-                                p="0"
+                                py="0"
                                 justify="stretch"
                                 display="block"
                                 className={
@@ -214,7 +214,7 @@ const Filter: React.FC<FilterProps> = ({
                             </Button>
                             <Button
                                 fullWidth
-                                p="0"
+                                py="0"
                                 justify="stretch"
                                 display="block"
                                 className={
@@ -243,7 +243,7 @@ const Filter: React.FC<FilterProps> = ({
                             </Button>
                             <Button
                                 fullWidth
-                                p="0"
+                                py="0"
                                 justify="stretch"
                                 display="block"
                                 className={
@@ -272,7 +272,7 @@ const Filter: React.FC<FilterProps> = ({
                             </Button>
                             <Button
                                 fullWidth
-                                p="0"
+                                py="0"
                                 justify="stretch"
                                 display="block"
                                 className={
@@ -301,7 +301,7 @@ const Filter: React.FC<FilterProps> = ({
                             </Button>
                             <Button
                                 fullWidth
-                                p="0"
+                                py="0"
                                 justify="stretch"
                                 display="block"
                                 className={
@@ -330,7 +330,7 @@ const Filter: React.FC<FilterProps> = ({
                             </Button>
                             <Button
                                 fullWidth
-                                p="0"
+                                py="0"
                                 justify="stretch"
                                 display="block"
                                 className={

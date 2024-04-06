@@ -19,11 +19,12 @@
 
 .stretch-button .mantine-Button-inner {
     display: block;
-    padding-left: .5rem;
-    padding-right: .5rem;
+
 }
 
 .filter-item {
+    padding-left: .5rem;
+    padding-right: .5rem;
     color: var(--text-color);
     font-weight: 200;
     background: none;

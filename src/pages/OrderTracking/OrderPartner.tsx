@@ -15,7 +15,7 @@ import OrderTable from "./OrderTable";
 import Filter from "./Filters";
 import Sorter from "./Sorters";
 import OrderForm from "../OrderForm/OrderForm";
-import { IconSearch } from "@tabler/icons-react";
+import { IconSearch, IconX } from "@tabler/icons-react";
 
 import "../../styles/OrderTracking.css";
 import ndcLogo from "../../assets/ndc-logo.png";
@@ -40,6 +40,12 @@ interface OrderResponse {
 const OrderPartner: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
     const { mongoId, currentUser } = useAuth();
+    const [orderTypes, setOrderTypes] = useState<string[]>([
+        "OPEN",
+        "APPROVED",
+        "CANCELLED",
+        "FILLED",
+    ]);
 
     useEffect(() => {
         const getOrders = async () => {
@@ -86,115 +92,182 @@ const OrderPartner: React.FC = () => {
         }
     }, []);
 
-    return (
-        <Tabs variant="pills" defaultValue={"all"}>
-            <Flex p="lg" direction="column" align="stretch" gap="lg">
-                <Title c="black" ta={{ base: "center", sm: "left" }}>
-                    Order Tracking
-                </Title>
-                <Flex
-                    justify="space-between"
-                    className="dashboard-box"
-                    p="md"
-                    direction="row"
-                >
-                    <Group align="center">
-                        <TextInput
-                            className="searchInput"
-                            placeholder="Search"
-                            leftSection={<IconSearch size="1rem" />}
-                            size="xs"
-                        ></TextInput>
-                        <Tabs.List>
-                            {/**<Tabs.Tab size="xs" value="all" className="tab">
-                                All
-    </Tabs.Tab>*/}
-                            <Tabs.Tab size="xs" value="open" className="tab">
-                                Unreviewed
-                            </Tabs.Tab>
-                            <Tabs.Tab
-                                size="xs"
-                                value="approved"
-                                className="tab"
-                            >
-                                In progress
-                            </Tabs.Tab>
-                            <Tabs.Tab
-                                size="xs"
-                                value="cancelled"
-                                className="tab"
-                            >
-                                Cancelled
-                            </Tabs.Tab>
-                            <Tabs.Tab size="xs" value="filled" className="tab">
-                                Filled
-                            </Tabs.Tab>
-                        </Tabs.List>
-                    </Group>
-                    <Group flex="1" gap="xs" justify="end">
-                        <Filter
-                            baseOrders={orders}
-                            setOrders={setOrders}
-                            classes=""
-                        ></Filter>
-                        <Sorter
-                            orders={orders}
-                            setOrders={setOrders}
-                            whichSorters={["Date", "Num"]}
-                            classes={""}
-                        ></Sorter>
-                    </Group>
-                </Flex>
+    const changeOrderType = (value: string) => {
+        let temp: string[] = orderTypes.slice();
+        if (!orderTypes.includes(value)) {
+            temp.push(value);
+            if (value == "OPEN") {
+                temp.push("PLACED");
+            }
+        } else {
+            temp.splice(temp.indexOf(value), 1);
+            if (value == "OPEN") {
+                temp.splice(temp.indexOf("PLACED"), 1);
+            }
+        }
+        setOrderTypes(temp);
+    };
 
-                <Flex
-                    justify="space-between"
-                    className="dashboard-box"
-                    p="md"
-                    direction="column"
-                >
-                    <Tabs.Panel value="all">
-                        <OrderTable
-                            orders={orders}
-                            amount={10}
-                            showPagination={true}
-                            orderType={""}
-                        />
-                    </Tabs.Panel>
-                    <Tabs.Panel value="open">
-                        <OrderTable
-                            orders={orders}
-                            amount={10}
-                            showPagination={true}
-                            orderType={"OPEN"}
-                        ></OrderTable>
-                    </Tabs.Panel>
-                    <Tabs.Panel value="approved">
-                        <OrderTable
-                            orders={orders}
-                            amount={10}
-                            showPagination={true}
-                            orderType={"APPROVED"}
-                        ></OrderTable>
-                    </Tabs.Panel>
-                    <Tabs.Panel value="cancelled">
-                        <OrderTable
-                            orders={orders}
-                            amount={10}
-                            showPagination={true}
-                            orderType={"CANCELLED"}
-                        ></OrderTable>
-                    </Tabs.Panel>
-                    <Tabs.Panel value="filled">
-                        <OrderTable
-                            orders={orders}
-                            amount={10}
-                            showPagination={true}
-                            orderType={"FILLED"}
-                        ></OrderTable>
-                    </Tabs.Panel>
-                </Flex>
+    return (
+        <Flex p="lg" direction="column" align="stretch" gap="lg">
+            <Title c="black" ta={{ base: "center", sm: "left" }}>
+                Order Tracking
+            </Title>
+            <Flex
+                justify="space-between"
+                className="dashboard-box"
+                p="md"
+                direction="row"
+            >
+                <Group align="center">
+                    <TextInput
+                        className="searchInput"
+                        placeholder="Search"
+                        leftSection={<IconSearch size="1rem" />}
+                        size="xs"
+                    ></TextInput>
+                    <Button
+                        justify="stretch"
+                        display="block"
+                        className={
+                            "stretch-button tab" +
+                            (orderTypes.includes("OPEN")
+                                ? " primary-button filters-item-selected"
+                                : "")
+                        }
+                        variant="transparent"
+                        ta="start"
+                        size="xs"
+                        onClick={() => changeOrderType("OPEN")}
+                    >
+                        <Flex
+                            flex="1"
+                            gap="xs"
+                            align="center"
+                            justify={"stretch"}
+                        >
+                            Unreviewed
+                            {orderTypes.includes("OPEN") && (
+                                <Flex flex="1" justify={"end"}>
+                                    <IconX size="1rem" />
+                                </Flex>
+                            )}
+                        </Flex>
+                    </Button>
+                    <Button
+                        justify="stretch"
+                        display="block"
+                        className={
+                            "stretch-button tab" +
+                            (orderTypes.includes("APPROVED")
+                                ? " primary-button filters-item-selected"
+                                : "")
+                        }
+                        variant="transparent"
+                        ta="start"
+                        size="xs"
+                        onClick={() => changeOrderType("APPROVED")}
+                    >
+                        <Flex
+                            flex="1"
+                            gap="sm"
+                            align="center"
+                            justify={"stretch"}
+                        >
+                            In progress
+                            {orderTypes.includes("APPROVED") && (
+                                <Flex flex="1" justify={"end"}>
+                                    <IconX size="1rem" />
+                                </Flex>
+                            )}
+                        </Flex>
+                    </Button>
+                    <Button
+                        justify="stretch"
+                        display="block"
+                        className={
+                            "stretch-button tab" +
+                            (orderTypes.includes("CANCELLED")
+                                ? " primary-button filters-item-selected"
+                                : "")
+                        }
+                        variant="transparent"
+                        ta="start"
+                        size="xs"
+                        onClick={() => changeOrderType("CANCELLED")}
+                    >
+                        <Flex
+                            flex="1"
+                            gap="xs"
+                            align="center"
+                            justify={"stretch"}
+                        >
+                            Cancelled
+                            {orderTypes.includes("CANCELLED") && (
+                                <Flex flex="1" justify={"end"}>
+                                    <IconX size="1rem" />
+                                </Flex>
+                            )}
+                        </Flex>
+                    </Button>
+                    <Button
+                        justify="stretch"
+                        display="block"
+                        className={
+                            "stretch-button tab" +
+                            (orderTypes.includes("FILLED")
+                                ? " primary-button filters-item-selected"
+                                : "")
+                        }
+                        variant="transparent"
+                        ta="start"
+                        size="xs"
+                        onClick={() => changeOrderType("FILLED")}
+                    >
+                        <Flex
+                            flex="1"
+                            gap="xs"
+                            align="center"
+                            justify={"stretch"}
+                        >
+                            Filled
+                            {orderTypes.includes("FILLED") && (
+                                <Flex flex="1" justify={"end"}>
+                                    <IconX size="1rem" />
+                                </Flex>
+                            )}
+                        </Flex>
+                    </Button>
+                </Group>
+                <Group flex="1" gap="xs" justify="end">
+                    <Filter
+                        baseOrders={orders}
+                        setOrders={setOrders}
+                        classes=""
+                    ></Filter>
+                    <Sorter
+                        orders={orders}
+                        setOrders={setOrders}
+                        whichSorters={["Date", "Num"]}
+                        classes={""}
+                    ></Sorter>
+                </Group>
             </Flex>
-        </Tabs>
+
+            <Flex
+                justify="space-between"
+                className="dashboard-box"
+                p="md"
+                direction="column"
+            >
+                <OrderTable
+                    orders={orders}
+                    amount={10}
+                    showPagination={true}
+                    orderTypes={orderTypes}
+                />
+            </Flex>
+        </Flex>
     );
 };
 
