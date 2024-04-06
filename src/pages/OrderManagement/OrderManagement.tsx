@@ -41,7 +41,7 @@ const OrderManagement: React.FC = () => {
         const getOrders = async () => {
             const token = await currentUser?.getIdToken();
 
-            let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/order`, {
+            let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/order?getAllOrders=True`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

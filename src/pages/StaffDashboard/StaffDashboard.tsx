@@ -159,7 +159,8 @@ useEffect(() => {
   ];
 
   return (
-    <>
+
+    <div style={{ width: "100%", height: "100%", padding: "0 1.5em 1em 1.5em" }}>
       <Title ta={{ base: "center", sm: "left" }} p="md">
         Hello, Staff Name
       </Title>
@@ -322,7 +323,7 @@ useEffect(() => {
           </Flex>
         </Grid.Col>
       </Grid>
-    </>
+    </div>
   );
 };
 
