@@ -99,8 +99,7 @@ function Dashboard() {
             console.log("MONGOID", mongoId);
 
             let res = await fetch(
-                `${
-                    import.meta.env.VITE_BACKEND_URL
+                `${import.meta.env.VITE_BACKEND_URL
                 }/order?partnerId=${mongoId}`,
                 {
                     method: "GET",
@@ -136,8 +135,7 @@ function Dashboard() {
                 );
 
                 let resOrders = await fetch(
-                    `${
-                        import.meta.env.VITE_BACKEND_URL
+                    `${import.meta.env.VITE_BACKEND_URL
                     }/order?partnerId=${mongoId}`,
                     {
                         method: "GET",
@@ -196,7 +194,10 @@ function Dashboard() {
                 console.error(err);
             }
         };
-        getPartnerOrders();
+        if (mongoId && currentUser) {
+
+            getPartnerOrders();
+        }
     }, []);
 
     const handleProfile = () => {
@@ -265,9 +266,9 @@ function Dashboard() {
                             event.currentTarget.checked
                                 ? [...selectedRows, element.orderNumber]
                                 : selectedRows.filter(
-                                      (orderNumber) =>
-                                          orderNumber !== element.orderNumber
-                                  )
+                                    (orderNumber) =>
+                                        orderNumber !== element.orderNumber
+                                )
                         )
                     }
                 />
@@ -283,8 +284,8 @@ function Dashboard() {
                             element.orderStatus == "Unreviewed"
                                 ? "unreviewed-icon"
                                 : element.orderStatus == "Open"
-                                ? "open-icon"
-                                : "approved-icon"
+                                    ? "open-icon"
+                                    : "approved-icon"
                         }
                         size=".75rem"
                     />
@@ -412,7 +413,7 @@ function Dashboard() {
                                 View All
                             </Button>
                         </Flex>
-                        <OrderTable orders={orders} orderType="" amount={5} showPagination={false}/>
+                        <OrderTable orders={orders} orderTypes={[]} amount={5} showPagination={false} />
                     </Flex>
                 </Grid.Col>
             </Grid>
