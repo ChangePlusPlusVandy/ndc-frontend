@@ -194,7 +194,10 @@ function Dashboard() {
                 console.error(err);
             }
         };
-        getPartnerOrders();
+        if (mongoId && currentUser) {
+
+            getPartnerOrders();
+        }
     }, []);
 
     const handleProfile = () => {
@@ -410,7 +413,7 @@ function Dashboard() {
                                 View All
                             </Button>
                         </Flex>
-                        <OrderTable orders={orders} orderType={[]} amount={5} showPagination={false} />
+                        <OrderTable orders={orders} orderTypes={[]} amount={5} showPagination={false} />
                     </Flex>
                 </Grid.Col>
             </Grid>

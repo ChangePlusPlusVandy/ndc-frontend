@@ -40,7 +40,7 @@ const OrderTable: React.FC<TableProps> = ({
     let orderCut: Order[] = [];
 
     orders.forEach((elem: Order) => {
-        if (orderTypes.includes(elem.status)) {
+        if (orderTypes && orderTypes.includes(elem.status)) {
             if (total <= maxIndex && total >= minIndex) {
                 orderCut.push(elem);
             }
