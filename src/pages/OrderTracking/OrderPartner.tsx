@@ -57,7 +57,8 @@ const OrderPartner: React.FC = () => {
             console.log("MONGOID", mongoId);
 
             let res = await fetch(
-                `${import.meta.env.VITE_BACKEND_URL
+                `${
+                    import.meta.env.VITE_BACKEND_URL
                 }/order?partnerId=${mongoId}`,
                 {
                     method: "GET",
@@ -115,7 +116,6 @@ const OrderPartner: React.FC = () => {
             <Title c="black" ta={{ base: "center", sm: "left" }}>
                 Order Tracking
             </Title>
-            {orders.length}
             <Flex
                 justify="space-between"
                 className="dashboard-box"
@@ -123,12 +123,6 @@ const OrderPartner: React.FC = () => {
                 direction="row"
             >
                 <Group align="center">
-                    <TextInput
-                        className="searchInput"
-                        placeholder="Search"
-                        leftSection={<IconSearch size="1rem" />}
-                        size="xs"
-                    ></TextInput>
                     <Button
                         justify="stretch"
                         display="block"
