@@ -21,7 +21,7 @@ import UserDirectory from "./pages/UserDirectory/UserDirectory";
 
 const DashboardAccessControl: React.FC = () => {
   const { isStaff } = useAuth();
-  return isStaff ? <StaffDashboard /> : <StaffDashboard /> ;
+  return isStaff ? <StaffDashboard /> : <PartnerDashboard />;
 }
 
 const OrderManageControl: React.FC = () => {
