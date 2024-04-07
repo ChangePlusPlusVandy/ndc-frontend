@@ -39,9 +39,11 @@ interface OrderResponse {
 
 const OrderPartner: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
+    const [baseOrders, setBaseOrders] = useState<Order[]>([]);
     const { mongoId, currentUser } = useAuth();
     const [orderTypes, setOrderTypes] = useState<string[]>([
         "OPEN",
+        "PLACED",
         "APPROVED",
         "CANCELLED",
         "FILLED",
@@ -84,6 +86,7 @@ const OrderPartner: React.FC = () => {
 
             console.log("DATA", data);
             setOrders(data);
+            setBaseOrders(data);
         };
         if (currentUser && mongoId) {
             getOrders();
@@ -112,6 +115,7 @@ const OrderPartner: React.FC = () => {
             <Title c="black" ta={{ base: "center", sm: "left" }}>
                 Order Tracking
             </Title>
+            {orders.length}
             <Flex
                 justify="space-between"
                 className="dashboard-box"
@@ -240,7 +244,7 @@ const OrderPartner: React.FC = () => {
                 </Group>
                 <Group flex="1" gap="xs" justify="end">
                     <Filter
-                        baseOrders={orders}
+                        baseOrders={baseOrders}
                         setOrders={setOrders}
                         classes=""
                     ></Filter>

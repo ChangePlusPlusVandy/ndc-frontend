@@ -133,7 +133,7 @@ const Sorter: React.FC<SorterProps> = ({
                                 }
                                 variant="transparent"
                                 ta="start"
-                                onClick={() => setValue("Newest - Oldest")}
+                                onClick={() => handleChange("Newest - Oldest")}
                             >
                                 <Flex
                                     flex="1"
@@ -162,7 +162,7 @@ const Sorter: React.FC<SorterProps> = ({
                                 }
                                 variant="transparent"
                                 ta="start"
-                                onClick={() => setValue("Oldest - Newest")}
+                                onClick={() => handleChange("Oldest - Newest")}
                             >
                                 <Flex
                                     flex="1"

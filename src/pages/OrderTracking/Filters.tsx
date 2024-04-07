@@ -33,12 +33,9 @@ const Filter: React.FC<FilterProps> = ({
     setOrders,
     classes,
 }: FilterProps) => {
-    const [value, setValue] = useState<string | undefined>("Newest - Oldest");
-
     const [targetSizes, setTargetSizes] = useState<number[]>(
         Array.from(Array(7).keys())
     );
-    const [opened, { open, close }] = useDisclosure(false);
 
     const filterMonth = () => {
         let orderCopy: Order[] = [];
@@ -73,26 +70,37 @@ const Filter: React.FC<FilterProps> = ({
             temp.splice(temp.indexOf(valueNum), 1);
         }
         setTargetSizes(temp);
+        filterSize();
     };
 
     const filterSize = () => {
         let orderCopy: Order[] = [];
         baseOrders.forEach((elem: Order) => {
+            let flag = false;
             targetSizes.forEach((target: number) => {
-                if ((elem.diaperDist[target] || 0) > 0) orderCopy.push(elem);
+                if ((elem.diaperDist[target] || 0) != 0) {
+                    flag = true;
+                }
             }, elem);
+            if (flag) orderCopy.push(elem);
         });
-
+        baseOrders.forEach((elem: Order) => {
+            if (!orderCopy.includes(elem)) {
+                console.log(elem);
+            }
+        })
         setOrders(orderCopy);
     };
 
     const selectAll = () => {
         setTargetSizes(() => Array.from(Array(7).keys()));
+        filterSize();
     };
 
     const reset = () => {
         setTargetSizes(() => []);
-        setOrders(() => baseOrders);
+        setOrders(baseOrders);
+        filterSize();
     };
 
     return (
