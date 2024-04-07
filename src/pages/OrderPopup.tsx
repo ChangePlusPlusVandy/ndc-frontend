@@ -113,6 +113,7 @@ const OrderPopup: React.FC<{
   const sizeInputs = sizes.map((val: number, index: number) => {
     return (
       <NumberInput
+        key={index}
         label={index === 0 ? "Newborn" : "Size " + index}
         placeholder="Enter Quantity"
         defaultValue={val}

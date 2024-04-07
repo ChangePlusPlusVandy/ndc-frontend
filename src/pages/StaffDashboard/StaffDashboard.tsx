@@ -9,6 +9,7 @@ import "../../styles/StaffDashboard.css";
 import { IconCircleFilled, IconCircle } from "@tabler/icons-react";
 
 
+
 export interface InventoryResponse {
   id: number;
   wrapped: {
@@ -112,7 +113,6 @@ useEffect(() => {
       diapperDeliveredChart();
   },[deliveredData]);*/
 
-
   const fakeDonutChart = [
     { name: "Unreviewed", value: 400, color: "var(--chart-light-color)" },
     { name: "Open", value: 300, color: "var(--chart-dark-color)" },
@@ -159,7 +159,8 @@ useEffect(() => {
   ];
 
   return (
-    <>
+
+    <div style={{ width: "100%", height: "100%", padding: "0 1.5em 1em 1.5em" }}>
       <Title ta={{ base: "center", sm: "left" }} p="md">
         Hello, Staff Name
       </Title>
@@ -322,7 +323,7 @@ useEffect(() => {
           </Flex>
         </Grid.Col>
       </Grid>
-    </>
+    </div>
   );
 };
 

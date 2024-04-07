@@ -2,11 +2,7 @@ import React, { useContext, ReactNode } from "react";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import '@mantine/charts/styles.css';
-import {
-  Route,
-  Routes,
-  BrowserRouter as RouterProvider,
-} from "react-router-dom";
+import { HashRouter as Router, Route, Routes, } from 'react-router-dom';
 import { AuthProvider, useAuth } from "./AuthContext";
 import "./App.css"
 // Routes
@@ -38,8 +34,9 @@ const OrderManageControl: React.FC = () => {
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <RouterProvider>
+      <Router>
         <Routes>
+
           <Route index path="/login" element={AuthWrapper(<Login />)} />
           <Route path="/forgot-password" element={AuthWrapper(<ForgotPassword />)} />
 
@@ -58,7 +55,8 @@ const App: React.FC = () => {
 
           </Route>
         </Routes>
-      </RouterProvider>
+
+      </Router>
     </AuthProvider >
   );
 }
