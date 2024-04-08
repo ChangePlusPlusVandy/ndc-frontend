@@ -125,6 +125,9 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 }),
             }
         );
+
+        const res = await response.json();
+        console.log("RESULT", res)
     };
 
     // Allow the user to freely go back and forth between visited steps.
@@ -133,12 +136,12 @@ const OrderForm: React.FC<OrderFormProps> = ({
 
     return (
         <>
-        <Modal
+            <Modal
                 size="xl"
                 opened={opened}
                 onClose={handleClose}
                 overlayProps={{
-                
+
                     backgroundOpacity: 0.55,
                     blur: 3,
                 }}
@@ -249,7 +252,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                     </Stepper>
                 </Flex>
             </Modal>
-            
+
             <Button
                 radius="0.5rem"
                 size="md"
