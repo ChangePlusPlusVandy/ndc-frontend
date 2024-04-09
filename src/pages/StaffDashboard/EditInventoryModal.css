@@ -1,27 +1,52 @@
-.container {
-    width: 60vw;
+.modal {
+    background-color: var(--light-color);
+    padding: 2.0625em 2.4375em 2.0625em 2.4375em; /* 33px = 2.0625em, 39px = 2.4375em */
+    gap: 2em;
+    height: 48.375em;
+    width: 58.5em
 }
-.header {
-    margin-bottom: 1em;
+.table {
+    width: 53.625em;
+    height: 33.25em;
+    padding: 0px 16px 0px 16px;
+    gap: 0px;
 }
 .table-element {
-    padding: 0vw 3vw;
     text-align: center;
 }
-.bold {
-    font-weight: bold;
-}
 .submit {
-    display: flex;
-    margin: auto;
-    margin-top: 3em;
-    margin-bottom: 1em;
+    text-align: center;
+    padding: 1.666em;
 }
 .table-header {
-    padding-bottom: 1em;
-    border-bottom: 1px solid gray;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid var(--highlight-color);
 }
-.form {
-    display: flex; 
-    justify-content: center; 
+.table-header-element {
+    font-size: 14px;
+    color: var(--secondary-color)
 }
+.button {
+    border-radius: 100px;
+    gap: 8px;
+    height: 3.5em;
+    font-size: 16px;
+    font-weight: 500;
+    width: 15.56em;
+    background-color: var(--primary-color);
+}
+.edit-button {
+    &:disabled,
+    &[data-disabled] {
+      background-color: transparent;
+    }
+}
+.open-button {
+    border-radius: 10px;
+    width: 22.4em;
+    height: 40px;
+    background-color: var(--primary-color);
+
+}
+
+
