@@ -12,31 +12,142 @@ import {
 } from "@mantine/core";
 import { useAuth } from "../../AuthContext";
 import { IconPencil } from "@tabler/icons-react";
-
-type User = {
-    displayName: string | null;
-    email: string | null;
-    phoneNumber: string | null;
-};
+import Staff from "./StaffClass";
+import Partner from "./PartnerClass";
+import User from "./UserClass";
 
 const Profile: React.FC = () => {
-    const { logout, getUser, isStaff } = useAuth();
+    const { mongoId, currentUser, logout, getUser, isStaff } = useAuth();
     const navigate = useNavigate();
 
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const currentUser = getUser();
+    const [editing, setEditing] = useState<boolean>(false);
+    const [email, setEmail] = useState<string | undefined>("");
+    const [phoneNumber, setPhoneNumber] = useState<string | undefined>("");
+    const [address, setAddress] = useState<string | undefined>("");
+    const [deliveryInstructions, setDeliveryInstructions] = useState<
+        string | undefined
+    >("");
 
     useEffect(() => {
-        if (currentUser) {
-            setUser(currentUser);
+        const getUsers = async () => {
+            const token = await currentUser?.getIdToken();
+            console.log(isStaff);
+            if (isStaff) {
+                let resStaff = await fetch(
+                    `${import.meta.env.VITE_BACKEND_URL}/staff?id=${mongoId}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                let dataStaff = await resStaff.json();
+                console.log(dataStaff);
+                console.log("staff");
+                let newUser = new Staff(
+                    dataStaff.firstName,
+                    dataStaff.lastName,
+                    dataStaff.phoneNumber,
+                    dataStaff.email
+                );
+                setUser(newUser);
+                setEmail(newUser.email);
+                setPhoneNumber(newUser.phoneNumber);
+            } else {
+                let resPartner = await fetch(
+                    `${import.meta.env.VITE_BACKEND_URL}/partner?id=${mongoId}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                let dataPartner = await resPartner.json();
+                console.log(dataPartner);
+                let newUser = new Partner(
+                    dataPartner.firstName,
+                    dataPartner.lastName,
+                    dataPartner.type,
+                    dataPartner.phoneNumber,
+                    dataPartner.email,
+                    dataPartner.numOrdersTotal,
+                    dataPartner.location,
+                    dataPartner.address,
+                    dataPartner.deliveryInstructions
+                );
+                setUser(newUser);
+                setEmail(newUser.email);
+                setPhoneNumber(newUser.phoneNumber);
+                if (newUser instanceof Partner) {
+                    setAddress(newUser.address);
+                    setDeliveryInstructions(newUser.deliveryInstructions);
+                }
+            }
+
             setIsLoading(false);
-        }
-    }, [currentUser]);
+        };
+
+        getUsers();
+    }, []);
 
     const handleLogout = () => {
         void logout();
         navigate("/login");
+    };
+
+    const handleSave = async () => {
+        setEditing(false);
+        try {
+            const token = await currentUser?.getIdToken();
+            if (isStaff) {
+                const staff = JSON.stringify({
+                    phoneNumber: phoneNumber,
+                    email: email,
+                });
+
+                const response = await fetch(
+                    `${import.meta.env.VITE_BACKEND_URL}/staff?id=${mongoId}`,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                        body: staff,
+                    }
+                );
+                console.log(response);
+            } else {
+                const partner = JSON.stringify({
+                    id: mongoId,
+                    phoneNumber: phoneNumber,
+                    email: email,
+                    deliveryInstructions: deliveryInstructions,
+                    address: address
+                })
+                const response = await fetch(
+                    `${import.meta.env.VITE_BACKEND_URL}/partner?id=${mongoId}`,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                        body: partner,
+                    }
+                );
+                console.log(response);
+            }
+
+        } catch (error) {
+            console.log("ERROR " + error);
+        }
     };
 
     /*<div>
@@ -72,16 +183,36 @@ const Profile: React.FC = () => {
                         align="center"
                     >
                         <Title>Profile</Title>
-                        <Button
-                            radius="0.5rem"
-                            size="md"
-                            color="var(--primary-color)"
-                            onClick={handleLogout}
-                        >
-                            <Flex gap="md">
+                        <Flex justify="end" gap="md">
+                            {editing ? (
+                                <Button
+                                    radius="0.5rem"
+                                    size="md"
+                                    color="var(--primary-color)"
+                                    onClick={handleSave}
+                                >
+                                    <Text c={"var(--light-color)"}>Save</Text>
+                                </Button>
+                            ) : (
+                                <Button
+                                    radius="0.5rem"
+                                    size="md"
+                                    color="var(--primary-color)"
+                                    onClick={() => setEditing(true)}
+                                >
+                                    <Text c={"var(--light-color)"}>Edit</Text>
+                                </Button>
+                            )}
+
+                            <Button
+                                radius="0.5rem"
+                                size="md"
+                                color="var(--primary-color)"
+                                onClick={handleLogout}
+                            >
                                 <Text c={"var(--light-color)"}>Log Out</Text>
-                            </Flex>
-                        </Button>
+                            </Button>
+                        </Flex>
                     </Flex>
 
                     <Grid
@@ -125,26 +256,66 @@ const Profile: React.FC = () => {
                                     gap="md"
                                     justify="space-between"
                                 >
-                                    <TextInput
-                                        label="Organization Name"
-                                        placeholder=""
-                                    />
-                                    <TextInput
-                                        label="First Name"
-                                        placeholder={String(user?.displayName)}
-                                    />
-                                    <TextInput
-                                        label="Last Name"
-                                        placeholder={String(user?.displayName)}
-                                    />
-                                    <TextInput
-                                        label="Email"
-                                        placeholder={String(user?.email)}
-                                    />
-                                    <TextInput
-                                        label="Phone"
-                                        placeholder={String(user?.phoneNumber)}
-                                    />
+                                    <Flex direction="column" gap="0">
+                                        <Text size="sm" fw="bold">
+                                            Organization Name
+                                        </Text>
+                                        <Text>
+                                            {user instanceof Partner
+                                                ? user?.location
+                                                : "Nashville Diaper Connection"}
+                                        </Text>
+                                    </Flex>
+                                    <Flex direction="column" gap="0">
+                                        <Text size="sm" fw="bold">
+                                            First Name
+                                        </Text>
+                                        <Text>{String(user?.firstName)}</Text>
+                                    </Flex>
+                                    <Flex direction="column" gap="0">
+                                        <Text size="sm" fw="bold">
+                                            Last Name
+                                        </Text>
+
+                                        <Text>{String(user?.lastName)}</Text>
+                                    </Flex>
+                                    {editing ? (
+                                        <>
+                                            <TextInput
+                                                label="Email"
+                                                value={email}
+                                                onChange={(e) =>
+                                                    setEmail(e.target.value)
+                                                }
+                                            />
+                                            <TextInput
+                                                label="Phone Number"
+                                                value={phoneNumber}
+                                                onChange={(e) =>
+                                                    setPhoneNumber(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Flex direction="column" gap="0">
+                                                <Text size="sm" fw="bold">
+                                                    Email
+                                                </Text>
+
+                                                <Text>{email}</Text>
+                                            </Flex>
+                                            <Flex direction="column" gap="0">
+                                                <Text size="sm" fw="bold">
+                                                    Phone Number
+                                                </Text>
+
+                                                <Text>{phoneNumber}</Text>
+                                            </Flex>
+                                        </>
+                                    )}
                                 </Flex>
                             </Flex>
                         </Grid.Col>
@@ -180,16 +351,52 @@ const Profile: React.FC = () => {
                                         justify="space-between"
                                         flex="1"
                                     >
-                                        <TextInput
-                                            label="Street Address"
-                                            placeholder=""
-                                        />
-                                        <TextInput
-                                            label="Delivery Instructions"
-                                            placeholder={String(
-                                                user?.displayName
+                                        <Flex direction="column" gap="0">
+                                            <Text size="sm" fw="bold">
+                                                Street Address
+                                            </Text>
+                                            {user instanceof Partner ? (
+                                                editing ? (
+                                                    <TextInput
+                                                        value={address}
+                                                        onChange={(e) =>
+                                                            setAddress(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                    />
+                                                ) : (
+                                                    <Text>{address}</Text>
+                                                )
+                                            ) : (
+                                                <Text>
+                                                    Nashville Diaper Connection
+                                                </Text>
                                             )}
-                                        />
+                                        </Flex>
+
+                                        <Flex direction="column" gap="0">
+                                            <Text size="sm" fw="bold">
+                                                Delivery Instructions
+                                            </Text>
+                                            {user instanceof Partner &&
+                                                (editing ? (
+                                                    <TextInput
+                                                        value={
+                                                            deliveryInstructions
+                                                        }
+                                                        onChange={(e) =>
+                                                            setDeliveryInstructions(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                    />
+                                                ) : (
+                                                    <Text>
+                                                        {deliveryInstructions}
+                                                    </Text>
+                                                ))}
+                                        </Flex>
                                     </Flex>
                                 </Flex>
                                 <Flex
@@ -211,9 +418,7 @@ const Profile: React.FC = () => {
                                     >
                                         <TextInput
                                             label="Current Password"
-                                            placeholder={String(
-                                                user?.displayName
-                                            )}
+                                            placeholder={String()}
                                         />
                                         <TextInput label="New Password" />
                                         <TextInput label="Confirm Password" />
