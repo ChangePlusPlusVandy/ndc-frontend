@@ -28,16 +28,21 @@ const OrderPopup: React.FC<{
       backendValue: "PLACED",
     },
     {
-      label: "Filled",
+      label: "Approved",
+      checked: order.status === "APPROVED",
+      key: randomId(),
+      backendValue: "APPROVED",
+    },
+    {
+      label: "Canceled",
+      checked: order.status === "CANCELLED",
+      key: randomId(),
+      backendValue: "CANCELLED",
+    }, {
+      label: "Delivered",
       checked: order.status === "FILLED",
       key: randomId(),
       backendValue: "FILLED",
-    },
-    {
-      label: "In Progress",
-      checked: order.status === "APPROVED" || order.status === "OPEN",
-      key: randomId(),
-      backendValue: "OPEN",
     },
   ];
 
@@ -162,7 +167,7 @@ const OrderPopup: React.FC<{
           </div>
 
           <div className="submit-panel">
-            {checkboxes}
+            {isStaff && checkboxes}
             <Button
               className="submit-button"
               variant="filled"
