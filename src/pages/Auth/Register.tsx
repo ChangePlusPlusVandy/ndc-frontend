@@ -101,17 +101,19 @@ const Register: React.FC<{
   const onSubmit = async (values: FormValues) => {
     try {
       setError("");
-      //TODO HANDLE CREATING STAFF VS USER HERE
-      // await registerUser(
-      //   values.firstName,
-      //   values.lastName,
-      //   values.email,
-      //   values.password,
-      //   false
-      // );
+      console.log("lksdjf");
+      // TODO HANDLE CREATING STAFF VS USER HERE
+      await registerUser(
+        values.firstName,
+        values.lastName,
+        values.email,
+        values.password,
+        false
+      );
 
-      // closeModal();
-      navigate("/user-dir"); // Redirect to home page
+      closeModal();
+      // navigate("/user-dir"); // Redirect to home page
+      navigate(0);
     } catch (err: any) {
       setError(err.message);
     }
@@ -147,8 +149,9 @@ const Register: React.FC<{
           <Modal.CloseButton />
         </Modal.Header>
         <Modal.Body>
-          <Container mt="1rem" className="dashboard-box">
-            <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Container mt="1rem" className="dashboard-box">
+
               <Text className="header-size">User Type</Text>
               <Divider my="sm" />
 
@@ -375,25 +378,27 @@ const Register: React.FC<{
               </Group>
 
               {error && <FormError>{error}</FormError>}
-            </form>
-          </Container>
-          <Group style={{ justifyContent: "center" }}>
-            <Button
-              radius="xl"
-              disabled={isSubmitting}
-              type="submit"
-              style={{
-                backgroundColor: "var(--primary-color)",
-                width: "10rem",
-                // width: "calc(100% - 20px)", // Adjust according to your desired margin width
-                // marginLeft: "10px", // Left margin
-                // marginRight: "10px", // Right margin
-                marginTop: "10px",
-              }}
-            >
-              {isSubmitting ? "Submitting" : "Create User"}
-            </Button>
-          </Group>
+
+            </Container>
+            <Group style={{ justifyContent: "center" }}>
+              <Button
+                radius="xl"
+                disabled={isSubmitting}
+                type="submit"
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                  width: "10rem",
+                  // width: "calc(100% - 20px)", // Adjust according to your desired margin width
+                  // marginLeft: "10px", // Left margin
+                  // marginRight: "10px", // Right margin
+                  marginTop: "10px",
+                }}
+
+              >
+                {isSubmitting ? "Submitting" : "Create User"}
+              </Button>
+            </Group>
+          </form>
         </Modal.Body>
       </Modal.Content>
     </Modal.Root>
