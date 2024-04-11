@@ -1,8 +1,9 @@
 import React from 'react';
 import OrderPopup from '../OrderPopup';
 import { Container, Group, Stack, Text, Flex } from '@mantine/core';
-import Order from '../OrderTracking/OrderClass'; 
+import Order from '../OrderTracking/OrderClass';
 import StatusImage from './StatusImage';
+import OrderStatusIndicator from '../components/OrderStatusIndicator';
 
 
 interface TableProps {
@@ -24,17 +25,18 @@ const StaffOrderTable: React.FC<TableProps> = ({ orders }: TableProps) => {
                     </Container>
                     {orders?.map((val: Order, index: number) => {
                         return (
-                            <Container className="OrderPopup-container" w="100%" fluid key={index}>
+                            <Container className="OrderPopup-container" w="100%" style={{ height: "100% !important" }} fluid key={index}>
                                 <OrderPopup order={val}>
                                     <Group style={{ width: '100%' }} grow gap="xl">
                                         <Text>{val.partner}</Text>
                                         <Text>{val.datePlaced.toDateString()}</Text>
                                         <Text>{val.numDiapers}</Text>
                                         <Flex direction="row" gap="sm" align={"center"}>
-                                            <StatusImage status={val.status}></StatusImage>
-                                            <Text>{val.status}</Text>
+                                            <OrderStatusIndicator status={val.status} size="sm"></OrderStatusIndicator>
+                                            {/* <StatusImage status={val.status}></StatusImage> */}
+                                            {/* <Text>{val.status}</Text> */}
                                         </Flex>
-                                            
+
                                     </Group>
                                 </OrderPopup>
                             </Container>
