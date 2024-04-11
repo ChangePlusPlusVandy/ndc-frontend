@@ -49,9 +49,22 @@ const OrderTable: React.FC<TableProps> = ({
     });
 
     const handlePageChange = (val: number) => {
-        setMinIndex((val - 1) * amount);
-        setMaxIndex((val - 1) * amount + amount - 1);
-        setActivePage(val);
+        const calculatedMin = (val - 1) * amount;
+        const calculatedMax = (val - 1) * amount + amount - 1;
+        if (calculatedMin < 0) {
+            setMinIndex(0);
+            setActivePage(1);
+        } else {
+            setMinIndex(calculatedMin);
+            setActivePage(val);
+        }
+        if (calculatedMax > total - 1) {
+            setMaxIndex(total - 1);
+            setActivePage(Math.ceil(total / amount));
+        } else {
+            setMaxIndex((val - 1) * amount + amount - 1);
+            setActivePage(val);
+        }
     };
 
     const handleStatusName = (status: string) => {
