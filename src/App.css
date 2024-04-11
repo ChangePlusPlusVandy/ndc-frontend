@@ -55,7 +55,7 @@ body {
 }
 
 .mantine-TextInput-input:focus, .mantine-DateInput-input:focus, .mantine-Textarea-input:focus {
-    outline: 2px solid var(--highlight-color);
+    outline: 2px solid var(--text-color);
 }
 
 
