@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 //import Chart from 'chart.js/auto';
+import { useAuth } from  "../../AuthContext";
 
 import { rem, Container, Text, Title, Flex, Grid, Table } from "@mantine/core";
 import { DonutChart, BarChart } from "@mantine/charts";
 
 import "../../styles/StaffDashboard.css";
 import { IconCircleFilled, IconCircle } from "@tabler/icons-react";
+import EditInventoryModal from "./EditInventoryModal";
 
 
 
@@ -36,6 +38,28 @@ const StaffDashboard: React.FC = () => {
 
   // const chartRef = useRef<HTMLCanvasElement>(null);
   // const chartRef2 = useRef<HTMLCanvasElement>(null);
+  const [inventory, setInventory] = useState<InventoryResponse>({
+    id: 0,
+    wrapped: {
+      newborn: 0,
+      size1: 0,
+      size2: 0,
+      size3: 0,
+      size4: 0,
+      size5: 0,
+      size6: 0
+    },
+    unwrapped: {
+      newborn: 0,
+      size1: 0,
+      size2: 0,
+      size3: 0,
+      size4: 0,
+      size5: 0,
+      size6: 0
+    }
+  });
+  const { currentUser } = useAuth();
 
   /*const diapperWrappingChart = async () => {
       if(chartRef.current != null){
@@ -75,21 +99,21 @@ const StaffDashboard: React.FC = () => {
   //   ],
   // };
 
-  // const getInventory = async () => {
-  //   const token = await currentUser?.getIdToken();
+  const getInventory = async () => {
+    const token = await currentUser?.getIdToken();
 
-  //   let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/inventory`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   });
+    let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/inventory`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-  //   const data: InventoryResponse = await res.json();
-  //   setInventory(data);
-  //   console.log(inventory);
-  // };
+    const data: InventoryResponse = await res.json();
+    setInventory(data);
+    console.log(inventory);
+  };
 
   /*const diapperDeliveredChart = async () => {
       if(chartRef2.current != null){
@@ -112,6 +136,10 @@ useEffect(() => {
   useEffect(() => {
       diapperDeliveredChart();
   },[deliveredData]);*/
+
+  useEffect(() => {
+    getInventory();
+  }, []);
 
   const fakeDonutChart = [
     { name: "Unreviewed", value: 400, color: "var(--chart-light-color)" },
@@ -164,6 +192,9 @@ useEffect(() => {
       <Title ta={{ base: "center", sm: "left" }} p="md">
         Hello, Staff Name
       </Title>
+      <div className="edit-inventory-button">
+        <EditInventoryModal inventory={inventory} setInventory={setInventory} />
+      </div>
       <Grid grow gutter="md" justify="center" align="stretch">
         <Grid.Col
           className="grid-col"
@@ -323,6 +354,7 @@ useEffect(() => {
           </Flex>
         </Grid.Col>
       </Grid>
+      
     </div>
   );
 };

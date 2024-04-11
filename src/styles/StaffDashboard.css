@@ -60,3 +60,8 @@
     fill: var(--chart-primary-color);
     color: var(--chart-primary-color);
 }
+.edit-inventory-button {
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 1em;
+}
