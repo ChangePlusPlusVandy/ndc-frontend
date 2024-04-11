@@ -36,14 +36,14 @@ const EditInventoryModal: React.FC<{
       "Size 5",
       "Size 6",
     ];
-    
+
     //Handles edit icon logic.
     const [isEditable, setIsEditable] = useState<boolean>(false);
     useEffect(() => setIsEditable(false), [opened]); //Resets feilds to uneditable after modal close
-  
+
     return (
-      <Container w="100%" fluid mt="0" style={{borderBottom: "1px solid var(--highlight-color)", padding: "1em"}} >
-        <Group style={{ width: "100%"}} grow gap="xl">
+      <Container w="100%" fluid mt="0" style={{ borderBottom: "1px solid var(--highlight-color)", padding: "1em" }} >
+        <Group style={{ width: "100%" }} grow gap="xl">
           <Text className="table-element">{sizeLabels[index]}</Text>
           <NumberInput
             className="table-element"
@@ -67,9 +67,9 @@ const EditInventoryModal: React.FC<{
           />
 
           <Text className="table-element">{lineTotal}</Text>
-          <ActionIcon className="edit-button"  
-            variant="transparent" 
-            color="black" 
+          <ActionIcon className="edit-button"
+            variant="transparent"
+            color="black"
             onClick={() => setIsEditable(!isEditable)}>
             {isEditable ? <IconCheck /> : <IconPencil />}
           </ActionIcon>
@@ -134,7 +134,8 @@ const EditInventoryModal: React.FC<{
         size="auto"
         closeOnClickOutside={false}
       >
-        <div className="header">
+        <div className="header" style={{ position: "relative" }}>
+          <div onClick={close} style={{ position: "absolute", right: "0", top: "0", cursor: "pointer" }}>X</div>
           <Title className="header-text" ta="center" order={1}>
             Inventory
           </Title>
@@ -157,14 +158,14 @@ const EditInventoryModal: React.FC<{
           <div className="submit">
             <Button className="button" type="submit">
               Submit Changes
-              <IconCheck style={{padding: "1px"}} />
+              <IconCheck style={{ padding: "1px" }} />
             </Button>
           </div>
         </form>
       </Modal>
 
-      <Button  className="open-button" onClick={open}>
-        <IconPencil style={{marginRight: "0.75em"}}/>
+      <Button className="open-button" onClick={open}>
+        <IconPencil style={{ marginRight: "0.75em" }} />
         Edit Inventory
       </Button>
     </>
