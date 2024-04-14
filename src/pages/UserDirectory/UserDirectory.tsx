@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../AuthContext";
-import { Stack, Button, Group } from "@mantine/core";
+import { Stack, Button, Group, Text} from "@mantine/core";
 import { IconPlus, IconX } from "@tabler/icons-react";
 import Register from "../Auth/Register";
 import Partner from "./PartnerClass";
@@ -138,6 +138,7 @@ const UserDirectory: React.FC = () => {
                 <Group className="background-bubble-light-1" justify="space-between">
                     <Group>
                         <SearchBar searchVal={searchVal} searchFunc={searchFunc} classes="background-light"></SearchBar>
+                    
                         <Button
                             onClick={toggleShowStaff}
                             className={showStaff ? "button-chosen" : "button-not-chosen"}
@@ -148,6 +149,9 @@ const UserDirectory: React.FC = () => {
                             className={showPartners ? "button-chosen" : "button-not-chosen"}
                             rightSection={showPartners && <IconX height={"1rem"}></IconX>}
                         >Partners</Button>
+                        <Text>
+                            {shownUsers.length} / {users.length}
+                        </Text>
                     </Group>
 
                     <UserSorter users={shownUsers} setUsers={setShownUsers} whichSorters={["Name", "Reverse"]} wrapperClasses="background-light" classes="button-transparent"></UserSorter>
