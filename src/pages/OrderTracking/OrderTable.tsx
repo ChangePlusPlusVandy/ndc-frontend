@@ -84,21 +84,6 @@ const OrderTable: React.FC<TableProps> = ({
 
     const rows = orderCut?.map((val: Order, index: number) => (
         <Table.Tr key={index}>
-            <Table.Td>
-                <OrderPopup order={val}>
-                    <ActionIcon
-                        variant="filled"
-                        color="var(--primary-color)"
-                        radius="xl"
-                        aria-label="Edit Order"
-                    >
-                        <IconPencil
-                            style={{ width: "70%", height: "70%" }}
-                            stroke={1.5}
-                        />
-                    </ActionIcon>
-                </OrderPopup>
-            </Table.Td>
             <Table.Td ta="center">{index + 1}</Table.Td>
             <Table.Td ta="center">{val.location}</Table.Td>
             <Table.Td ta="center">{val.datePlaced.toDateString()}</Table.Td>
@@ -130,6 +115,24 @@ const OrderTable: React.FC<TableProps> = ({
                     </Flex>
                 </Flex>
             </Table.Td>
+            <Table.Td>
+                <OrderPopup order={val}>
+                    <ActionIcon
+                        variant="filled"
+                        color="white"
+                        // color="var(--primary-color)"
+                        radius="xl"
+                        aria-label="Edit Order"
+                        style={{ '--ai-hover': 'var(--background-color)' }}
+                    >
+                        <IconPencil
+                            style={{ width: "70%", height: "70%" }}
+                            color="black"
+                            stroke={1.5}
+                        />
+                    </ActionIcon>
+                </OrderPopup>
+            </Table.Td>
         </Table.Tr>
     ));
 
@@ -138,7 +141,6 @@ const OrderTable: React.FC<TableProps> = ({
             <Table>
                 <Table.Thead>
                     <Table.Tr>
-                        <Table.Th />
                         <Table.Th ta="center">Order #</Table.Th>
                         <Table.Th ta="center">Distribution Center</Table.Th>
                         <Table.Th ta="center">Order Date</Table.Th>
@@ -146,6 +148,7 @@ const OrderTable: React.FC<TableProps> = ({
                         <Table.Th className="table-order-status" ta={"center"}>
                             Order Status
                         </Table.Th>
+                        <Table.Th />
                     </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>
