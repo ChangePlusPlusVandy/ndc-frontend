@@ -132,6 +132,7 @@ const OrderTable: React.FC<TableProps> = ({
             </Table.Td>
         </Table.Tr>
     ));
+
     return (
         <>
             <Table>
