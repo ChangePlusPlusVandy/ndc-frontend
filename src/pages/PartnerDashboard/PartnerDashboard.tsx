@@ -413,7 +413,7 @@ function Dashboard() {
                                 View All
                             </Button>
                         </Flex>
-                        <OrderTable orders={orders} orderTypes={[]} amount={5} showPagination={false} />
+                        <OrderTable orders={orders} orderTypes={["OPEN", "PLACED", "FILLED", "CANCELED", "APPROVED"]} amount={5} showPagination={false} />
                     </Flex>
                 </Grid.Col>
             </Grid>
