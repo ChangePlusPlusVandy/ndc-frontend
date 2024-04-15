@@ -195,7 +195,6 @@ function Dashboard() {
             }
         };
         if (mongoId && currentUser) {
-
             getPartnerOrders();
         }
     }, []);

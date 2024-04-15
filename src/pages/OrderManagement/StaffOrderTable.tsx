@@ -3,6 +3,7 @@ import OrderStaffPopup from '../OrderStaffPopup';
 import { Container, Group, Stack, Text, Flex } from '@mantine/core';
 import Order from '../OrderTracking/OrderClass';
 import StatusImage from './StatusImage';
+import OrderStatusIndicator from '../components/OrderStatusIndicator';
 
 
 interface TableProps {
@@ -31,8 +32,9 @@ const StaffOrderTable: React.FC<TableProps> = ({ orders }: TableProps) => {
                                         <Text>{val.datePlaced.toDateString()}</Text>
                                         <Text>{val.numDiapers}</Text>
                                         <Flex direction="row" gap="sm" align={"center"}>
-                                            <StatusImage status={val.status}></StatusImage>
-                                            <Text>{val.status}</Text>
+                                            <OrderStatusIndicator status={val.status} size="sm"></OrderStatusIndicator>
+                                            {/* <StatusImage status={val.status}></StatusImage> */}
+                                            {/* <Text>{val.status}</Text> */}
                                         </Flex>
 
                                     </Group>

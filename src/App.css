@@ -11,7 +11,7 @@
     --text-color: #21272a;
     --input-outline-color: #80747c;
     --button-color: var(--primary-color);
-    --highlight-color: #f3e7f0;
+    --highlight-color: #f7ebf1;
     --chart-dark-color: #653661;
     --chart-primary-color: #c99bc3;
     --chart-light-color: #ead3e4;
@@ -50,13 +50,18 @@ body {
 }
 
 .mantine-TextInput-input, .mantine-DateInput-input, .mantine-Textarea-input {
-    outline: 2px solid var(--input-outline-color);
+    outline: 2px solid var(--button-outline-color);
     outline-offset: -2px;
 }
 
 .mantine-TextInput-input:focus, .mantine-DateInput-input:focus, .mantine-Textarea-input:focus {
     outline: 2px solid var(--highlight-color);
 }
+
+
+
+
+
 
 .mantine-Checkbox-icon {
     margin: auto;
@@ -121,6 +126,7 @@ header {
 .mantine-Checkbox-inner{
   order: var(--_checkbox-inner-order, 0);
 }
+
 
 
 /*.container {

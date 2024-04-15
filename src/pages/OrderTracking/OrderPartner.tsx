@@ -39,9 +39,11 @@ interface OrderResponse {
 
 const OrderPartner: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
+    const [baseOrders, setBaseOrders] = useState<Order[]>([]);
     const { mongoId, currentUser } = useAuth();
     const [orderTypes, setOrderTypes] = useState<string[]>([
         "OPEN",
+        "PLACED",
         "APPROVED",
         "CANCELLED",
         "FILLED",
@@ -55,7 +57,8 @@ const OrderPartner: React.FC = () => {
             console.log("MONGOID", mongoId);
 
             let res = await fetch(
-                `${import.meta.env.VITE_BACKEND_URL
+                `${
+                    import.meta.env.VITE_BACKEND_URL
                 }/order?partnerId=${mongoId}`,
                 {
                     method: "GET",
@@ -84,6 +87,7 @@ const OrderPartner: React.FC = () => {
 
             console.log("DATA", data);
             setOrders(data);
+            setBaseOrders(data);
         };
         if (currentUser && mongoId) {
             getOrders();
@@ -119,12 +123,6 @@ const OrderPartner: React.FC = () => {
                 direction="row"
             >
                 <Group align="center">
-                    <TextInput
-                        className="searchInput"
-                        placeholder="Search"
-                        leftSection={<IconSearch size="1rem" />}
-                        size="xs"
-                    ></TextInput>
                     <Button
                         justify="stretch"
                         display="block"
@@ -240,7 +238,7 @@ const OrderPartner: React.FC = () => {
                 </Group>
                 <Group flex="1" gap="xs" justify="end">
                     <Filter
-                        baseOrders={orders}
+                        baseOrders={baseOrders}
                         setOrders={setOrders}
                         classes=""
                     ></Filter>

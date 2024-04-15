@@ -1,7 +1,7 @@
 import { AppShell, Burger, Button, Group, Image, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { IconStarFilled, IconSettings, IconUserCircle, IconUsers, IconPointFilled } from '@tabler/icons-react';
+import { IconStarFilled, IconSettings, IconUserCircle, IconUsers, IconPointFilled, IconNewSection } from '@tabler/icons-react';
 import Logo from '../../assets/logo-horizontal.png';
 import UserThumb from '../../assets/Images/StaffImages/UserThumb.png';
 import "./DashboardLayout.css"
@@ -9,6 +9,7 @@ import { useAuth } from '../../AuthContext';
 
 export default function DashboardLayout() {
     const { isStaff } = useAuth();
+    // console.log("Hi: " + isStaff);
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(false);
 
@@ -52,7 +53,8 @@ export default function DashboardLayout() {
                                 <Text>Orders</Text>
                             </button>
                         </Link>
-                         }
+                    }
+                        
 
                     <Link to="/profile">
                         <button className='nav-button'>
